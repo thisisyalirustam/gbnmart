@@ -39,11 +39,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/product',ProductController::class);
     Route::get('/show_product',[AdminController::class,'product'])->name('product');
     Route::get('/create_product',[AdminMainController::class,'product_add'])->name('product_create');
+    Route::get('/get-subcategories-brands/{categoryId}', [AdminMainController::class, 'getSubcategoriesAndBrands'])->name('getSubcategoriesAndBrands');
+
 });
- 
+
 Route::middleware(['auth','verified'])->group(function () {
     Route::get('/supplier-Dashboard', [SuplairController::class, 'index'])->name('supplier.auth');
-   
+
 });
 
 require __DIR__.'/auth.php';

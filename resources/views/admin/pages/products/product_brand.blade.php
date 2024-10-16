@@ -45,17 +45,29 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                
+
                   <form id="addform">
                       @csrf
                       <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
+
+                      <div class="row mb-3">
+                        <label for="inputNumber" class="col-sm-2 col-form-label">Sub Catogry</label>
+                        <div class="col-sm-10">
+                            <select id="product_cat_id" name="product_cat_id" class="form-select">
+                                <option selected="">Select category</option>
+                                @foreach ($product_cat as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                       <div class="row mb-3">
                           <label for="inputText" class="col-sm-2 col-form-label">Name</label>
                           <div class="col-sm-10">
                               <input type="text" name="name" id="name" class="form-control">
                           </div>
                       </div>
-                    
+
                       <div class="row mb-3">
                           <label class="col-sm-2 col-form-label">Submit Button</label>
                           <div class="col-sm-10">
@@ -68,7 +80,7 @@
           </div>
       </div>
   </div>
-   
+
 <!-- Update Modal -->
 <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -79,7 +91,7 @@
           </div>
           <div class="modal-body">
 
-              <form id="updateform">  
+              <form id="updateform">
                 @csrf
                 <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
                 <input type="hidden" id="updateid" name="id" value="">
@@ -88,7 +100,7 @@
                       <div class="col-sm-10">
                           <input type="text" name="name" id="updatename" class="form-control">
                       </div>
-                  </div>              
+                  </div>
                   <div class="row mb-3">
                       <label class="col-sm-2 col-form-label">Submit Button</label>
                       <div class="col-sm-10">
@@ -101,7 +113,7 @@
       </div>
   </div>
 </div>
-  
+
 {{-- user delete modal --}}
 <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -124,7 +136,7 @@
     </div>
 </div>
 
-  
+
 @endsection
 @section('tabledev')
 <script src="{{ asset('admin/ajax_crud/brand.js') }}"></script>

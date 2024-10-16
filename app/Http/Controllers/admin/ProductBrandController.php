@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductBrand;
+use App\Models\ProductCat;
 use Illuminate\Http\Request;
 
 class ProductBrandController extends Controller
@@ -13,8 +14,10 @@ class ProductBrandController extends Controller
      */
     public function index()
     {
-        //
-        return view('admin.pages.products.product_brand');
+        $product_cat=ProductCat::all();
+        $product_brand = ProductBrand::with('product_cat')->get();
+        return view('admin.pages.products.product_brand',compact('product_brand', 'product_cat'));
+
     }
 
     /**
@@ -32,6 +35,7 @@ class ProductBrandController extends Controller
     {
         //
         $brand=ProductBrand::create([
+            'product_cat_id' => request('product_cat_id'),
             'name' => request('name'),
         ]);
         return response()->json([

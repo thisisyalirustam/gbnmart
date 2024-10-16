@@ -34,13 +34,17 @@ $(() => {
                 dataField: "name",
                 caption: "Name",
             },
-          
+            {
+                dataField: "product_cat.name",
+                caption: "Category",
+            },
+
             {
                 dataField: "created_at",
                 caption: "Create Date",
                 dataType: "date",
                 width: 150,
-                
+
             },
             {
                 caption: "Actions",
@@ -61,7 +65,7 @@ $(() => {
                         .appendTo(container);
 
                     // Show Button
-                 
+
                     // Delete Button
                     $("<a>")
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
@@ -176,7 +180,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: `/product-brand/${id}`,
-            type: "POST", 
+            type: "POST",
             data: formData,
             contentType: false,
             processData: false,
@@ -232,7 +236,7 @@ update.addEventListener("show.bs.modal", function (event) {
 
 //Delete model
 var deleteModal = document.getElementById("delete");
-deleteModal.addEventListener("show.bs.modal", function (event) {  
+deleteModal.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
     document.querySelector("#deleteid").value = id;

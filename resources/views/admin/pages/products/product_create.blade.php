@@ -15,159 +15,349 @@
             padding-bottom: 0;
         }
     </style>
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <form id="addform">
-                        @csrf
-                        <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
 
-                        <!-- Product Information Section -->
-                        <div class="row">
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+    .card {
+        background: #fff;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 8px;
+        padding: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .form-control, .form-select {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+    .image-upload-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .image-preview {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        align-items: center;
+    }
+    .image-preview img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .add-image-btn {
+        width: 50px;
+        height: 50px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .add-image-btn:hover {
+        background-color: #45a049;
+    }
+    .add-image-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        color: white;
+    }
+    .btn-success {
+        background-color: #28a745;
+    }
+    .btn-info {
+        background-color: #17a2b8;
+    }
+    .btn-success:hover, .btn-info:hover {
+        opacity: 0.85;
+    }
+    .text-danger {
+        color: red;
+    }
+</style>
 
-                            <!-- Left Column for General Product Info -->
-                            <div class="col-md-6">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="name" class="form-label">Product Name</label>
-                                        <input type="text" name="name" id="name" class="form-control" placeholder="Enter product name" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="brand" class="form-label">Brand Name</label>
-                                        <input type="text" name="brand" id="brand" class="form-control" placeholder="Enter brand name (if applicable)">
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="sku" class="form-label">Product SKU</label>
-                                        <input type="text" name="sku" id="sku" class="form-control" placeholder="Enter SKU (Stock Keeping Unit)" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="p_category" class="form-label">Product Category</label>
-                                        <select id="p_category" name="product_category" class="form-select" required>
-                                            <option selected disabled>Select Product Category</option>
-                                            <option value="electronics">Electronics</option>
-                                            <option value="clothing">Clothing</option>
-                                            <option value="home_appliances">Home Appliances</option>
-                                            <!-- Add more categories as needed -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="p_sub_cat" class="form-label">Sub Category</label>
-                                        <select id="p_sub_cat" name="sub_category" class="form-select" required>
-                                            <option selected disabled>Select Sub Category</option>
-                                            <option value="smartphones">Smartphones</option>
-                                            <option value="laptops">Laptops</option>
-                                            <option value="accessories">Accessories</option>
-                                            <!-- Add more subcategories as needed -->
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+<section class="section">
+    <div class="container">
+        <div class="card shadow p-4 mb-5 bg-white rounded">
+            <form id="addform" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <input type="hidden" id="csrf_token" name="_token" value="YOUR_CSRF_TOKEN_HERE">
 
-                            <!-- Right Column for Price, Quantity, and Images -->
-                            <div class="col-md-6">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="price" class="form-label">Price</label>
-                                        <input type="number" name="price" id="price" class="form-control" placeholder="Enter price" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="quantity" class="form-label">Quantity</label>
-                                        <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Enter quantity in stock" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="description" class="form-label">Product Description</label>
-                                        <textarea class="form-control" id="description" name="description" rows="5" maxlength="1000" placeholder="Provide a brief description of the product..." required></textarea>
-                                        <small id="descriptionHelp" class="form-text text-muted">Max 1000 characters</small>
-                                    </div>
-                                </div>
-                            </div>
+                <!-- Product Information Section -->
+                <h2 class="mb-3">Product Details</h2>
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-lg-6">
+                        <!-- General Product Info -->
+                        <div class="form-group">
+                            <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Enter product name" required>
                         </div>
 
-                        <!-- SEO Section -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="seo_keywords" class="form-label">SEO Keywords</label>
-                                        <input type="text" name="seo_keywords" id="seo_keywords" class="form-control" placeholder="Enter keywords for SEO, separated by commas" required>
-                                        <small id="keywordsHelp" class="form-text text-muted">Example: "smartphone, electronics, gadgets"</small>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="seo_slug" class="form-label">URL Slug (Optional)</label>
-                                        <input type="text" name="seo_slug" id="seo_slug" class="form-control" placeholder="Enter custom URL slug for this product">
-                                        <small id="slugHelp" class="form-text text-muted">Example: "new-smartphone-2024"</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="seo_meta_desc" class="form-label">Meta Description</label>
-                                        <textarea class="form-control" id="seo_meta_desc" name="seo_meta_desc" rows="4" maxlength="160" placeholder="Write a brief meta description for SEO (max 160 characters)" required></textarea>
-                                        <small id="metaDescHelp" class="form-text text-muted">This will appear in search engine results.</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="sku" class="form-label">Product SKU <span class="text-danger">*</span></label>
+                            <input type="text" name="sku" id="sku" class="form-control" placeholder="Enter SKU" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_category" class="form-label">Product Category <span class="text-danger">*</span></label>
+                            <select id="p_category" name="product_category" class="form-select" required>
+                                <option value="">Select Category</option>
+                                @foreach ($category as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- Row for Image Uploads -->
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="imageUpload1" class="form-label">Upload Image 1</label>
-                                <div id="dropArea1" class="border border-primary rounded p-3 text-center drop-area">
-                                    <p><i class="bi bi-upload" style="font-size: 2rem; color: #6c757d;"></i></p>
-                                    <p>Select Product Image</p>
-                                    <input type="file" id="imageUpload1" name="image_1" class="form-control d-none" accept="image/*" required>
-                                    <div id="preview1" class="mt-3 preview-container"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="imageUpload2" class="form-label">Upload Image 2</label>
-                                <div id="dropArea2" class="border border-primary rounded p-3 text-center drop-area">
-                                    <p><i class="bi bi-upload" style="font-size: 2rem; color: #6c757d;"></i></p>
-                                    <p>Select Product Image</p>
-                                    <input type="file" id="imageUpload2" name="image_2" class="form-control d-none" accept="image/*" required>
-                                    <div id="preview2" class="mt-3 preview-container"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="imageUpload3" class="form-label">Upload Image 3</label>
-                                <div id="dropArea3" class="border border-primary rounded p-3 text-center drop-area">
-                                    <p><i class="bi bi-upload" style="font-size: 2rem; color: #6c757d;"></i></p>
-                                    <p>Select Product Image</p>
-                                    <input type="file" id="imageUpload3" name="image_3" class="form-control d-none" accept="image/*" required>
-                                    <div id="preview3" class="mt-3 preview-container"></div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="p_sub_cat" class="form-label">Sub Category <span class="text-danger">*</span></label>
+                            <select id="p_sub_cat" name="sub_category" class="form-select" required>
+                                <option value="">Select Sub Category</option>
+                            </select>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="row mb-3 mt-4">
-                            <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-primary">Save Product</button>
-                            </div>
+                        <div class="form-group">
+                            <label for="brand" class="form-label">Brand Name</label>
+                            <select id="brand" name="brand_id" class="form-select">
+                                <option value="">Select Brand</option>
+                            </select>
                         </div>
-                    </form>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
+                            <input type="number" name="price" id="price" class="form-control" placeholder="Enter price" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount_price" class="form-label">Discount Price</label>
+                            <input type="number" name="discount_price" id="discount_price" class="form-control" placeholder="Enter discount price (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                            <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Enter quantity in stock" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Product Description <span class="text-danger">*</span></label>
+                                    <div id="description-editor"></div>
+                                    <input type="hidden" id="description" name="description">
+                                    <small id="descriptionHelp" class="form-text text-muted">Max 1000 characters</small>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Image Upload and Color Selection -->
+                <h2 class="mb-3">Additional Information</h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="weight" class="form-label">Weight (in kg) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" name="weight" id="weight" class="form-control" placeholder="Enter weight" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dimensions" class="form-label">Dimensions (L x W x H in cm) <span class="text-danger">*</span></label>
+                            <input type="text" name="dimensions" id="dimensions" class="form-control" placeholder="Enter dimensions" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="products" class="form-label">Select Tag Line <span class="text-danger"></span></label>
+                            <input type="text" id="products" name="products[]" class="form-control" placeholder="Select or add products" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="color_input" class="form-label">Available Colors <span class="text-danger">*</span></label>
+                            <input type="text" id="color_input" class="form-control" placeholder="Enter color name and press 'Add'">
+                            <button type="button" id="add_color_btn" class="btn btn-info mt-2" onclick="addColor()">Add Color</button>
+                            <div id="color-swatches" class="mt-3 d-flex flex-wrap"></div>
+                            <input type="hidden" name="colors[]" id="colors">
+                        </div>
+                        <div class="form-group">
+                            <label for="images" class="form-label">Product Images <span class="text-danger">*</span></label>
+                            <div id="image-upload-container" class="image-upload-container">
+                                <div id="image-preview" class="image-preview"></div>
+                                <button type="button" id="add_image_btn" class="add-image-btn" onclick="document.getElementById('images').click();">
+                                    <span>+</span>
+                                </button>
+                                <input type="file" id="images" name="images[]" class="form-control d-none" accept="image/*" multiple onchange="handleImageFiles(this.files);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="row">
+                    <div class="col-md-12 text-center mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">Save Product</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Include jQuery if it's not already included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Listen for changes on the category dropdown
+        $('#p_category').on('change', function() {
+            var categoryId = $(this).val();  // Get the selected category ID
+
+            if (categoryId) {
+                // If a category is selected, make an AJAX request to fetch subcategories and brands
+                $.ajax({
+                    url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
+                    type: 'GET',  // GET request
+                    dataType: 'json',  // Expect JSON response
+                    success: function(data) {
+                        // Clear and populate the subcategory dropdown
+                        $('#p_sub_cat').empty();
+                        $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+                        $.each(data.subcategories, function(key, value) {
+                            $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+
+                        // Clear and populate the brand dropdown
+                        $('#brand').empty();
+                        $('#brand').append('<option value="">Select Brand</option>');
+                        $.each(data.brands, function(key, value) {
+                            $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error: " + error);
+                        console.log("Response: " + xhr.responseText);
+                    }
+                });
+            } else {
+                // If no category is selected, clear both subcategory and brand dropdowns
+                $('#p_sub_cat').empty();
+                $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+
+                $('#brand').empty();
+                $('#brand').append('<option value="">No Brand Yet</option>');
+            }
+        });
+    });
+</script>
 
 
+<script>
+
+    let imageArray = [];
+    let colors = [];
+
+    function handleImageFiles(files) {
+        const remainingSlots = 7 - imageArray.length;
+        const filesToAdd = Array.from(files).slice(0, remainingSlots);
+        filesToAdd.forEach(file => {
+            if (imageArray.length < 7) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    document.getElementById('image-preview').appendChild(img);
+                    imageArray.push(file);
+                    if (imageArray.length === 7) {
+                        document.getElementById('add_image_btn').style.display = 'none';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    function addColor() {
+        const colorInput = document.getElementById('color_input');
+        const colorName = colorInput.value.trim();
+        if (colorName === "" || colors.includes(colorName)) {
+            alert("Please enter a unique color.");
+            return;
+        }
+        const colorDiv = document.createElement('div');
+        colorDiv.style.backgroundColor = colorName;
+        colorDiv.style.width = '30px';
+        colorDiv.style.height = '30px';
+        colorDiv.style.borderRadius = '10%';
+        document.getElementById('color-swatches').appendChild(colorDiv);
+        colors.push(colorName);
+        document.getElementById('colors').value = JSON.stringify(colors);
+        colorInput.value = "";
+    }
+</script>
+
+<!-- Include Quill Editor CSS & JS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
+<!-- Custom Script to Handle Quill Editor -->
+<script>
+    // Initialize Quill editor
+    var quill = new Quill('#description-editor', {
+        theme: 'snow',
+        placeholder: 'Enter product description...',
+        modules: {
+            toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ list: 'ordered'}, { list: 'bullet' }],
+                ['link', 'image', 'video']
+            ]
+        }
+    });
+
+    // On form submit, store the editor content in hidden input
+    document.getElementById('addform').onsubmit = function() {
+        document.getElementById('description').value = quill.root.innerHTML;
+    };
+</script>
+<!-- Include Tagify CSS & JS -->
+<!-- Include Tagify CSS & JS -->
+
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+<!-- Initialize Tagify for Product Dropdown -->
+<script>
+    // Initialize Tagify on the input field for products
+    var input = document.querySelector('input[name=products]');
+    var tagify = new Tagify(input, {
+        whitelist: ["iPhone 13", "MacBook Pro", "Samsung Galaxy", "PlayStation 5", "Nintendo Switch", "Sony Headphones", "Dell XPS", "Canon Camera"],
+        dropdown: {
+            maxItems: 10,          // Maximum items to show in the dropdown
+            enabled: 0,            // Always show suggestions dropdown
+            closeOnSelect: false   // Keep dropdown open after selecting
+        }
+    });
+</script>
 </div>
+@endsection
+@section('tabledev')
+<script src="{{ asset('admin/customJs/product.js') }}"></script>
+<script src="{{ asset('admin/ajax_crud/product.js') }}"></script>
 @endsection

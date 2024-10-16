@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
@@ -23,7 +24,7 @@ class AdminController extends Controller
             }
             return $user;
         });
-    
+
         return response()->json($users);
     }
     public function showproductcat(){
@@ -32,14 +33,16 @@ class AdminController extends Controller
     }
     public function product_sub_cat(){
         $product_sub_cat = ProductSubCategory::with('product_cat')->get();
-        return response()->json($product_sub_cat);        
+        return response()->json($product_sub_cat);
     }
-    
+
     public function product_brand(){
-        $brand = ProductBrand::all();
-        return response()->json($brand);    
+        $brand = ProductBrand::with('product_cat')->get();
+        return response()->json($brand);
     }
     public function product(){
-        
+      $product=Product::all();
+      return response()->json($product);
+
     }
 }

@@ -1,7 +1,7 @@
 @extends('admin.layout.content')
 @section('content')
     <div class="pagetitle">
-        <h1>Users</h1>
+        <h1>Product</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -45,18 +45,18 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                
+
                   <form id="addform">
                       @csrf
                       <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
                       <div class="row">
                         <div class="col-md-6">
-                            <div class="row mb-3"> 
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label for="comments" class="form-label">Name</label>
                                     <input type="text" name="name" id="name" class="form-control">
                                 </div>
-                            </div>                                             
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label for="comments" class="form-label">Product Category</label>
@@ -67,7 +67,7 @@
                                         <option value="admin">Admin</option>
                                     </select>
                                 </div>
-                            </div>                           
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label for="comments" class="form-label">Sub Category</label>
@@ -117,19 +117,19 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
-                 
+
+
+
                         </div>
 
                         <div class="col-md-6">
-                            <div class="row mb-3"> 
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label for="comments" class="form-label">Price</label>
                                     <input type="number" name="name" id="name" class="form-control">
                                 </div>
                             </div>
-                            <div class="row mb-3"> 
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label for="comments" class="form-label">Quantity</label>
                                     <input type="number" name="name" id="name" class="form-control">
@@ -141,21 +141,21 @@
                                     <textarea class="form-control" id="comments" name="comments" rows="7" maxlength="1000" placeholder="Enter your comments here..."></textarea>
                                     <small id="commentsHelp" class="form-text text-muted">1000 characters left</small>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <button type="submit" class="btn  btn-primary">Save</button>
                                 </div>
                             </div>
-                        </div>                       
+                        </div>
                       </div>
                   </form>
               </div>
           </div>
       </div>
   </div>
-   
-<<!-- Update Modal -->
+
+<!-- Update Modal -->
 <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-xl modal-dialog-centered">
       <div class="modal-content">
@@ -166,7 +166,7 @@
           <div class="modal-body">
 
               <form id="updateform">
-                
+
                 @csrf
                 <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
                 <input type="hidden" id="updateid" name="id" value="">
@@ -182,7 +182,7 @@
                           <input type="email" name="email" id="updateemail" class="form-control">
                       </div>
                   </div>
-                 
+
                   <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-2 col-form-label">User Type</label>
                       <div class="col-sm-10">
@@ -193,7 +193,7 @@
                           </select>
                       </div>
                   </div>
-        
+
                   <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-2 col-form-label">Profile Upload</label>
                       <div class="col-sm-10">
@@ -202,11 +202,11 @@
                   </div>
                  <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-2 col-form-label">Profile</label>
-    
+
                       <label for="inputNumber" class="col-sm-3 col-form-label">
                         <img src="" id="imageshow" height="200"  width="150" alt="" >
                       </label>
-                  </div> 
+                  </div>
 
                   <div class="row mb-3">
                       <label class="col-sm-2 col-form-label">Submit Button</label>
@@ -237,7 +237,7 @@
   </div>
 </div>
 {{-- edn of user show model --}}
-  
+
 {{-- user delete modal --}}
 <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -264,5 +264,5 @@
 @section('tabledev')
 <link rel="stylesheet" href="{{ asset('admin/custom_css/product.css') }}">
 <script src="{{ asset('admin/customJs/product.js') }}"></script>
-<script src="{{ asset('admin/ajax_crud/user_management.js') }}"></script>
+<script src="{{ asset('admin/ajax_crud/product.js') }}"></script>
 @endsection

@@ -45,7 +45,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                
+
                   <form id="addform">
                       @csrf
                       <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
@@ -53,10 +53,10 @@
                         <label for="inputNumber" class="col-sm-2 col-form-label">Sub Catogry</label>
                         <div class="col-sm-10">
                             <select id="product_cat_id" name="product_cat_id" class="form-select">
-                                <option selected="">Select User Type</option>
+                                <option selected="">Select category</option>
                                 @foreach ($product_cat as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach                                 
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
           </div>
       </div>
   </div>
-   
+
 <!-- Update Modal -->
 <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -90,18 +90,18 @@
           <div class="modal-body">
 
               <form id="updateform">
-                
+
                 @csrf
                 <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
                 <input type="hidden" id="updateid" name="id" value="">
 
                 <div class="row mb-3">
                     <label for="inputNumber" class="col-sm-2 col-form-label">User Type</label>
-                    <div class="col-sm-10"> 
-                        <select id="product_cat_id" name="product_cat_id" class="form-select"> 
+                    <div class="col-sm-10">
+                        <select id="product_cat_id" name="product_cat_id" class="form-select">
                                 @foreach ($product_cat as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach     
+                                @endforeach
                         </select>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
   </div>
 </div>
 {{-- edn of user show model --}}
-  
+
 {{-- user delete modal --}}
 <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-sm modal-dialog-centered">
