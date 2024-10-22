@@ -35,20 +35,30 @@ $(() => {
                 caption: "Name Product",
             },
             {
-                dataField: "brand_id",
-                caption: "Brand",
+                dataField: "stock_quantity",
+                caption: "Stoke",
             },
             {
-                dataField: "user_type",
-                caption: "User Type",
+                dataField: "price",
+                caption: "Price",
             },
             {
-                dataField: "image",
-                caption: "Profile",
-                dataType: "string",
-                width: 150,
-                cellTemplate: profileCellTemplate,
+                dataField: "discounted_price",
+                caption: "Discount Price",
             },
+            {
+                dataField: "weight",
+                caption: "Weight",
+            },
+            {
+                dataField: "dimensions",
+                caption: "Dimensions",
+            },
+            {
+                dataField: "dimensions",
+                caption: "Dimensions",
+            },
+
             {
                 caption: "Actions",
                 alignment: "center", // Center-align the buttons
@@ -168,7 +178,7 @@ $(document).ready(function () {
         formData.append("_method", "PUT"); // Append the _method to override with PUT
 
         $.ajax({
-            url: `/add-user/${id}`, // The resource controller update route
+            url: `/show_product/${id}`, // The resource controller update route
             type: "POST", // Still use POST, but we include _method=PUT in the form data
             data: formData,
             contentType: false,
@@ -207,7 +217,7 @@ $(document).ready(function () {
         formData.append("_method", "DELETE"); // Method override for DELETE
 
         $.ajax({
-            url: `/add-user/${id}`,
+            url: `/show_product/${id}`,
             type: "POST",
             data: formData,
             contentType: false,
@@ -245,7 +255,7 @@ var show = document.getElementById("show");
 show.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
-    fetch(`/add-user/${id}`, {
+    fetch(`/show_product/${id}`, {
         method: "Get",
         headers: {
             "Content-Type": "application/json",
@@ -372,7 +382,7 @@ var update = document.getElementById("update");
 update.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
-    fetch(`/add-user/${id}`, {
+    fetch(`/show_product/${id}`, {
         method: "Get",
         headers: {
             "Content-Type": "application/json",

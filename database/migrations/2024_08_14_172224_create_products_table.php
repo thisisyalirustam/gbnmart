@@ -17,11 +17,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('name_slug');
-            $table->string('slug')->unique();
+            $table->text('name');
+            $table->text('name_slug');
+            $table->text('slug')->unique();
             $table->text('description')->nullable();
-            $table->string('description_slug')->nullable();
+            $table->text('description_slug')->nullable();
             $table->foreignIdFor(ProductCat::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignIdFor(ProductSubCategory::class)->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('sku')->unique();

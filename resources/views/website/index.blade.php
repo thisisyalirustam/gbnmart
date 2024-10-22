@@ -1,6 +1,6 @@
 @extends('website.layout.content')
 @section('webcontent')
-      
+
     <!-- Hero Section Begin -->
     <section class="hero">
         <div class="container">
@@ -118,126 +118,129 @@
                 </div>
             </div>
             <div class="row featured__filter">
+                @foreach ($product as $item)
+                @php
+                    // Decode the JSON images into an array
+                    $images = json_decode($item->images, true);
+                    // Get the first image or use a fallback
+                    $firstImage = $images ? $images[0] : 'default-image.jpg';
+                @endphp
+
                 <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
                     <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-1.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
+                        <!-- Product Image Slider -->
+                        <div class="featured__item__pic owl-carousel owl-theme">
+                            @if($images)
+                                @foreach($images as $image)
+                                    <div class="item">
+                                        <img src="{{ asset('images/products/' . $image) }}" alt="Product Image" style="width: 100%; height: 200px; object-fit: cover;">
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="item">
+                                    <img src="{{ asset('images/products/default-image.jpg') }}" alt="Default Image" style="width: 100%; height: 200px; object-fit: cover;">
+                                </div>
+                            @endif
                         </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
+
+                        <!-- Product Info -->
+                        <div class="featured__item__text text-center">
+                            <!-- Product Name -->
+                            <h6><a href="{{ route('product.detail', $item->slug) }}">{{ $item->name }}</a></h6>
+
+                            <!-- Product Description -->
+                            <p>{{ Str::limit(strip_tags($item->description), 50) }}</p>
+
+
+                            <!-- Product Price -->
+                            <h5>
+                                @if($item->discounted_price)
+                                    <span style="text-decoration: line-through; color: red;">${{ $item->price }}</span>
+                                    <span>${{ $item->discounted_price }}</span>
+                                @else
+                                    <span>${{ $item->price }}</span>
+                                @endif
+                            </h5>
+
+                            <!-- Stock Status -->
+                            <p class="text-muted">
+                                {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                            </p>
+
+                            <!-- Action Buttons -->
+                            <ul class="featured__item__pic__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li> <!-- Wishlist -->
+                                <li><a href="#"><i class="fa fa-retweet"></i></a></li> <!-- Compare -->
+                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li> <!-- Add to Cart -->
+                                <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li> <!-- Buy Now -->
+                                <li><a href="#"><i class="fa fa-share-alt"></i></a></li> <!-- Share -->
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fastfood">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-2.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix vegetables fresh-meat">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-3.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood oranges">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-4.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-5.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fastfood">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-6.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix fresh-meat vegetables">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-7.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 mix fastfood vegetables">
-                    <div class="featured__item">
-                        <div class="featured__item__pic set-bg" data-setbg="img/featured/feature-8.jpg">
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="featured__item__text">
-                            <h6><a href="#">Crab Pool Security</a></h6>
-                            <h5>$30.00</h5>
-                        </div>
-                    </div>
-                </div>
+            @endforeach
+
+            <!-- Improved Styles -->
+            <style>
+                .featured__item {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    height: 100%;
+                    padding: 15px;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }
+
+                .featured__item__pic {
+                    margin-bottom: 15px;
+                }
+
+                .featured__item__text {
+                    padding-top: 10px;
+                }
+
+                .featured__item__text h6 {
+                    font-size: 16px;
+                    margin: 5px 0;
+                }
+
+                .featured__item__text h5 {
+                    font-size: 18px;
+                    color: #28a745;
+                }
+
+                .featured__item__text p {
+                    font-size: 14px;
+                    margin-bottom: 10px;
+                    color: #6c757d;
+                }
+            </style>
+
+            <!-- Owl Carousel CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+            <!-- jQuery -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+            <!-- Owl Carousel JS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+            <!-- Owl Carousel Initialization -->
+            <script>
+                $(document).ready(function(){
+                    $(".owl-carousel").owlCarousel({
+                        items: 1, // Show one image at a time
+                        loop: true, // Loop through images
+                        margin: 10,
+                        nav: true, // Show navigation arrows
+                        autoplay: true, // Enable auto-play
+                        autoplayTimeout: 3000, // Auto-play interval
+                        autoplayHoverPause: true // Pause on hover
+                    });
+                });
+            </script>
             </div>
         </div>
     </section>
