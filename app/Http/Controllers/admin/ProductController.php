@@ -33,58 +33,56 @@ class ProductController extends Controller
      * Store a newly created product in storage.
      */
     public function store(Request $request)
-    {
-        // Validate the input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products',
-            'price' => 'required|numeric',
-            'product_category' => 'required|integer',
-            'sub_category' => 'required|integer',
-            'quantity' => 'required|integer',
-            'description' => 'required|string',
-            'weight' => 'required|numeric',
-            'dimensions' => 'required|string',
-            'images' => 'required', // Required images field
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Each image must follow this rule
-        ]);
+{
+    // Validate the input
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'sku' => 'required|string|unique:products',
+        'price' => 'required|numeric',
+        'product_category' => 'required|integer',
+        'sub_category' => 'required|integer',
+        'quantity' => 'required|integer',
+        'description' => 'required|string',
+        'weight' => 'required|numeric',
+        'dimensions' => 'required|string',
+        'images' => 'required', // Required images field
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Each image must follow this rule
+    ]);
 
+    $user = Auth::user();
+    $userId = $user ? $user->id : null;
 
-        $user = Auth::user();
-        $userId = $user ? $user->id : null;
+    // Generate slugs
+    $slug = Str::slug($request->name, '-');
+    $description_slug = Str::slug($request->description, '-');
 
-        // Generate slugs
-        $slug = Str::slug($request->name, '-');
-        $description_slug = Str::slug($request->description, '-');
+    // Create a new Product instance
+    $product = new Product();
+    $product->name = $request->name;
+    $product->sku = $request->sku;
+    $product->price = $request->price;
+    $product->discounted_price = $request->discount_price;
+    $product->stock_quantity = $request->quantity;
+    $product->product_cat_id = $request->product_category;
+    $product->product_sub_category_id = $request->sub_category;
+    $product->product_brand_id = $request->brand_id;
+    $product->description = $request->description;
+    $product->weight = $request->weight;
+    $product->dimensions = $request->dimensions;
+    $product->color_options = json_encode($request->input('colors'));
+    $product->tags = json_encode($request->input('tags'));
+    $product->user_id = $userId;
+    $product->slug = $slug;
+    $product->name_slug = $slug;
+    $product->description_slug = $description_slug;
 
-        // Create a new Product instance
-        $product = new Product();
-        $product->name = $request->name;
-        $product->sku = $request->sku;
-        $product->price = $request->price;
-        $product->discounted_price = $request->discount_price;
-        $product->stock_quantity = $request->quantity;
-        $product->product_cat_id = $request->product_category;
-        $product->product_sub_category_id = $request->sub_category;
-        $product->product_brand_id = $request->brand_id;
-        $product->description = $request->description;
-        $product->weight = $request->weight;
-        $product->dimensions = $request->dimensions;
-        $product->color_options = json_encode($request->input('colors'));
-        $product->tags = json_encode($request->input('tags'));
-        $product->user_id = $userId;
-        $product->slug = $slug;
-        $product->name_slug = $slug;
-        $product->description_slug = $description_slug;
+    // Handle multiple image uploads and store as JSON in the database
+    $product->images = $this->uploadImages($request); // JSON array of image names
+    $product->save();
 
-        // Handle the image uploads
-        $product->images = $this->uploadImages($request);
+    return redirect()->route('product.index')->with('success', 'Product added successfully.');
+}
 
-        // Save the product
-        $product->save();
-
-        return redirect()->route('product.index')->with('success', 'Product added successfully.');
-    }
 
     /**
      * Display the specified product.
@@ -161,13 +159,19 @@ class ProductController extends Controller
 
         if ($images) {
             foreach ($images as $image) {
-                $imageName = time() . '-' . $image->getClientOriginalName();
+                // Generate a unique name for each image
+                $imageName = time() . '-' . Str::random(10) . '-' . $image->getClientOriginalName();
+
+                // Move the image to the public directory for product images
                 $image->move(public_path('images/products'), $imageName);
+
+                // Add each uploaded image's name to the array
                 $uploadedImages[] = $imageName;
             }
         }
 
-        return json_encode($uploadedImages); // Store as JSON array in database
+        // Return the array of uploaded image names as JSON
+        return json_encode($uploadedImages);
     }
 
 
