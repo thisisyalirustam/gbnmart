@@ -29,39 +29,129 @@ $(() => {
         rowAlternationEnabled: true,
         showBorders: true,
         width: "100%",
+        columnAutoWidth: true, // Automatically adjusts column widths
+        scrolling: {
+            mode: "virtual", // Enables virtual scrolling
+            useNative: true,
+        },
+
         columns: [
+            {
+                dataField: "image",
+                caption: "Image",
+                alignment: "center",
+                dataType: "string",
+                width: 100,
+                cellTemplate: profileCellTemplate // Reference the function here
+            },
             {
                 dataField: "name",
                 caption: "Name Product",
+
+
             },
             {
+                dataField: "product_cat.name", // Accessing nested category name
+                caption: "Category Name",
+            },
+            {
+                dataField: "product_sub_category.name", // Accessing nested sub-category name
+                caption: "Sub-Category Name",
+            },
+            {
+                dataField: "product_brand.name", // Accessing nested brand name
+                caption: "Brand Name",
+            },
+            {
+                dataField: "user.name", // Accessing nested user name
+                caption: "User Name",
+            },
+
+            {
                 dataField: "stock_quantity",
-                caption: "Stoke",
+                caption: "Stock",
+                width: 80,
+                alignment: "center",
             },
             {
                 dataField: "price",
                 caption: "Price",
+                width: 80,
+                alignment: "center",
             },
             {
                 dataField: "discounted_price",
                 caption: "Discount Price",
+                width: 80,
+                alignment: "center",
             },
             {
                 dataField: "weight",
                 caption: "Weight",
+                width: 80,
+                alignment: "center",
             },
             {
                 dataField: "dimensions",
                 caption: "Dimensions",
-            },
-            {
-                dataField: "dimensions",
-                caption: "Dimensions",
+                width: 80,
+                alignment: "center",
             },
 
             {
+                dataField: "status",
+                caption: "Status",
+                alignment: "center",
+                width: 110,
+                cellTemplate: function(container, options) {
+                    let buttonClass = 'btn-outline-secondary'; // Default class
+                    let iconClass = 'bi bi-pencil-square'; // Default icon
+                    if (options.data.status === 'active') {
+                        buttonClass = 'btn-success';
+                        iconClass = 'bi bi-check-circle';
+                    } else if (options.data.status === 'pending') {
+                        buttonClass = 'btn-warning';
+                        iconClass = 'bi bi-exclamation-circle';
+                    } else if (options.data.status === 'suspend') {
+                        buttonClass = 'btn-danger';
+                        iconClass = 'bi bi-x-circle';
+                    } else if (options.data.status === 'blocked') {
+                        buttonClass = 'btn-dark';
+                        iconClass = 'bi bi-block';
+                    }
+                    $("<button/>")
+                        .addClass(`btn ${buttonClass} btn-sm mx-1`)
+                        .html(`<i class="${iconClass}"></i> ${options.data.status}`)
+                        .on("click", function() {
+                            showStatusChangeModal(options.data.id, options.data.status);
+                        })
+                        .appendTo(container);
+                }
+            },
+
+            {
+                dataField: "sof",
+                caption: "Show on Front",
+                width: 80,
+                alignment: "center",
+                cellTemplate: function(container, options) {
+                    let buttonClass = options.data.sof === 'Yes' ? 'btn-success' : 'btn-danger';
+                    let buttonText = options.data.sof === 'Yes' ? '<i class="bi bi-eye-fill"></i> Yes' : '<i class="bi bi-eye-slash-fill"></i> No';
+                    $("<button/>")
+                        .addClass(`btn ${buttonClass} btn-sm mx-1`)
+                        .html(buttonText)
+                        .on("click", function() {
+                            showSOFModal(options.data.id, options.data.sof);
+                        })
+                        .appendTo(container);
+                }
+            },
+
+
+
+            {
                 caption: "Actions",
-                alignment: "center", // Center-align the buttons
+                alignment: "center",
                 cellTemplate(container, options) {
                     const id = options.data.id;
 
@@ -70,11 +160,9 @@ $(() => {
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
                         .attr("href", "#")
                         .attr("data-bs-toggle", "modal")
-                        .attr("data-bs-userId", id) //this id is for load dynaimic on model
+                        .attr("data-bs-userId", id)
                         .attr("data-bs-target", "#update")
-                        .html(
-                            '<i class="bi bi-pencil-square" style="color: #007bff;"></i>'
-                        )
+                        .html('<i class="bi bi-pencil-square" style="color: #007bff;"></i>')
                         .appendTo(container);
 
                     // Show Button
@@ -83,21 +171,18 @@ $(() => {
                         .attr("href", "#")
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
-                        .attr("data-bs-target", "#show") // Ensure this matches the modal ID
-                        .html(
-                            '<i class="bi bi-eye" style="color: #28a745;"></i>'
-                        )
+                        .attr("data-bs-target", "#show")
+                        .html('<i class="bi bi-eye" style="color: #28a745;"></i>')
                         .appendTo(container);
+
                     // Delete Button
                     $("<a>")
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
                         .attr("href", "#")
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
-                        .attr("data-bs-target", "#delete") // Ensure this matches the modal ID
-                        .html(
-                            '<i class="bi bi-trash" style="color: #dc3545;"></i>'
-                        )
+                        .attr("data-bs-target", "#delete")
+                        .html('<i class="bi bi-trash" style="color: #dc3545;"></i>')
                         .appendTo(container);
                 },
             },
@@ -110,25 +195,26 @@ $(() => {
         },
     });
 });
+function profileCellTemplate(container, options) {
+    const imageUrl = options.data.image; // Get the image URL from the data
 
-const profileCellTemplate = function (container, options) {
-    $("<div/>")
-        .append(
-            $("<img>", {
-                src: options.value, // assuming 'options.value' contains the image URL
-                css: {
-                    borderRadius: "50%",
-                    width: "50px",
-                    height: "50px",
-                    marginRight: "10px",
-                },
+    if (imageUrl) {
+        // Create an <img> element with the image URL
+        $("<img>")
+            .attr("src", imageUrl)
+            .css({
+                width: "50px",
+                height: "50px",
+                borderRadius: "5px", // Optional: rounded corners
             })
-        )
-        .appendTo(container);
-};
-
+            .appendTo(container); // Append the image to the cell container
+    } else {
+        // Fallback text if no image is available
+        container.text("No Image");
+    }
+}
 let collapsed = false;
-//end of Table DeveExtream
+
 
 //create record
 $(document).ready(function () {
@@ -437,4 +523,53 @@ $(document).ready(function() {
         }
     });
 });
-//end of category and sub category  auto load end
+//end of category and sub category  auto load endlet selectedProductId;
+function showStatusChangeModal(productId, currentStatus) {
+    selectedProductId = productId;
+    $('#newStatus').val(currentStatus);
+    $('#statusModal').modal('show');
+}
+function showSOFModal(productId, currentSOF) {
+    selectedProductId = productId;
+    // Set the select dropdown value based on the current SOF value
+    $('#newSOF').val(currentSOF === 'Yes' ? '1' : '0');
+    $('#sofModal').modal('show');
+}
+
+$(document).ready(function() {
+    // Handle the status form submission
+    $('#statusForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: `/product/${selectedProductId}/status`,
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#statusModal').modal('hide');
+                $("#gridContainer").dxDataGrid("instance").refresh();
+            },
+            error: function(xhr) {
+                console.log("Error updating status:", xhr.responseText);
+            }
+        });
+    });
+
+    // Handle the SOF form submission
+    $('#sofForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: `/product/${selectedProductId}/sof`,
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#sofModal').modal('hide');
+                $("#gridContainer").dxDataGrid("instance").refresh();
+            },
+            error: function(xhr) {
+                console.log("Error updating SOF:", xhr.responseText);
+            }
+        });
+    });
+});
+
+

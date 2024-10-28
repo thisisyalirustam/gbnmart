@@ -14,6 +14,8 @@
         .dx-datagrid .dx-data-row>td.bullet {
             padding-top: 0;
             padding-bottom: 0;
+
+
         }
     </style>
     <section class="section">
@@ -259,6 +261,64 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <form id="statusForm">
+                <div class="modal-body text-center">
+                    <i class="bi bi-shuffle" style="font-size: 3rem; color: #0d6efd;"></i>
+                    <h5 class="modal-title mt-3" style="color: #0d6efd;">Change Status</h5>
+                    <p class="text-muted">Are you sure you want to update the status?</p>
+                </div>
+                <div class="modal-body">
+                    <select id="newStatus" class="form-control" name="status">
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="suspend">Suspend</option>
+                        <option value="blocked">Block</option>
+                    </select>
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- SOF Change Modal -->
+<div id="sofModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <form id="sofForm">
+                <div class="modal-body text-center">
+                    <i class="bi bi-eye-fill" style="font-size: 3rem; color: #ffc107;"></i>
+                    <p class="text-muted">Are you sure you want to change the visibility on the front page?</p>
+                    <select id="newSOF" class="form-control mt-2" name="sof">
+                        <option value="1">Yes - Show on Front</option>
+                        <option value="0">No - Do Not Show on Front</option>
+                    </select>
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Confirm Change</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 
 @endsection
 @section('tabledev')

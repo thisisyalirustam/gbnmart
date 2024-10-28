@@ -1,4 +1,3 @@
-//Table DevExtream
 $(() => {
     $("#gridContainer").dxDataGrid({
         dataSource: {
@@ -31,20 +30,53 @@ $(() => {
         width: "100%",
         columns: [
             {
-                dataField: "name",
-                caption: "Name",
+                dataField: "image",
+                caption: "Image",
+                alignment: "center",
+                dataType: "string",
+                width: 100,
+                cellTemplate: profileCellTemplate // Reference the function here
             },
-          
+
             {
-                dataField: "created_at",
-                caption: "Create Date",
-                dataType: "date",
-                width: 150,
-                
+                dataField: "name",
+                caption: "Category Name",
+                alignment: "left",
             },
+            {
+                dataField: "status",
+                caption: "Status",
+                alignment: "center",
+                width: 100,
+                cellTemplate(container, options) {
+                    const isActive = options.data.status;
+                    $("<span>")
+                        .text(isActive ? "Active" : "Inactive")
+                        .css({
+                            color: isActive ? "green" : "red",
+                            fontWeight: "bold",
+                        })
+                        .appendTo(container);
+                },
+            },
+            {
+                dataField: "sof",
+                caption: "Show on Screen",
+                alignment: "center",
+                width: 100,
+                cellTemplate(container, options) {
+                    const showOnScreen = options.data.sof;
+                    $("<i>")
+                        .addClass(showOnScreen === "yes" ? "bi bi-eye-fill" : "bi bi-eye-slash-fill")
+                        .css({ color: showOnScreen === "yes" ? "blue" : "gray", fontSize: "1.2em" })
+                        .appendTo(container);
+                },
+            },
+
             {
                 caption: "Actions",
-                alignment: "center", // Center-align the buttons
+                alignment: "center",
+                width: 150,
                 cellTemplate(container, options) {
                     const id = options.data.id;
 
@@ -53,25 +85,19 @@ $(() => {
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
                         .attr("href", "#")
                         .attr("data-bs-toggle", "modal")
-                        .attr("data-bs-userId", id) //this id is for load dynaimic on model
+                        .attr("data-bs-userId", id)
                         .attr("data-bs-target", "#update")
-                        .html(
-                            '<i class="bi bi-pencil-square" style="color: #007bff;"></i>'
-                        )
+                        .html('<i class="bi bi-pencil-square" style="color: #007bff;"></i>')
                         .appendTo(container);
 
-                    // Show Button
-                 
                     // Delete Button
                     $("<a>")
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
                         .attr("href", "#")
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
-                        .attr("data-bs-target", "#delete") // Ensure this matches the modal ID
-                        .html(
-                            '<i class="bi bi-trash" style="color: #dc3545;"></i>'
-                        )
+                        .attr("data-bs-target", "#delete")
+                        .html('<i class="bi bi-trash" style="color: #dc3545;"></i>')
                         .appendTo(container);
                 },
             },
@@ -83,19 +109,36 @@ $(() => {
             }
         },
     });
+
 });
+function profileCellTemplate(container, options) {
+    const imageUrl = options.data.image; // Get the image URL from the data
+
+    if (imageUrl) {
+        // Create an <img> element with the image URL
+        $("<img>")
+            .attr("src", imageUrl)
+            .css({
+                width: "50px",
+                height: "50px",
+                borderRadius: "5px", // Optional: rounded corners
+            })
+            .appendTo(container); // Append the image to the cell container
+    } else {
+        // Fallback text if no image is available
+        container.text("No Image");
+    }
+}
+
 
 let collapsed = false;
-//end of Table DeveExtream
 
-//create record
+// Create Record
 $(document).ready(function () {
     $("#addform").on("submit", function (e) {
         e.preventDefault();
 
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
         const formData = new FormData(this);
 
         $.ajax({
@@ -111,130 +154,171 @@ $(document).ready(function () {
                 if (response.success) {
                     $("#gridContainer").dxDataGrid("instance").refresh();
                     $("#add").modal("hide");
-
                     $("#addform")[0].reset();
                 } else {
                     alert("Error: " + response.message);
                 }
             },
             error: function (response) {
-                console.log("Error:", response);
-            },
-        });
-    });
-    // edn of create data
-
-    //update code
-    $("#updateform").on("submit", function (e) {
-        e.preventDefault();
-
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
-        const id = document.querySelector("#updateid").value;
-        const formData = new FormData(this);
-        formData.append("_method", "PUT"); // Append the _method to override with PUT
-
-        $.ajax({
-            url: `/product-cat/${id}`, // The resource controller update route
-            type: "POST", // Still use POST, but we include _method=PUT in the form data
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (response) {
-                if (response.success) {
-                    // Refresh the DataGrid to reflect the updated record
-                    $("#gridContainer").dxDataGrid("instance").refresh();
-                    // Hide the modal
-                    $("#update").modal("hide");
-                    // Reset the form
-                    $("#updateform")[0].reset();
-                } else {
-                    alert("Error: " + response.message);
-                }
-            },
-            error: function (response) {
-                console.log("Error:", response);
-            },
-        });
-    });
-    // end of update code
-
-    //delete code
-    $("#deleteForm").on("submit", function (e) {
-        e.preventDefault();
-
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
-        const id = document.querySelector("#deleteid").value;
-        const formData = new FormData(this);
-        formData.append("_method", "DELETE"); // Method override for DELETE
-
-        $.ajax({
-            url: `/product-cat/${id}`,
-            type: "POST", 
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (response) {
-                if (response.success) {
-                    // Refresh the DataGrid to reflect the deleted record
-                    $("#gridContainer").dxDataGrid("instance").refresh();
-                    // Hide the modal
-                    $("#delete").modal("hide");
-                    // Reset the form
-                    $("#deleteForm")[0].reset();
-                } else {
-                    alert("Error: " + response.message);
-                }
-            },
-            error: function (response) {
-                console.log("Error:", response);
+                console.log("Error:", response); // Print the error to console
+                alert("Error occurred. Check the console for more details.");
             },
         });
     });
 
-    // Trigger form submission when the delete button is clicked
-    $(document).on("click", ".delete-btn", function () {
-        $("#deleteForm").submit();
+
+function submitDeleteForm() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const id = document.querySelector("#deleteid").value;
+    const formData = new FormData(document.querySelector("#deleteForm"));
+
+    $.ajax({
+        url: `/product-cat/${id}`,
+        type: "POST", // Override POST to DELETE with _method
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            if (response.success) {
+                // Refresh the DataGrid to reflect the deleted record
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                // Hide the modal
+                $("#delete").modal("hide");
+                // Reset the form
+                $("#deleteForm")[0].reset();
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function (xhr) {
+            console.log("Error:", xhr.responseText);
+            alert("An error occurred while deleting the record. Please try again.");
+        },
     });
+}
+
+function submitDeleteForm() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const id = document.querySelector("#deleteid").value;
+    const formData = new FormData(document.querySelector("#deleteForm"));
+
+    $.ajax({
+        url: `/product-cat/${id}`,
+        type: "POST", // Override POST to DELETE with _method
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            if (response.success) {
+                // Refresh the DataGrid to reflect the deleted record
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                // Hide the modal
+                $("#delete").modal("hide");
+                // Reset the form
+                $("#deleteForm")[0].reset();
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function (xhr) {
+            console.log("Error:", xhr.responseText);
+            alert("An error occurred while deleting the record. Please try again.");
+        },
+    });
+}
+
 });
-//end of delete code
 
-
-//update Record model
-var update = document.getElementById("update");
+// Update Modal with Prefilled Data
+// Show existing data in the modal, including the image
 update.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
-    fetch(`/product-cat/${id}`, {
-        method: "Get",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
+
+    fetch(`/product-cat/${id}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             const product = data.product[0];
             document.querySelector("#updateid").value = product.id;
             document.querySelector("#updatename").value = product.name;
+            document.querySelector("#updatestatus").value = product.status;
+            document.querySelector("#updatesof").value = product.sof;
+
+            // Show current image in preview
+            if (product.image) {
+                const preview = document.querySelector("#updateImagePreview");
+                const previewImg = document.querySelector("#updateImagePreviewImg");
+                previewImg.src = product.image; // Ensure this is the full image URL
+                preview.style.display = "block";
+            }
         });
 });
-//end update Record model
 
-//Delete model
+// Image preview on new image selection
+document.getElementById("updateImage").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("updateImagePreview");
+    const previewImg = document.getElementById("updateImagePreviewImg");
+    const fileNameInput = document.getElementById("updateFileName");
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImg.src = e.target.result; // Show new image preview
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file); // Read file
+        fileNameInput.value = file.name; // Show file name
+    }
+});
+
+// Handle form submission for updating the category
+$("#updateform").on("submit", function (e) {
+    e.preventDefault();
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const id = document.querySelector("#updateid").value;
+    const formData = new FormData(this);
+    formData.append("_method", "PUT"); // Ensure _method is included for PUT requests
+
+    $.ajax({
+        url: `/product-cat/${id}`,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            if (response.success) {
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                $("#update").modal("hide");
+                $("#updateform")[0].reset();
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function (response) {
+            console.log("Error:", response);
+            alert("Error occurred. Check the console for more details.");
+        },
+    });
+});
+
+
+// Delete Modal Prefill
 var deleteModal = document.getElementById("delete");
-deleteModal.addEventListener("show.bs.modal", function (event) {  
+deleteModal.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
     document.querySelector("#deleteid").value = id;
 });
-// end of delete model
+
+

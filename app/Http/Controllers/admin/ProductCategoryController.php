@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\ProductCat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductCategoryController extends Controller
 {
@@ -13,18 +14,8 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        //
-        $product_cat=ProductCat::all();
-        return view('admin.pages.products.products_cat',compact('product_cat'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-       
+        $product_cat = ProductCat::all();
+        return view('admin.pages.products.products_cat', compact('product_cat'));
     }
 
     /**
@@ -32,11 +23,36 @@ class ProductCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-       $p_cat=ProductCat::create([
-            'name' => request('name'),
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|boolean',
+            'sof' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        return response()->json(['success'=>true,'message'=>'product create successfully','product'=>$p_cat]);
+
+        // Handle image upload if provided
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $img = $request->file('image');
+            $ext = $img->getClientOriginalExtension();
+            $imageName = time() . '.' . $ext;
+            $img->move(public_path('images/category_img'), $imageName);
+            $imagePath = 'images/category_img/' . $imageName;
+        }
+
+        // Create the category
+        $productCat = ProductCat::create([
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+            'sof' => $request->input('sof'),
+            'image' => $imagePath,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product category created successfully',
+            'product' => $productCat
+        ]);
     }
 
     /**
@@ -44,11 +60,9 @@ class ProductCategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
-        $product = ProductCat::select(
-            'id',
-            'name',
-        )->where(['id' => $id])->get();
+        $product = ProductCat::select('id', 'name', 'status', 'sof', 'image')
+            ->where(['id' => $id])
+            ->get();
 
         return response()->json([
             'status' => true,
@@ -62,7 +76,7 @@ class ProductCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Additional code for editing can be implemented here if needed
     }
 
     /**
@@ -70,20 +84,72 @@ class ProductCategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        $p_cat=ProductCat::where('id',$id)->update([
-            'name' => request('name')
-        ]);
-        return response()->json(['success'=>true,'message'=>'product updated successfully','product'=>$p_cat]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'status' => 'required|boolean',
+                'sof' => 'required',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            $productCat = ProductCat::findOrFail($id);
+
+            // Update the fields
+            $productCat->name = $request->input('name');
+            $productCat->status = $request->input('status');
+            $productCat->sof = $request->input('sof');
+
+            // Handle image update
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                if ($productCat->image && file_exists(public_path($productCat->image))) {
+                    unlink(public_path($productCat->image));
+                }
+
+                // Save the new image
+                $img = $request->file('image');
+                $ext = $img->getClientOriginalExtension();
+                $imageName = time() . '.' . $ext;
+                $img->move(public_path('images/category_img'), $imageName);
+                $productCat->image = 'images/category_img/' . $imageName;
+            }
+
+            $productCat->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully',
+                'product' => $productCat
+            ]);
+
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Update Error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        //
-        $p_cat=ProductCat::destroy($id);
-        return response()->json(['success'=>true,'message'=>'product Delete successfully','product'=>$p_cat]);
+{
+    $productCat = ProductCat::findOrFail($id);
+
+    if ($productCat->image && file_exists(public_path($productCat->image))) {
+        unlink(public_path($productCat->image));
     }
+
+    $productCat->delete();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Product category deleted successfully'
+    ]);
+}
+
+
 }

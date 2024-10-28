@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductBrand;
+use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+
         $products = Product::all();
         return view('admin.pages.products.product', compact('products'));
     }
@@ -132,7 +134,8 @@ class ProductController extends Controller
             'product_sub_category_id' => $request->sub_category,
             'description' => $request->description,
             'weight' => $request->weight,
-            'dimensions' => $request->dimensions,
+            'status' => $request->status,
+            'sof' => $request->sof,
             'colors' => json_encode($request->input('colors')),
             'images' => $this->uploadImages($request),
         ]);
