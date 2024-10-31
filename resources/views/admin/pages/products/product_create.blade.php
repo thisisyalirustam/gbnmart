@@ -512,15 +512,12 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 </script>
 <!-- Include Tagify CSS & JS -->
-<!-- Include Tagify CSS & JS -->
+
 
 <!-- Link to Tagify CSS -->
 <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
 
-<!-- Input field for tags -->
 
-
-<!-- Include Tagify JS -->
 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 
 <script>

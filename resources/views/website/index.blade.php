@@ -61,7 +61,7 @@
                 <div class="categories__slider owl-carousel">
 
                         @foreach ($category as $cat )
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 rounded">
                             <div class="categories__item set-bg" data-setbg="{{$cat->image}}">
                                 <h5><a href="#">{{$cat->name}}</a></h5>
                             </div>
@@ -95,101 +95,130 @@
             <div class="row featured__filter">
                 @foreach ($product as $item)
                 @php
-                    // Decode the JSON images into an array
                     $images = json_decode($item->images, true);
-                    // Get the first image or use a fallback
-                    $firstImage = $images ? $images[0] : 'default-image.jpg';
                 @endphp
 
-                <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                    <div class="featured__item">
+                <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4">
+                    <div class="card h-100 border-1 shadow-sm position-relative">
                         <!-- Product Image Slider -->
-                        <div class="featured__item__pic owl-carousel owl-theme">
-                            @if($images)
-                                @foreach($images as $image)
-                                    <div class="item">
-                                        <img src="{{ asset('images/products/' . $image) }}" alt="Product Image" style="width: 100%; height: 200px; object-fit: cover;">
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="item">
-                                    <img src="{{ asset('images/products/default-image.jpg') }}" alt="Default Image" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach($images as $index => $imageName)
+                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100" alt="...">
                                 </div>
-                            @endif
+                                @endforeach
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </a>
                         </div>
 
-                        <!-- Product Info -->
-                        <div class="featured__item__text text-center">
-                            <!-- Product Name -->
-                            <h6><a href="{{ route('product.detail', $item->slug) }}">{{ $item->name }}</a></h6>
-
-                            <!-- Product Description -->
-                            <p>{{ Str::limit(strip_tags($item->description), 50) }}</p>
-
-
+                        <!-- Overlay Icons (Wishlist, Share, and Read More) -->
+                        <div class="overlay-icons d-flex align-items-center justify-content-center">
+                            <a href="#" class="text-white mx-2" title="Add to Wishlist"><i class="fa fa-heart"></i></a>
+                            <a href="#" class="text-white mx-2" title="Share"><i class="fa fa-share-alt"></i></a>
+                            <a href="{{ route('product.detail', $item->slug) }}" class="text-white mx-2" title="Read More"><i class="fa fa-ellipsis-h"></i></a>
+                        </div>
+                        <!-- Product Details -->
+                        <div class="card-body text-center p-3">
+                            <h6 class="product-name text-truncate font-weight-bold mb-2">
+                                <a href="{{ route('product.detail', $item->slug) }}" class="text-dark">{{ $item->name }}</a>
+                            </h6>
+                            <p class="product-description text-muted small mb-2">{{ Str::limit(strip_tags($item->description), 50) }}</p>
                             <!-- Product Price -->
-                            <h5>
+                            <div class="product-price mb-2">
                                 @if($item->discounted_price)
-                                    <span style="text-decoration: line-through; color: red;">${{ $item->price }}</span>
-                                    <span>${{ $item->discounted_price }}</span>
+                                    <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
+                                    <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
                                 @else
-                                    <span>${{ $item->price }}</span>
+                                    <span class="text-primary">${{ $item->price }}</span>
                                 @endif
-                            </h5>
-
+                            </div>
                             <!-- Stock Status -->
-                            <p class="text-muted">
+                            <p class="text-muted small fixed-stock-status">
                                 {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
                             </p>
-
-                            <!-- Action Buttons -->
-                            <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li> <!-- Wishlist -->
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li> <!-- Compare -->
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li> <!-- Add to Cart -->
-                                <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li> <!-- Buy Now -->
-                                <li><a href="#"><i class="fa fa-share-alt"></i></a></li> <!-- Share -->
-                            </ul>
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="card-footer d-flex justify-content-around bg-light">
+                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <button class="btn btn-primary btn-sm">Buy Now</button>
                         </div>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
+            </div>
 
-            <!-- Improved Styles -->
-            <style>
-                .featured__item {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    height: 100%;
-                    padding: 15px;
-                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-                    border-radius: 8px;
-                }
 
-                .featured__item__pic {
-                    margin-bottom: 15px;
-                }
+ <style>
+/* General Card Styling */
+.product-card .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #d0d3d4;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+}
+.product-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
-                .featured__item__text {
-                    padding-top: 10px;
-                }
+/* Product Image Styling */
+.product-image-container {
+    position: relative;
+}
+.product-image-container img {
+    transition: transform 0.3s ease;
+}
+.product-card .card:hover .product-image-container img {
+    transform: scale(1.05);
+}
 
-                .featured__item__text h6 {
-                    font-size: 16px;
-                    margin: 5px 0;
-                }
+/* Slider Control Buttons */
+.product-image-container .btn {
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    color: white;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.product-image-container:hover .btn {
+    opacity: 1;
+}
 
-                .featured__item__text h5 {
-                    font-size: 18px;
-                    color: #28a745;
-                }
+/* Action Buttons */
+.card-footer button {
+    width: 48%;
+    transition: background 0.3s ease;
+}
+.card-footer button:hover {
+    background: #0056b3;
+    color: #fff;
+}
+/* General and Overlay styling as previously defined... */
 
-                .featured__item__text p {
-                    font-size: 14px;
-                    margin-bottom: 10px;
-                    color: #6c757d;
-                }
+/* Carousel */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 250px;
+}
+.carousel img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Hover effect for Overlay Icons */
+.product-image-container:hover .overlay-icons {
+    opacity: 1;
+}
+
             </style>
 
             <!-- Owl Carousel CSS -->
@@ -215,6 +244,18 @@
                         autoplayHoverPause: true // Pause on hover
                     });
                 });
+                document.querySelectorAll('.slider-left').forEach(button => {
+    button.onclick = function() {
+        // Logic to slide to the previous image
+    };
+});
+
+document.querySelectorAll('.slider-right').forEach(button => {
+    button.onclick = function() {
+        // Logic to slide to the next image
+    };
+});
+
             </script>
             </div>
         </div>

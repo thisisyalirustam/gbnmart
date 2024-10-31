@@ -14,19 +14,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
 
     <!-- Css Styles -->
-    <link rel="stylesheet" href="website/css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="website/css/font-awesome.min.css" type="text/css">
-    <link rel="stylesheet" href="website/css/elegant-icons.css" type="text/css">
-    <link rel="stylesheet" href="website/css/nice-select.css" type="text/css">
-    <link rel="stylesheet" href="website/css/jquery-ui.min.css" type="text/css">
-    <link rel="stylesheet" href="website/css/owl.carousel.min.css" type="text/css">
-    <link rel="stylesheet" href="website/css/slicknav.min.css" type="text/css">
-    <link rel="stylesheet" href="website/css/style.css" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/bootstrap.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/font-awesome.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/elegant-icons.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css">
+    <link rel="stylesheet" href=" {{asset('website/css/jquery-ui.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/owl.carousel.min.css')}}" type="text/css">
+    <link rel="stylesheet" href=" {{asset('website/css/slicknav.min.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/css/style.css ')}}" type="text/css">
 </head>
 
 <body>
     <!-- Page Preloder -->
- 
+
     <!-- Humberger Begin -->
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
@@ -128,7 +128,7 @@
                                 @else
                                 <div class="header__top__right__auth">
                                     <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
-                                </div>                               
+                                </div>
                                     @if (Route::has('register'))
                                     <div class="header__top__right__auth ml-2">
                                         <a href="{{ route('register') }}"><i class="fa fa-user-secret"></i> Register</a>
@@ -137,7 +137,7 @@
                                 @endauth
                             </nav>
                         @endif
-                
+
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                     <nav class="header__menu">
                         <ul>
                             <li class="active"><a href="{{ route('homepage') }}">Home</a></li>
-                            <li><a href="">Shop</a></li>
+                            <li><a href="{{route('shoppage')}}">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="header__menu__dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
@@ -184,3 +184,4 @@
         </div>
     </header>
     <!-- Header Section End -->
+

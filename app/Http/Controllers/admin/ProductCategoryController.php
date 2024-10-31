@@ -121,7 +121,6 @@ class ProductCategoryController extends Controller
                 'message' => 'Product updated successfully',
                 'product' => $productCat
             ]);
-
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Update Error: ' . $e->getMessage());
@@ -136,20 +135,18 @@ class ProductCategoryController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-{
-    $productCat = ProductCat::findOrFail($id);
+    {
+        $productCat = ProductCat::findOrFail($id);
 
-    if ($productCat->image && file_exists(public_path($productCat->image))) {
-        unlink(public_path($productCat->image));
+        if ($productCat->image && file_exists(public_path($productCat->image))) {
+            unlink(public_path($productCat->image));
+        }
+
+        $productCat->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product category deleted successfully'
+        ]);
     }
-
-    $productCat->delete();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Product category deleted successfully'
-    ]);
-}
-
-
 }

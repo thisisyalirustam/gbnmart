@@ -15,7 +15,7 @@ class ProdcutSubCategoryController extends Controller
     public function index()
     {
         //
-        $product_cat=ProductCat::all();
+        $product_cat=ProductCat::where('status',1)->get();
         $product_sub_cat = ProductSubCategory::with('product_cat')->get();
         return view('admin.pages.products.product_sub_cat',compact('product_sub_cat', 'product_cat'));
     }
@@ -37,15 +37,15 @@ class ProdcutSubCategoryController extends Controller
         $p_sub_category = ProductSubCategory::create([
             'product_cat_id' => request('product_cat_id'),
             'name' => request('name')
-          
+
         ]);
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Product created successfully',
             'product' => $p_sub_category
         ]);
-        
+
 
     }
     /**

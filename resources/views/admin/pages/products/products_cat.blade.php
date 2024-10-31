@@ -172,7 +172,7 @@
 
 
 {{-- user delete modal --}}
-<div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="delete" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center">
@@ -182,17 +182,18 @@
             </div>
             <form id="deleteForm" class="delete-form">
                 @csrf
-                <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
                 <input type="hidden" id="deleteid" name="id" value="">
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                    <!-- Trigger AJAX delete with onclick -->
+                    <button type="button" class="btn btn-danger delete-btn" onclick="submitDeleteForm()">Delete</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 
 <script>
     function handleFileUpload(inputId, previewId, fileNameId) {
