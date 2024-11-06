@@ -33,7 +33,6 @@ class AdminController extends Controller
     {
         $product_cat = ProductCat::orderBy('id', 'DESC')->get()->map(function ($category) {
             if ($category->image) {
-                // Ensure that only the filename is appended to the base URL
                 $category->image = url('images/category_img/' . basename($category->image));
             }
             return $category;
@@ -61,12 +60,8 @@ class AdminController extends Controller
             ->get()
             ->map(function ($product) {
                 if ($product->images) {
-                    // Decode the JSON images data
                     $images = json_decode($product->images, true);
-
-                    // Check if images is not empty and is an array
                     if (is_array($images) && count($images) > 0) {
-                        // Set the first image from the images array
                         $product->image = url('images/products/' . basename($images[0]));
                     }
                 }

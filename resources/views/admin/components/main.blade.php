@@ -22,10 +22,10 @@
         rel="stylesheet">
 
     {{-- Datatable --}}
-
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css">
     {{-- end of datatable --}}
-
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Vendor CSS Files -->
     <link href="{{ asset('admin/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('admin/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
@@ -87,6 +87,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/supplemental.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/unresolved.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/24.1.4/css/dx.light.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
     @yield('tabledev')
     <script src="{{ asset('admin/DevExtream/plugin/dx.all.js') }}"></script>
 </body>

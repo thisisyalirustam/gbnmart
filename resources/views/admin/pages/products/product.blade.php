@@ -322,7 +322,6 @@
 
 @endsection
 @section('tabledev')
-<link rel="stylesheet" href="{{ asset('admin/custom_css/product.css') }}">
 <script src="{{ asset('admin/customJs/product.js') }}"></script>
 <script src="{{ asset('admin/ajax_crud/product.js') }}"></script>
 @endsection

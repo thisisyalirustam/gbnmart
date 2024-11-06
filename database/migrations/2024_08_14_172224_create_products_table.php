@@ -39,8 +39,10 @@ return new class extends Migration
             $table->json('images')->nullable(); // Images (JSON array)
             $table->decimal('rating', 3, 2)->nullable(); // Product Rating
             $table->text('reviews')->nullable(); // Reviews
-            $table->string('shipping_info')->nullable(); // Shipping Info
-            $table->string('return_policy')->nullable(); // Return Policy
+            $table->text('shipping_info')->nullable();
+            $table->text('short_description')->nullable();// Shipping Info
+            $table->text('return_policy')->nullable();
+            $table->text('related_product')->nullable(); // Return Policy
             $table->json('tags')->nullable(); // Tags (JSON array)
             $table->boolean('featured')->default(false); // Featured Product (Boolean)
             $table->timestamps(); // Created At and Updated At

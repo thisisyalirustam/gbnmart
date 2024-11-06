@@ -1,5 +1,6 @@
 @extends('admin.layout.content')
 @section('content')
+<link rel="stylesheet" href="{{asset('admin/custom_css/product.css')}}">
 <div class="pagetitle">
     <h1>Users</h1>
     <nav>
@@ -9,93 +10,6 @@
             <li class="breadcrumb-item active">Data</li>
         </ol>
     </nav>
-    <style>
-        .dx-datagrid .dx-data-row>td.bullet {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-    </style>
-
-<style>
-    .container {
-        max-width: 1200px;
-        margin: 20px auto;
-    }
-    .card {
-        background: #fff;
-        box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        border-radius: 8px;
-        padding: 20px;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: block;
-    }
-    .form-control, .form-select {
-        width: 100%;
-        padding: 8px;
-        font-size: 16px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-    }
-    .image-upload-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .image-preview {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 10px;
-        align-items: center;
-    }
-    .image-preview img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-    .add-image-btn {
-        width: 50px;
-        height: 50px;
-        border: none;
-        background-color: #4CAF50;
-        color: white;
-        font-size: 24px;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-    .add-image-btn:hover {
-        background-color: #45a049;
-    }
-    .add-image-btn:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-    }
-    .btn {
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-        color: white;
-    }
-    .btn-success {
-        background-color: #28a745;
-    }
-    .btn-info {
-        background-color: #17a2b8;
-    }
-    .btn-success:hover, .btn-info:hover {
-        opacity: 0.85;
-    }
-    .text-danger {
-        color: red;
-    }
-</style>
 
 <section class="section">
     <div class="container">
@@ -159,19 +73,45 @@
                             <label for="quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
                             <input type="number" name="quantity" id="quantity" class="form-control" placeholder="Enter quantity in stock" required>
                         </div>
-
-                        <div class="form-group">
-                            <label for="description" class="form-label">Product Description <span class="text-danger">*</span></label>
-                            <div id="description-editor"></div>
-                            <input type="hidden" id="description" name="description">
-                            <small id="descriptionHelp" class="form-text text-muted">Max 1000 characters</small>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="shortDescription" class="form-label">
+                                    Short Description <span class="text-danger mt-2">*</span>
+                                </label>
+                                <div id="shortDescriptionEditor"></div>
+                                <input type="hidden" id="shortDescription" name="short_description">
+                            </div>
                         </div>
+
+                    </div>
+                </div>
+                <h2 class="mb-3">Add Description</h2>
+                <hr>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="description" class="form-label">
+                           Description <span class="text-danger mt-2">*</span>
+                        </label>
+                        <div id="description-editor"></div>
+                        <input type="hidden" id="description" name="description">
                     </div>
                 </div>
 
-                <!-- Image Upload and Color Selection -->
-                <h2 class="mb-3">Additional Information</h2>
+                <div class="row mt-4 mb-5"></div>
                 <div class="row">
+                    <div class="form-group ">
+                        <label for="shippingInfo" class="form-label ">
+                            Shipping Information <span class="text-danger">*</span>
+                        </label>
+                        <div id="shippingInfoEditor"></div>
+                        <input type="hidden" id="shippingInfo" name="shipping_info">
+                    </div>
+                </div>
+                <div class="row mt-4 mb-5"></div>
+
+                <!-- Image Upload and Color Selection -->
+                <h2 class="mt-5">Additional Information</h2>
+                <div class="row mt-5">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="weight" class="form-label">Weight (in kg) <span class="text-danger">*</span></label>
@@ -192,7 +132,7 @@
                         <div class="form-group">
                             <label for="color_input" class="form-label">Available Colors <span class="text-danger">*</span></label>
                             <input type="text" id="color_input" class="form-control" placeholder="Enter color name and press 'Add'">
-                            <button type="button" id="add_color_btn" class="btn btn-info mt-2" onclick="addColor()">Add Color</button>
+                            <button type="button" id="add_color_btn" class="btn btn-info btn-sm mt-2" onclick="addColor()">Add Color</button>
                             <div id="color-swatches" class="mt-3 d-flex flex-wrap"></div>
                             <input type="hidden" name="colors[]" id="colors">
                         </div>
@@ -221,18 +161,97 @@
     </div>
 </section>
 
+
 <!-- jQuery for AJAX Requests -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- AJAX Form Submission -->
 <script>
+    $(document).ready(function() {
+    $('#p_category').on('change', function() {
+        var categoryId = $(this).val();
+        if (categoryId) {
+            $.ajax({
+                url: '/get-subcategories/' + categoryId,  // Ensure this URL matches your route definition
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#p_sub_cat').empty();  // Clear previous subcategories
+                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Add a default option
+                    $.each(data, function(key, value) {
+                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error: " + error);  // Add error logging
+                    console.log(xhr.responseText);   // Debug response from the server
+                }
+            });
+        } else {
+            $('#p_sub_cat').empty();
+            $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Reset if no category is selected
+        }
+    });
+});
+//end of category and sub category  auto load endlet selectedProductId;
+function showStatusChangeModal(productId, currentStatus) {
+    selectedProductId = productId;
+    $('#newStatus').val(currentStatus);
+    $('#statusModal').modal('show');
+}
+function showSOFModal(productId, currentSOF) {
+    selectedProductId = productId;
+    // Set the select dropdown value based on the current SOF value
+    $('#newSOF').val(currentSOF === 'Yes' ? '1' : '0');
+    $('#sofModal').modal('show');
+}
+
+$(document).ready(function() {
+    // Handle the status form submission
+    $('#statusForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: `/product/${selectedProductId}/status`,
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#statusModal').modal('hide');
+                $("#gridContainer").dxDataGrid("instance").refresh();
+            },
+            error: function(xhr) {
+                console.log("Error updating status:", xhr.responseText);
+            }
+        });
+    });
+
+
+    // Handle the SOF form submission
+    $('#sofForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: `/product/${selectedProductId}/sof`,
+            type: "POST",
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#sofModal').modal('hide');
+                $("#gridContainer").dxDataGrid("instance").refresh();
+            },
+            error: function(xhr) {
+                console.log("Error updating SOF:", xhr.responseText);
+            }
+        });
+    });
+});
+
+
+
 $(document).ready(function() {
     $('#addform').on('submit', function(e) {
     e.preventDefault();
 
     var formData = new FormData(this);  // Prepare FormData
-    formData.append('description', quill.root.innerHTML); // Append Quill editor content
-
+    $('#description').val(quillDescription.root.innerHTML);
+        $('#shortDescription').val(quillShortDescription.root.innerHTML);
+        $('#shippingInfo').val(quillShippingInfo.root.innerHTML);
     $.ajax({
         type: 'POST',
         url: "{{ route('product.store') }}",
@@ -251,106 +270,34 @@ $(document).ready(function() {
 });
 
 
-    // Handle Category Change to Fetch Subcategories and Brands
-    $('#p_category').on('change', function() {
-        var categoryId = $(this).val();
+$('#p_category').on('change', function() {
+    var categoryId = $(this).val();
 
-        if (categoryId) {
-            $.ajax({
-                url: '/get-subcategories-brands/' + categoryId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // Populate subcategories
-                    $('#p_sub_cat').empty().append('<option value="">Select Sub Category</option>');
-                    $.each(data.subcategories, function(index, subcategory) {
-                        $('#p_sub_cat').append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
-                    });
+    if (categoryId) {
+        $.ajax({
+            url: '/get-subcategories-brands/' + categoryId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Populate subcategories
+                $('#p_sub_cat').empty().append('<option value="">Select Sub Category</option>');
+                $.each(data.subcategories, function(index, subcategory) {
+                    $('#p_sub_cat').append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                });
 
-                    // Populate brands
-                    $('#brand').empty().append('<option value="">Select Brand</option>');
-                    $.each(data.brands, function(index, brand) {
-                        $('#brand').append('<option value="' + brand.id + '">' + brand.name + '</option>');
-                    });
-                }
-            });
-        } else {
-            $('#p_sub_cat, #brand').empty().append('<option value="">Select Option</option>');
-        }
-    });
-});
-</script>
-
-<!-- Quill Editor for Product Description -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-<script>
-var quill = new Quill('#description-editor', {
-    theme: 'snow',
-    placeholder: 'Enter product description...',
-    modules: {
-        toolbar: [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            [{ list: 'ordered'}, { list: 'bullet' }],
-            ['link', 'image']
-        ]
+                // Populate brands
+                $('#brand').empty().append('<option value="">Select Brand</option>');
+                $.each(data.brands, function(index, brand) {
+                    $('#brand').append('<option value="' + brand.id + '">' + brand.name + '</option>');
+                });
+            }
+        });
+    } else {
+        $('#p_sub_cat, #brand').empty().append('<option value="">Select Option</option>');
     }
 });
-</script>
+});
 
-<!-- Color Management and Image Preview -->
-<script>
-let imageArray = [];
-let colors = [];
-
-function handleImageFiles(files) {
-    const remainingSlots = 7 - imageArray.length;
-    const filesToAdd = Array.from(files).slice(0, remainingSlots);
-    filesToAdd.forEach(file => {
-        if (imageArray.length < 7) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                document.getElementById('image-preview').appendChild(img);
-                imageArray.push(file);
-                if (imageArray.length === 7) {
-                    document.getElementById('add_image_btn').style.display = 'none';
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-}
-
-function addColor() {
-    const colorInput = document.getElementById('color_input');
-    const colorName = colorInput.value.trim();
-
-    if (colorName === "" || colors.includes(colorName)) {
-        alert("Please enter a unique color.");
-        return;
-    }
-
-    const colorDiv = document.createElement('div');
-    colorDiv.style.backgroundColor = colorName;
-    colorDiv.style.width = '30px';
-    colorDiv.style.height = '30px';
-    colorDiv.style.borderRadius = '10%';
-    document.getElementById('color-swatches').appendChild(colorDiv);
-    colors.push(colorName);
-    document.getElementById('colors').value = JSON.stringify(colors);
-    colorInput.value = "";
-}
-</script>
-
-<!-- Tagify for Tags Input -->
-<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-
-<script>
 document.addEventListener("DOMContentLoaded", function() {
     var input = document.querySelector('#tags');
     var tagify = new Tagify(input, {
@@ -364,187 +311,55 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
-</script>
 
 
-<!-- Include jQuery if it's not already included -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+$(document).ready(function() {
+    // Listen for changes on the category dropdown
+    $('#p_category').on('change', function() {
+        var categoryId = $(this).val();  // Get the selected category ID
 
-<script>
-    $(document).ready(function() {
-        $('#addform').on('submit', function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            formData.append('description', quill.root.innerHTML);
+        if (categoryId) {
+            // If a category is selected, make an AJAX request to fetch subcategories and brands
             $.ajax({
-                type: 'POST',
-                url: "{{ route('product.store') }}",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    console.log('Success:', response);
-                    alert('Product saved successfully!');
+                url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
+                type: 'GET',  // GET request
+                dataType: 'json',  // Expect JSON response
+                success: function(data) {
+                    // Clear and populate the subcategory dropdown
+                    $('#p_sub_cat').empty();
+                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+                    $.each(data.subcategories, function(key, value) {
+                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+
+                    // Clear and populate the brand dropdown
+                    $('#brand').empty();
+                    $('#brand').append('<option value="">Select Brand</option>');
+                    $.each(data.brands, function(key, value) {
+                        $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
                 },
                 error: function(xhr, status, error) {
-                    console.log('Error:', xhr.responseText);
-                    alert('Error saving product!');
+                    console.log("Error: " + error);
+                    console.log("Response: " + xhr.responseText);
                 }
             });
-        });
-    });
-    </script>
+        } else {
+            // If no category is selected, clear both subcategory and brand dropdowns
+            $('#p_sub_cat').empty();
+            $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
 
-<script>
-
-    $(document).ready(function() {
-        // Listen for changes on the category dropdown
-        $('#p_category').on('change', function() {
-            var categoryId = $(this).val();  // Get the selected category ID
-
-            if (categoryId) {
-                // If a category is selected, make an AJAX request to fetch subcategories and brands
-                $.ajax({
-                    url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
-                    type: 'GET',  // GET request
-                    dataType: 'json',  // Expect JSON response
-                    success: function(data) {
-                        // Clear and populate the subcategory dropdown
-                        $('#p_sub_cat').empty();
-                        $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
-                        $.each(data.subcategories, function(key, value) {
-                            $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-
-                        // Clear and populate the brand dropdown
-                        $('#brand').empty();
-                        $('#brand').append('<option value="">Select Brand</option>');
-                        $.each(data.brands, function(key, value) {
-                            $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.log("Error: " + error);
-                        console.log("Response: " + xhr.responseText);
-                    }
-                });
-            } else {
-                // If no category is selected, clear both subcategory and brand dropdowns
-                $('#p_sub_cat').empty();
-                $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
-
-                $('#brand').empty();
-                $('#brand').append('<option value="">No Brand Yet</option>');
-            }
-        });
-    });
-</script>
-
-
-<script>
-
-    let imageArray = [];
-    let colors = [];
-
-    function handleImageFiles(files) {
-        const remainingSlots = 7 - imageArray.length;
-        const filesToAdd = Array.from(files).slice(0, remainingSlots);
-        filesToAdd.forEach(file => {
-            if (imageArray.length < 7) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    document.getElementById('image-preview').appendChild(img);
-                    imageArray.push(file);
-                    if (imageArray.length === 7) {
-                        document.getElementById('add_image_btn').style.display = 'none';
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    function addColor() {
-        const colorInput = document.getElementById('color_input');
-        const colorName = colorInput.value.trim();
-        if (colorName === "" || colors.includes(colorName)) {
-            alert("Please enter a unique color.");
-            return;
+            $('#brand').empty();
+            $('#brand').append('<option value="">No Brand Yet</option>');
         }
-        const colorDiv = document.createElement('div');
-        colorDiv.style.backgroundColor = colorName;
-        colorDiv.style.width = '30px';
-        colorDiv.style.height = '30px';
-        colorDiv.style.borderRadius = '10%';
-        document.getElementById('color-swatches').appendChild(colorDiv);
-        colors.push(colorName);
-        document.getElementById('colors').value = JSON.stringify(colors);
-        colorInput.value = "";
-    }
-</script>
-
-<!-- Include Quill Editor CSS & JS -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-
-<!-- Custom Script to Handle Quill Editor -->
-<script>
-    // Initialize Quill editor
-    var quill = new Quill('#description-editor', {
-        theme: 'snow',
-        placeholder: 'Enter product description...',
-        modules: {
-            toolbar: [
-                [{ header: [1, 2, 3, false] }],
-                ['bold', 'italic', 'underline'],
-                [{ list: 'ordered'}, { list: 'bullet' }],
-                ['link', 'image', 'video']
-            ]
-        }
-    });
-
-    // On form submit, store the editor content in hidden input
-    document.getElementById('addform').onsubmit = function() {
-        document.getElementById('description').value = quill.root.innerHTML;
-    };
-</script>
-<!-- Include Tagify CSS & JS -->
-
-
-<!-- Link to Tagify CSS -->
-<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
-
-
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var input = document.querySelector('#tags'); // Get the input element
-    var tagify = new Tagify(input, {
-        whitelist: ["iPhone 13", "MacBook Pro", "Samsung Galaxy", "PlayStation 5", "Nintendo Switch", "Sony Headphones", "Dell XPS", "Canon Camera"],
-        maxTags: 10, // Maximum number of tags
-        dropdown: {
-            maxItems: 20,    // Max items to show in the dropdown
-            classname: "tags-look", // Custom classname for the dropdown
-            enabled: 0,      // Always show the dropdown
-            closeOnSelect: false // Keep the dropdown open after selecting
-        }
-    });
-
-    // If you need to handle form submission:
-    input.form.addEventListener('submit', (e) => {
-        e.preventDefault();  // Prevent the native form submission
-        console.log(tagify.value.map(item => item.value));  // Log or process the array of tags
     });
 });
-</script>
 
+</script>
 </div>
 @endsection
 @section('tabledev')
+
 <script src="{{ asset('admin/customJs/product.js') }}"></script>
 <script src="{{ asset('admin/ajax_crud/product.js') }}"></script>
 @endsection

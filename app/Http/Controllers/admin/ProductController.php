@@ -73,10 +73,14 @@ class ProductController extends Controller
     $product->dimensions = $request->dimensions;
     $product->color_options = json_encode($request->input('colors'));
     $product->tags = json_encode($request->input('tags'));
+    // $product->color_options = $request->input('colors'); // Directly saving JSON string
+    // $product->tags = $request->input('tags'); // Directly saving JSON string
     $product->user_id = $userId;
     $product->slug = $slug;
     $product->name_slug = $slug;
     $product->description_slug = $description_slug;
+    $product->short_description = $request->short_description;
+    $product->shipping_info = $request->shipping_info;
 
     // Handle multiple image uploads and store as JSON in the database
     $product->images = $this->uploadImages($request); // JSON array of image names

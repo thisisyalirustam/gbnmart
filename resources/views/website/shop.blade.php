@@ -2,61 +2,10 @@
 @section('webcontent')
 
 
-    <!-- Hero Section Begin -->
-    <section class="hero hero-normal">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="hero__categories">
-                        <div class="hero__categories__all">
-                            <i class="fa fa-bars"></i>
-                            <span>All departments</span>
-                        </div>
-                        <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="hero__search">
-                        <div class="hero__search__form">
-                            <form action="#">
-                                <div class="hero__search__categories">
-                                    All Categories
-                                    <span class="arrow_carrot-down"></span>
-                                </div>
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
-                            </form>
-                        </div>
-                        <div class="hero__search__phone">
-                            <div class="hero__search__phone__icon">
-                                <i class="fa fa-phone"></i>
-                            </div>
-                            <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Hero Section End -->
+
 
     <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+    <section class="breadcrumb-section set-bg" data-setbg="{{asset('website/img/breadcrumb.jpg')}}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -81,20 +30,24 @@
                     <div class="sidebar">
                         <div class="sidebar__item">
                             <h4>Department</h4>
-                            <ul>
+                            <ul class="category-list">
                                 @if ($categories->isNotEmpty())
                                     @foreach ($categories as $category)
-                                        <li>
+                                        <li class="category-item">
+                                            <!-- Category name for filtering -->
                                             <a href="{{ route('shoppage', $category->slug) }}" class="main-category-link">
                                                 {{ $category->name }}
                                             </a>
+
+                                            <!-- Icon for expanding subcategories -->
                                             @if ($category->product_sub_category->isNotEmpty())
-                                                <a href="#submenu{{$category->id}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle ml-2">
-                                                    <i class="fas fa-chevron-down"></i> <!-- Optional icon for dropdown -->
+                                                <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown('{{ $category->id }}')">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                    <i class="fas fa-chevron-up" style="display: none;"></i>
                                                 </a>
-                                                <ul class="collapse list-unstyled" id="submenu{{$category->id}}">
+                                                <ul class="collapse list-unstyled submenu" id="submenu{{ $category->id }}">
                                                     @foreach ($category->product_sub_category as $subCategory)
-                                                        <li>
+                                                        <li class="sub-category-item">
                                                             <a href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}">
                                                                 {{ $subCategory->name }}
                                                             </a>
@@ -106,64 +59,217 @@
                                     @endforeach
                                 @endif
                             </ul>
+
+
                         </div>
+<style>
+    /* Base styles for the category list */
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-                        <!-- JavaScript to control collapse -->
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script>
-                            $(document).ready(function(){
-                                // Allow only one submenu to be open at a time
-                                $('.sidebar__item .dropdown-toggle').on('click', function() {
-                                    // Close all other submenus
-                                    $('.sidebar__item ul.collapse').not($(this).next()).collapse('hide');
-                                });
-                            });
-                        </script>
+.category-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f8f9fa;
+    position: relative;
+}
 
-                        <!-- CSS Styles -->
-                        <style>
-                            .sidebar__item ul {
-                                list-style: none;
-                                padding: 0;
-                            }
+.main-category-link, .dropdown-toggle {
+    color: #007bff;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 5px;
+}
 
-                            .sidebar__item ul li {
-                                padding: 5px 10px;
-                            }
+.dropdown-toggle {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
 
-                            .sidebar__item ul li a {
-                                color: black;
-                                text-decoration: none;
-                            }
+.submenu {
+    padding-left: 20px;
+    display: none;
+    background-color: #e9ecef;
+    margin: 5px 0;
+}
 
-                            .sidebar__item ul li a:hover,
-                            .sidebar__item ul li a:focus {
-                                color: darkblue;
-                            }
+.sub-category-item {
+    padding: 5px 0;
+}
 
-                            .list-unstyled {
-                                background-color: #f8f9fa;
-                                border-left: 3px solid #007bff;
-                            }
-                        </style>
+/* Hover styles */
+.category-item:hover {
+    background-color: #e2e6ea;
+}
 
+/* Active styles for dropdown */
+.active-submenu {
+    display: block;
+}
+
+/* Icon rotation */
+.fas.fa-chevron-up, .fas.fa-chevron-down {
+    transition: transform 0.3s ease;
+}
+
+.active-toggle .fa-chevron-down {
+    transform: rotate(180deg);
+}
+.sidebar__item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.sidebar__item h4 {
+    margin-bottom: 10px;
+}
+
+.sidebar__item__size {
+    margin: 5px 0;
+}
+
+.sidebar__item__size label {
+    cursor: pointer;
+}
+
+.sidebar__item__size input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+
+</style>
+<script>
+    function toggleDropdown(categoryId) {
+    var submenu = document.getElementById('submenu' + categoryId);
+    var isActive = submenu.classList.contains('active-submenu');
+
+    // Close all open submenus
+    var allSubmenus = document.querySelectorAll('.submenu');
+    allSubmenus.forEach(function(menu) {
+        menu.classList.remove('active-submenu');
+    });
+
+    // Reset all chevron icons to downward
+    var allToggles = document.querySelectorAll('.dropdown-toggle');
+    allToggles.forEach(function(toggle) {
+        var icons = toggle.querySelectorAll('i');
+        icons[0].style.display = 'inline';  // Chevron down
+        icons[1].style.display = 'none';    // Chevron up
+    });
+
+    // Toggle the current submenu and icon, if it was not active before
+    if (!isActive) {
+        submenu.classList.add('active-submenu');
+        var icons = submenu.previousElementSibling.querySelectorAll('i');
+        icons[0].style.display = 'none';   // Chevron down
+        icons[1].style.display = 'inline'; // Chevron up
+    }
+}
+
+function getSelectedSizes() {
+    var sizes = [];
+    document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
+        sizes.push(item.parentNode.textContent.trim());
+    });
+    alert('Selected Sizes: ' + sizes.join(', '));
+}
+
+
+</script>
+<div class="sidebar__item">
+    <h4>Select Brands</h4>
+    <ul class="brand-list">
+        @if ($brands->isNotEmpty())
+        @foreach ($brands as $brand)
+        <li class="brand-item">
+            <input class="brand-label" type="checkbox" id="brand{{$brand->id}}" name="brand[]" value="{{$brand->id}}" {{ in_array($brand->id, $brandsArray) ? 'checked' : '' }}>
+            <label for="brand{{$brand->id}}">{{$brand->name}}</label>
+        </li>
+        @endforeach
+    @endif
+
+    </ul>
+
+
+</div>
                                   <div class="sidebar__item">
                             <h4>Price</h4>
                             <div class="price-range-wrap">
                                 <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                    data-min="10" data-max="540">
-                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                </div>
-                                <div class="range-slider">
-                                    <div class="price-input">
-                                        <input type="text" id="minamount">
-                                        <input type="text" id="maxamount">
-                                    </div>
+                                data-min="{{ $min_price ?: '0' }}"
+                                data-max="{{ $max_price ?: $maxPriceProduct }}">
+                                <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                            </div>
+                            <div class="range-slider">
+                                <div class="price-input">
+                                    <input type="text" id="minamount" name="minamount">
+                                    <input type="text" id="maxamount" name="maxamount">
                                 </div>
                             </div>
+
+                            </div>
                         </div>
+
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+$(document).ready(function() {
+    var rangeSlider = $(".price-range"),
+        minamount = $("#minamount"),
+        maxamount = $("#maxamount"),
+        minPrice = parseInt(rangeSlider.data('min')),
+        maxPrice = parseInt(rangeSlider.data('max'));
+
+    rangeSlider.slider({
+        range: true,
+        min: 0,
+        max: {{$maxPriceProduct}},
+        values: [minPrice, maxPrice],
+        slide: function(event, ui) {
+            minamount.val('$' + ui.values[0]);
+            maxamount.val('$' + ui.values[1]);
+        },
+        change: function(event, ui) {
+            apply_filters();
+        }
+    });
+
+    minamount.val('$' + minPrice);
+    maxamount.val('$' + maxPrice);
+
+    $(".brand-label").change(function() {
+        apply_filters();
+    });
+    $('#sort').change(function(){
+        apply_filters();
+    });
+    function apply_filters() {
+        var brands = $(".brand-label:checked").map(function() {
+            return $(this).val();
+        }).get().join(',');
+
+        var url = '{{url()->current()}}';
+
+        url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$', '');
+
+        url+='&sort='+$("#sort").val();
+        if (brands) {
+            url += '&brand=' + brands;
+        }
+        window.location.href = url;
+    }
+});
+</script>
+
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Colors</h4>
                             <div class="sidebar__item__color sidebar__item__color--white">
@@ -208,28 +314,29 @@
                             <div class="sidebar__item__size">
                                 <label for="large">
                                     Large
-                                    <input type="radio" id="large">
+                                    <input type="checkbox" id="large" name="size">
                                 </label>
                             </div>
                             <div class="sidebar__item__size">
                                 <label for="medium">
                                     Medium
-                                    <input type="radio" id="medium">
+                                    <input type="checkbox" id="medium" name="size">
                                 </label>
                             </div>
                             <div class="sidebar__item__size">
                                 <label for="small">
                                     Small
-                                    <input type="radio" id="small">
+                                    <input type="checkbox" id="small" name="size">
                                 </label>
                             </div>
                             <div class="sidebar__item__size">
                                 <label for="tiny">
                                     Tiny
-                                    <input type="radio" id="tiny">
+                                    <input type="checkbox" id="tiny" name="size">
                                 </label>
                             </div>
                         </div>
+
 
                     </div>
                 </div>
@@ -308,15 +415,17 @@
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
                                     <span>Sort By</span>
-                                    <select>
+                                    <select  id="sort" name="sort">
                                         <option value="0">Default</option>
-                                        <option value="0">Default</option>
+                                        <option value="latest_product" {{($sort=='latest_product')?'selected' : ''}}>Latest Products</option>
+                                        <option value="price_high"  {{($sort=='price_high')?'selected' : ''}}>Price High</option>
+                                        <option value="price_low"  {{($sort=='price_low')?'selected' : ''}}>Price Low</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="filter__found">
-                                    <h6><span>16</span> Products found</h6>
+                                    <h6><span>8</span> Products found</h6>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-3">
@@ -519,4 +628,6 @@
                     </div>
                 </div>
             </div>
+
+
  @endsection
