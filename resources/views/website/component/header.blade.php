@@ -8,6 +8,8 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Ogani | Template</title>
 
     <!-- Google Font -->
@@ -22,10 +24,20 @@
     <link rel="stylesheet" href="{{asset('website/css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href=" {{asset('website/css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/css/style.css ')}}" type="text/css">
+    <link rel="stylesheet" href="{{asset('website/coustom_css/css.css')}}" type="text/css">
+
 </head>
 
 <body>
     <!-- Page Preloder -->
+
+    <script>
+ $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    </script>
 
     <!-- Humberger Begin -->
     <div class="humberger__menu__overlay"></div>

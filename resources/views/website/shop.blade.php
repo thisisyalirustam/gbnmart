@@ -1,11 +1,7 @@
 @extends('website.layout.content')
 @section('webcontent')
-
-
-
-
     <!-- Breadcrumb Section Begin -->
-    <section class="breadcrumb-section set-bg" data-setbg="{{asset('website/img/breadcrumb.jpg')}}">
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('website/img/breadcrumb.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -38,17 +34,17 @@
                                             <a href="{{ route('shoppage', $category->slug) }}" class="main-category-link">
                                                 {{ $category->name }}
                                             </a>
-
-                                            <!-- Icon for expanding subcategories -->
                                             @if ($category->product_sub_category->isNotEmpty())
-                                                <a href="javascript:void(0);" class="dropdown-toggle" onclick="toggleDropdown('{{ $category->id }}')">
+                                                <a href="javascript:void(0);" class="dropdown-toggle"
+                                                    onclick="toggleDropdown('{{ $category->id }}')">
                                                     <i class="fas fa-chevron-down"></i>
                                                     <i class="fas fa-chevron-up" style="display: none;"></i>
                                                 </a>
                                                 <ul class="collapse list-unstyled submenu" id="submenu{{ $category->id }}">
                                                     @foreach ($category->product_sub_category as $subCategory)
                                                         <li class="sub-category-item">
-                                                            <a href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}">
+                                                            <a
+                                                                href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}">
                                                                 {{ $subCategory->name }}
                                                             </a>
                                                         </li>
@@ -60,215 +56,45 @@
                                 @endif
                             </ul>
 
+                        </div>
+                        <script></script>
+                        <div class="sidebar__item">
+                            <h4>Select Brands</h4>
+                            <ul class="brand-list">
+                                @if ($brands->isNotEmpty())
+                                    @foreach ($brands as $brand)
+                                        <li class="brand-item">
+                                            <input class="brand-label" type="checkbox" id="brand{{ $brand->id }}"
+                                                name="brand[]" value="{{ $brand->id }}"
+                                                {{ in_array($brand->id, $brandsArray) ? 'checked' : '' }}>
+                                            <label for="brand{{ $brand->id }}">{{ $brand->name }}</label>
+                                        </li>
+                                    @endforeach
+                                @endif
+
+                            </ul>
+
 
                         </div>
-<style>
-    /* Base styles for the category list */
-.category-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.category-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px;
-    background-color: #f8f9fa;
-    position: relative;
-}
-
-.main-category-link, .dropdown-toggle {
-    color: #007bff;
-    text-decoration: none;
-    display: inline-block;
-    margin-right: 5px;
-}
-
-.dropdown-toggle {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-}
-
-.submenu {
-    padding-left: 20px;
-    display: none;
-    background-color: #e9ecef;
-    margin: 5px 0;
-}
-
-.sub-category-item {
-    padding: 5px 0;
-}
-
-/* Hover styles */
-.category-item:hover {
-    background-color: #e2e6ea;
-}
-
-/* Active styles for dropdown */
-.active-submenu {
-    display: block;
-}
-
-/* Icon rotation */
-.fas.fa-chevron-up, .fas.fa-chevron-down {
-    transition: transform 0.3s ease;
-}
-
-.active-toggle .fa-chevron-down {
-    transform: rotate(180deg);
-}
-.sidebar__item {
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.sidebar__item h4 {
-    margin-bottom: 10px;
-}
-
-.sidebar__item__size {
-    margin: 5px 0;
-}
-
-.sidebar__item__size label {
-    cursor: pointer;
-}
-
-.sidebar__item__size input[type="checkbox"] {
-    margin-right: 5px;
-}
-
-
-</style>
-<script>
-    function toggleDropdown(categoryId) {
-    var submenu = document.getElementById('submenu' + categoryId);
-    var isActive = submenu.classList.contains('active-submenu');
-
-    // Close all open submenus
-    var allSubmenus = document.querySelectorAll('.submenu');
-    allSubmenus.forEach(function(menu) {
-        menu.classList.remove('active-submenu');
-    });
-
-    // Reset all chevron icons to downward
-    var allToggles = document.querySelectorAll('.dropdown-toggle');
-    allToggles.forEach(function(toggle) {
-        var icons = toggle.querySelectorAll('i');
-        icons[0].style.display = 'inline';  // Chevron down
-        icons[1].style.display = 'none';    // Chevron up
-    });
-
-    // Toggle the current submenu and icon, if it was not active before
-    if (!isActive) {
-        submenu.classList.add('active-submenu');
-        var icons = submenu.previousElementSibling.querySelectorAll('i');
-        icons[0].style.display = 'none';   // Chevron down
-        icons[1].style.display = 'inline'; // Chevron up
-    }
-}
-
-function getSelectedSizes() {
-    var sizes = [];
-    document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
-        sizes.push(item.parentNode.textContent.trim());
-    });
-    alert('Selected Sizes: ' + sizes.join(', '));
-}
-
-
-</script>
-<div class="sidebar__item">
-    <h4>Select Brands</h4>
-    <ul class="brand-list">
-        @if ($brands->isNotEmpty())
-        @foreach ($brands as $brand)
-        <li class="brand-item">
-            <input class="brand-label" type="checkbox" id="brand{{$brand->id}}" name="brand[]" value="{{$brand->id}}" {{ in_array($brand->id, $brandsArray) ? 'checked' : '' }}>
-            <label for="brand{{$brand->id}}">{{$brand->name}}</label>
-        </li>
-        @endforeach
-    @endif
-
-    </ul>
-
-
-</div>
-                                  <div class="sidebar__item">
+                        <div class="sidebar__item">
                             <h4>Price</h4>
                             <div class="price-range-wrap">
                                 <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                data-min="{{ $min_price ?: '0' }}"
-                                data-max="{{ $max_price ?: $maxPriceProduct }}">
-                                <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                            </div>
-                            <div class="range-slider">
-                                <div class="price-input">
-                                    <input type="text" id="minamount" name="minamount">
-                                    <input type="text" id="maxamount" name="maxamount">
+                                    data-min="{{ $min_price ?: '0' }}" data-max="{{ $max_price ?: $maxPriceProduct }}">
+                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
                                 </div>
-                            </div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <input type="text" id="minamount" name="minamount">
+                                        <input type="text" id="maxamount" name="maxamount">
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
 
-                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-  <script>
-$(document).ready(function() {
-    var rangeSlider = $(".price-range"),
-        minamount = $("#minamount"),
-        maxamount = $("#maxamount"),
-        minPrice = parseInt(rangeSlider.data('min')),
-        maxPrice = parseInt(rangeSlider.data('max'));
-
-    rangeSlider.slider({
-        range: true,
-        min: 0,
-        max: {{$maxPriceProduct}},
-        values: [minPrice, maxPrice],
-        slide: function(event, ui) {
-            minamount.val('$' + ui.values[0]);
-            maxamount.val('$' + ui.values[1]);
-        },
-        change: function(event, ui) {
-            apply_filters();
-        }
-    });
-
-    minamount.val('$' + minPrice);
-    maxamount.val('$' + maxPrice);
-
-    $(".brand-label").change(function() {
-        apply_filters();
-    });
-    $('#sort').change(function(){
-        apply_filters();
-    });
-    function apply_filters() {
-        var brands = $(".brand-label:checked").map(function() {
-            return $(this).val();
-        }).get().join(',');
-
-        var url = '{{url()->current()}}';
-
-        url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$', '');
-
-        url+='&sort='+$("#sort").val();
-        if (brands) {
-            url += '&brand=' + brands;
-        }
-        window.location.href = url;
-    }
-});
-</script>
 
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Colors</h4>
@@ -348,64 +174,76 @@ $(document).ready(function() {
                         <div class="row">
                             <div class="product__discount__slider owl-carousel">
                                 @foreach ($products as $item)
-                                @php
-                                    $images = json_decode($item->images, true);
-                                @endphp
+                                    @php
+                                        $images = json_decode($item->images, true);
+                                    @endphp
 
-                                <div class="col-lg-4 col-md-6 col-sm-6 product-card mb-4">
-                                    <div class="card h-100 border-1 shadow-sm position-relative">
-                                        <!-- Product Image Slider -->
-                                        <div class="product__discount__percent">-20%</div>
-                                        <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
-                                            <div class="carousel-inner">
-                                                @foreach($images as $index => $imageName)
-                                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                                    <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100" alt="...">
+                                    <div class="col-lg-4 col-md-6 col-sm-6 product-card mb-4">
+                                        <div class="card h-100 border-1 shadow-sm position-relative">
+                                            <!-- Product Image Slider -->
+                                            <div class="product__discount__percent">-20%</div>
+                                            <div id="carousel{{ $item->id }}" class="carousel slide"
+                                                data-ride="carousel">
+                                                <div class="carousel-inner">
+                                                    @foreach ($images as $index => $imageName)
+                                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                                            <img src="{{ asset('images/products/' . $imageName) }}"
+                                                                class="d-block w-100" alt="...">
+                                                        </div>
+                                                    @endforeach
+
                                                 </div>
-                                                @endforeach
-
+                                                <a class="carousel-control-prev" href="#carousel{{ $item->id }}"
+                                                    role="button" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                </a>
+                                                <a class="carousel-control-next" href="#carousel{{ $item->id }}"
+                                                    role="button" data-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                </a>
                                             </div>
-                                            <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            </a>
-                                            <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            </a>
-                                        </div>
 
-                                        <!-- Overlay Icons (Wishlist, Share, and Read More) -->
-                                        <div class="overlay-icons d-flex align-items-center justify-content-center">
-                                            <a href="#" class="text-white mx-2" title="Add to Wishlist"><i class="fa fa-heart"></i></a>
-                                            <a href="#" class="text-white mx-2" title="Share"><i class="fa fa-share-alt"></i></a>
-                                            <a href="{{ route('product.detail', $item->slug) }}" class="text-white mx-2" title="Read More"><i class="fa fa-ellipsis-h"></i></a>
-                                        </div>
-                                        <!-- Product Details -->
-                                        <div class="card-body text-center p-3">
-                                            <h6 class="product-name text-truncate font-weight-bold mb-2">
-                                                <a href="{{ route('product.detail', $item->slug) }}" class="text-dark">{{ $item->name }}</a>
-                                            </h6>
-                                            <p class="product-description text-muted small mb-2">{{ Str::limit(strip_tags($item->description), 50) }}</p>
-                                            <!-- Product Price -->
-                                            <div class="product-price mb-2">
-                                                @if($item->discounted_price)
-                                                    <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
-                                                    <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
-                                                @else
-                                                    <span class="text-primary">${{ $item->price }}</span>
-                                                @endif
+                                            <!-- Overlay Icons (Wishlist, Share, and Read More) -->
+                                            <div class="overlay-icons d-flex align-items-center justify-content-center">
+                                                <a href="#" class="text-white mx-2" title="Add to Wishlist"><i
+                                                        class="fa fa-heart"></i></a>
+                                                <a href="#" class="text-white mx-2" title="Share"><i
+                                                        class="fa fa-share-alt"></i></a>
+                                                <a href="{{ route('product.detail', $item->slug) }}"
+                                                    class="text-white mx-2" title="Read More"><i
+                                                        class="fa fa-ellipsis-h"></i></a>
                                             </div>
-                                            <!-- Stock Status -->
-                                            <p class="text-muted small fixed-stock-status">
-                                                {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
-                                            </p>
-                                        </div>
-                                        <!-- Action Buttons -->
-                                        <div class="card-footer d-flex justify-content-around bg-light">
-                                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
-                                            <button class="btn btn-primary btn-sm">Buy Now</button>
+                                            <!-- Product Details -->
+                                            <div class="card-body text-center p-3">
+                                                <h6 class="product-name text-truncate font-weight-bold mb-2">
+                                                    <a href="{{ route('product.detail', $item->slug) }}"
+                                                        class="text-dark">{{ $item->name }}</a>
+                                                </h6>
+                                                <p class="product-description text-muted small mb-2">
+                                                    {{ Str::limit(strip_tags($item->description), 50) }}</p>
+                                                <!-- Product Price -->
+                                                <div class="product-price mb-2">
+                                                    @if ($item->discounted_price)
+                                                        <span class="text-muted"
+                                                            style="text-decoration: line-through;">${{ $item->price }}</span>
+                                                        <span
+                                                            class="text-primary ml-1">${{ $item->discounted_price }}</span>
+                                                    @else
+                                                        <span class="text-primary">${{ $item->price }}</span>
+                                                    @endif
+                                                </div>
+                                                <!-- Stock Status -->
+                                                <p class="text-muted small fixed-stock-status">
+                                                    {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                                                </p>
+                                            </div>
+                                            <!-- Action Buttons -->
+                                            <div class="card-footer d-flex justify-content-around bg-light">
+                                                <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                                                <button class="btn btn-primary btn-sm">Buy Now</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -415,11 +253,15 @@ $(document).ready(function() {
                             <div class="col-lg-4 col-md-5">
                                 <div class="filter__sort">
                                     <span>Sort By</span>
-                                    <select  id="sort" name="sort">
+                                    <select id="sort" name="sort">
                                         <option value="0">Default</option>
-                                        <option value="latest_product" {{($sort=='latest_product')?'selected' : ''}}>Latest Products</option>
-                                        <option value="price_high"  {{($sort=='price_high')?'selected' : ''}}>Price High</option>
-                                        <option value="price_low"  {{($sort=='price_low')?'selected' : ''}}>Price Low</option>
+                                        <option value="latest_product" {{ $sort == 'latest_product' ? 'selected' : '' }}>
+                                            Latest Products</option>
+                                        <option value="price_high" {{ $sort == 'price_high' ? 'selected' : '' }}>Price
+                                            High
+                                        </option>
+                                        <option value="price_low" {{ $sort == 'price_low' ? 'selected' : '' }}>Price Low
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -438,129 +280,72 @@ $(document).ready(function() {
                     </div>
                     <div class="row">
                         @foreach ($products as $item)
-                        @php
-                            $images = json_decode($item->images, true);
-                        @endphp
+                            @php
+                                $images = json_decode($item->images, true);
+                            @endphp
 
-                        <div class="col-lg-4 col-md-6 col-sm-6 product-card mb-4">
-                            <div class="card h-100 border-1 shadow-sm position-relative">
-                                <!-- Product Image Slider -->
-                                <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
-                                    <div class="carousel-inner">
-                                        @foreach($images as $index => $imageName)
-                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                            <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100" alt="...">
+                            <div class="col-lg-4 col-md-6 col-sm-6 product-card mb-4">
+                                <div class="card h-100 border-1 shadow-sm position-relative">
+                                    <!-- Product Image Slider -->
+                                    <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            @foreach ($images as $index => $imageName)
+                                                <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                                    <img src="{{ asset('images/products/' . $imageName) }}"
+                                                        class="d-block w-100" alt="...">
+                                                </div>
+                                            @endforeach
                                         </div>
-                                        @endforeach
+                                        <a class="carousel-control-prev" href="#carousel{{ $item->id }}"
+                                            role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel{{ $item->id }}"
+                                            role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        </a>
                                     </div>
-                                    <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    </a>
-                                </div>
 
-                                <!-- Overlay Icons (Wishlist, Share, and Read More) -->
-                                <div class="overlay-icons d-flex align-items-center justify-content-center">
-                                    <a href="#" class="text-white mx-2" title="Add to Wishlist"><i class="fa fa-heart"></i></a>
-                                    <a href="#" class="text-white mx-2" title="Share"><i class="fa fa-share-alt"></i></a>
-                                    <a href="{{ route('product.detail', $item->slug) }}" class="text-white mx-2" title="Read More"><i class="fa fa-ellipsis-h"></i></a>
-                                </div>
-                                <!-- Product Details -->
-                                <div class="card-body text-center p-3">
-                                    <h6 class="product-name text-truncate font-weight-bold mb-2">
-                                        <a href="{{ route('product.detail', $item->slug) }}" class="text-dark">{{ $item->name }}</a>
-                                    </h6>
-                                    <p class="product-description text-muted small mb-2">{{ Str::limit(strip_tags($item->description), 50) }}</p>
-                                    <!-- Product Price -->
-                                    <div class="product-price mb-2">
-                                        @if($item->discounted_price)
-                                            <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
-                                            <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
-                                        @else
-                                            <span class="text-primary">${{ $item->price }}</span>
-                                        @endif
+                                    <!-- Overlay Icons (Wishlist, Share, and Read More) -->
+                                    <div class="overlay-icons d-flex align-items-center justify-content-center">
+                                        <a href="#" class="text-white mx-2" title="Add to Wishlist"><i
+                                                class="fa fa-heart"></i></a>
+                                        <a href="#" class="text-white mx-2" title="Share"><i
+                                                class="fa fa-share-alt"></i></a>
+                                        <a href="{{ route('product.detail', $item->slug) }}" class="text-white mx-2"
+                                            title="Read More"><i class="fa fa-ellipsis-h"></i></a>
                                     </div>
-                                    <!-- Stock Status -->
-                                    <p class="text-muted small fixed-stock-status">
-                                        {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
-                                    </p>
-                                </div>
-                                <!-- Action Buttons -->
-                                <div class="card-footer d-flex justify-content-around bg-light">
-                                    <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
-                                    <button class="btn btn-primary btn-sm">Buy Now</button>
+                                    <!-- Product Details -->
+                                    <div class="card-body text-center p-3">
+                                        <h6 class="product-name text-truncate font-weight-bold mb-2">
+                                            <a href="{{ route('product.detail', $item->slug) }}"
+                                                class="text-dark">{{ $item->name }}</a>
+                                        </h6>
+                                        <p class="product-description text-muted small mb-2">
+                                            {{ Str::limit(strip_tags($item->description), 50) }}</p>
+                                        <!-- Product Price -->
+                                        <div class="product-price mb-2">
+                                            @if ($item->discounted_price)
+                                                <span class="text-muted"
+                                                    style="text-decoration: line-through;">${{ $item->price }}</span>
+                                                <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
+                                            @else
+                                                <span class="text-primary">${{ $item->price }}</span>
+                                            @endif
+                                        </div>
+                                        <!-- Stock Status -->
+                                        <p class="text-muted small fixed-stock-status">
+                                            {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                                        </p>
+                                    </div>
+                                    <!-- Action Buttons -->
+                                    <div class="card-footer d-flex justify-content-around bg-light">
+                                        <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                                        <button class="btn btn-primary btn-sm">Buy Now</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endforeach
-                        <style>
-                            /* General Card Styling */
-                            .product-card .card {
-                                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                                border: 1px solid #d0d3d4;
-                                border-radius: 8px;
-                                overflow: hidden;
-                                background-color: #fff;
-                            }
-                            .product-card .card:hover {
-                                transform: translateY(-5px);
-                                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                            }
-
-                            /* Product Image Styling */
-                            .product-image-container {
-                                position: relative;
-                            }
-                            .product-image-container img {
-                                transition: transform 0.3s ease;
-                            }
-                            .product-card .card:hover .product-image-container img {
-                                transform: scale(1.05);
-                            }
-
-                            /* Slider Control Buttons */
-                            .product-image-container .btn {
-                                background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-                                color: white;
-                                border: none;
-                                opacity: 0;
-                                transition: opacity 0.3s ease;
-                            }
-                            .product-image-container:hover .btn {
-                                opacity: 1;
-                            }
-
-                            /* Action Buttons */
-                            .card-footer button {
-                                width: 48%;
-                                transition: background 0.3s ease;
-                            }
-                            .card-footer button:hover {
-                                background: #0056b3;
-                                color: #fff;
-                            }
-                            /* General and Overlay styling as previously defined... */
-
-                            /* Carousel */
-                            .carousel {
-                                position: relative;
-                                width: 100%;
-                                height: 250px;
-                            }
-                            .carousel img {
-                                width: 100%;
-                                height: 250px;
-                                object-fit: cover;
-                            }
-
-                            /* Hover effect for Overlay Icons */
-                            .product-image-container:hover .overlay-icons {
-                                opacity: 1;
-                            }
-
-                                        </style>
                     </div>
                     <div class="product__pagination">
                         <a href="#">1</a>
@@ -629,5 +414,56 @@ $(document).ready(function() {
                 </div>
             </div>
 
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    var rangeSlider = $(".price-range"),
+                        minamount = $("#minamount"),
+                        maxamount = $("#maxamount"),
+                        minPrice = parseInt(rangeSlider.data('min')),
+                        maxPrice = parseInt(rangeSlider.data('max'));
 
- @endsection
+                    rangeSlider.slider({
+                        range: true,
+                        min: 0,
+                        max: {{ $maxPriceProduct }},
+                        values: [minPrice, maxPrice],
+                        slide: function(event, ui) {
+                            minamount.val('$' + ui.values[0]);
+                            maxamount.val('$' + ui.values[1]);
+                        },
+                        change: function(event, ui) {
+                            apply_filters();
+                        }
+                    });
+
+                    minamount.val('$' + minPrice);
+                    maxamount.val('$' + maxPrice);
+
+                    $(".brand-label").change(function() {
+                        apply_filters();
+                    });
+                    $('#sort').change(function() {
+                        apply_filters();
+                    });
+
+                    function apply_filters() {
+                        var brands = $(".brand-label:checked").map(function() {
+                            return $(this).val();
+                        }).get().join(',');
+
+                        var url = '{{ url()->current() }}';
+
+                        url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
+                            '');
+
+                        url += '&sort=' + $("#sort").val();
+                        if (brands) {
+                            url += '&brand=' + brands;
+                        }
+                        window.location.href = url;
+                    }
+                });
+            </script>
+
+        @endsection

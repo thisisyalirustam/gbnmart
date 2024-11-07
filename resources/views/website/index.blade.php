@@ -112,7 +112,7 @@
                         </div>
                         <!-- Action Buttons -->
                         <div class="card-footer d-flex justify-content-around bg-light">
-                            <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                            <a href="{{route('cartpage', $item->slug)}}" class="btn btn-outline-primary btn-sm">Add to Cart</a>
                             <button class="btn btn-primary btn-sm">Buy Now</button>
                         </div>
                     </div>
