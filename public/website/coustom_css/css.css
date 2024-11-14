@@ -140,3 +140,66 @@
 .product-image-container:hover .overlay-icons {
     opacity: 1;
 }
+.product-card .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #d0d3d4;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+}
+.product-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Image Styling */
+.product-image-container {
+    position: relative;
+}
+.product-image-container img {
+    transition: transform 0.3s ease;
+}
+.product-card .card:hover .product-image-container img {
+    transform: scale(1.05);
+}
+
+/* Slider Control Buttons */
+.product-image-container .btn {
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    color: white;
+    border: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.product-image-container:hover .btn {
+    opacity: 1;
+}
+
+/* Action Buttons */
+.card-footer button {
+    width: 48%;
+    transition: background 0.3s ease;
+}
+.card-footer button:hover {
+    background: #0056b3;
+    color: #fff;
+}
+/* General and Overlay styling as previously defined... */
+
+/* Carousel */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 250px;
+}
+.carousel img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Hover effect for Overlay Icons */
+.product-image-container:hover .overlay-icons {
+    opacity: 1;
+}
+

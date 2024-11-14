@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="{{asset('website/css/style.css ')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/coustom_css/css.css')}}" type="text/css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
 </head>
 
 <body>
@@ -184,10 +187,12 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href=""><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href=""><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ $cartCount ?? 0 }}</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
+
+
                 </div>
             </div>
             <div class="humberger__open">
