@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\suplair\SuplairController;
 use App\Http\Controllers\website\CartController;
@@ -18,6 +19,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::middleware(['auth','user_type:buyer'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

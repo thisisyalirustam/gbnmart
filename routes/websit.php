@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\website\CartController;
 use App\Http\Controllers\website\WebController;
 use Illuminate\Support\Facades\Route;
@@ -17,5 +18,7 @@ Route::get('/cart-count', [CartController::class, 'index'])->name('cart.count');
 Route::post('/cart/update-quantity/{productId}', [CartController::class, 'updateQuantity'])->name('cart.update.quantity');
 Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'processOrder'])->name('checkout.process');
 
 

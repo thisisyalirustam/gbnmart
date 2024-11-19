@@ -25,7 +25,7 @@
     <link rel="stylesheet" href=" {{asset('website/css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/css/style.css ')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/coustom_css/css.css')}}" type="text/css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 

@@ -175,4 +175,7 @@ class CartController extends Controller
       return $subtotal;
   }
 
+  public function checkoption(){
+    return view('website.middlepage');
+  }
 }

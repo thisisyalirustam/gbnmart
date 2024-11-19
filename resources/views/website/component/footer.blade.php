@@ -77,6 +77,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src=" {{asset('website/js/owl.carousel.min.js')}}"></script>
 <script src="{{asset('website/js/main.js')}}"></script>
 <script src="{{asset('website/coustom_js/js.js')}}"></script>
+<!-- Include Toastr CSS -->
+
+<!-- Include jQuery if not already included -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 

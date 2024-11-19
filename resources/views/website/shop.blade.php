@@ -239,7 +239,7 @@
                                             </div>
                                             <!-- Action Buttons -->
                                             <div class="card-footer d-flex justify-content-around bg-light">
-                                                <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                                                <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
                                                 <button class="btn btn-primary btn-sm">Buy Now</button>
                                             </div>
                                         </div>
@@ -340,7 +340,7 @@
                                     </div>
                                     <!-- Action Buttons -->
                                     <div class="card-footer d-flex justify-content-around bg-light">
-                                        <button class="btn btn-outline-primary btn-sm">Add to Cart</button>
+                                        <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
                                         <button class="btn btn-primary btn-sm">Buy Now</button>
                                     </div>
                                 </div>
