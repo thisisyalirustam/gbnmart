@@ -10,7 +10,7 @@
             </div>
             <div class="checkout__form">
                 <h4>Billing Details</h4>
-                <form id="orderForm" name="orderForm" method="POST" >
+                <form id="orderForm" name="orderForm" method="POST" enctype="multipart/form-data" >
                     @csrf
                     <div class="row">
                         <!-- Billing Details -->
@@ -151,10 +151,10 @@
                                     <div id="bank-details" style="display:none;">
                                         <p>Please send a screenshot of your bank transfer.</p>
                                         <label for="bank-screenshot">Upload Screenshot:</label>
-                                        <input type="file" id="bank-screenshot" name="bank_screenshot"
-                                            accept="image/*">
-                                        <p>Bank Name: Your Bank Name Here</p>
-                                        <p>Account Details: Your Account Details Here</p>
+                                        <input type="file" id="bank-screenshot" name="bank_invoice"
+                                            >
+                                        <p>Bank Name: EasyPaisa</p>
+                                        <p>Account Details: 03157773112</p>
                                     </div>
                                     <div id="paypal-details" style="display:none;">
                                         <p>You will be redirected to PayPal for payment.</p>

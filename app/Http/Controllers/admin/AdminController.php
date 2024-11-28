@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
+use App\Models\ShippingCharge;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -70,4 +73,40 @@ class AdminController extends Controller
 
         return response()->json($products);
     }
+    public function shipping(){
+        $shipping = ShippingCharge::with('country', 'state', 'city')->get();
+        return response()->json($shipping);
+    }
+    public function orders(){
+        $order = Order::orderBy('id', 'desc')->get();
+        return response()->json($order);
+
+
+    }
+    public function updateDeliveryDate(Request $request, $id)
+    {
+
+
+        // Find the order by ID and update the delivery date
+        $order = Order::findOrFail($id);
+        $order->delivered_date = $request->delivered_date;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Delivery date updated successfully!');
+    }
+
+
+
+
+    public function updateShippingStatus(Request $request, $id)
+{
+    $order = Order::findOrFail($id);
+    $order->shipping_status = $request->shipping_status;
+    $order->save();
+
+    return redirect()->back()->with('success', 'Delivery date updated successfully!');
+}
+
+
+
 }

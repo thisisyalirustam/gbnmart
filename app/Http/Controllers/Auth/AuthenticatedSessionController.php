@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         }elseif($request->user()->user_type === "supplier"){
             $url = "supplier-Dashboard";
         }else{
-            $url = "dashboard";  
+            $url = "/";
         }
 
         return redirect()->intended($url);

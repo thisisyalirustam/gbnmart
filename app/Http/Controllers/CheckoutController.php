@@ -22,7 +22,6 @@ class CheckoutController extends Controller
         $subtotal = 0;
 
         if (Auth::check()) {
-            // Fetch cart items for logged-in user
             $userId = Auth::id();
             $cartItems = Cart::where('carts.user_id', $userId)
                 ->join('products', 'carts.product_id', '=', 'products.id')
@@ -43,16 +42,15 @@ class CheckoutController extends Controller
                 }
             }
         }
-
-        // Calculate subtotal
         foreach ($cartItems as $item) {
             $subtotal += $item->price * $item->quantity;
             $images = json_decode($item->images, true);
             $item->first_image = $images[0] ?? null;
         }
-        $countries=Country::orderBy('name','asc')->get();
-        return view('website.checkout', compact('cartItems', 'subtotal','countries'));
+        $countries = Country::orderBy('name', 'asc')->get();
+        return view('website.checkout', compact('cartItems', 'subtotal', 'countries'));
     }
+
 
     // public function processOrder(Request $request)
     // {
@@ -61,7 +59,7 @@ class CheckoutController extends Controller
     //         'name' => 'required|string|max:255|min:3',
     //         'email' => 'required|string|email|max:255',
     //         'phone' => 'required|string|max:20',
-    //         'country_id' => 'required|integer', // Assuming country_id is an integer
+    //         'country_id' => 'required|integer',
     //         'address' => 'required|string|max:500',
     //         'apartment' => 'nullable|string|max:255',
     //         'city' => 'required|string|max:255',
@@ -69,8 +67,6 @@ class CheckoutController extends Controller
     //         'zip_code' => 'nullable|string|max:20',
     //         'order_notes' => 'nullable|string',
     //     ]);
-
-    //     // Check if validation fails
     //     if ($validate->fails()) {
     //         return response()->json([
     //             'message' => 'Please fix the errors',
@@ -78,11 +74,7 @@ class CheckoutController extends Controller
     //             'error' => $validate->errors()
     //         ]);
     //     }
-
-    //     // Determine user ID
     //     $userId = Auth::check() ? Auth::id() : null;
-
-    //     // If user is authenticated, save the address in the CustomerAddress table
     //     if ($userId) {
     //         CustomerAdress::updateOrCreate(
     //             ['user_id' => $userId],
@@ -100,7 +92,6 @@ class CheckoutController extends Controller
     //         );
     //     }
 
-    //     // Prepare order data
     //     $orderData = [
     //         'user_id' => $userId, // Can be null for guests
     //         'subtotal' => 0, // Will recalculate later
@@ -117,204 +108,178 @@ class CheckoutController extends Controller
     //         'state' => $request->state,
     //         'zip' => $request->zip_code,
     //         'note' => $request->order_notes,
+    //         'payment_method' => $request->payment_method,
     //     ];
-
-    //     // Create the order
     //     $order = Order::create($orderData);
-
-    //     // Retrieve cart items to calculate subtotal and create order items
     //     $cartItems = Auth::check()
     //         ? Cart::where('user_id', $userId)->get()
     //         : collect(session('cart', []));
-
-    //     // Calculate subtotal and create order items
     //     $subtotal = 0;
-
     //     foreach ($cartItems as $item) {
-    //         // For guest users or if the item is an associative array
-    //         $product = Product::find($item['product_id']); // Assuming $item is an associative array for guests
-
-    //         // Check if the product exists
+    //         $product = Product::find($item['product_id']);
     //         if ($product) {
-    //             $price = $product->price; // Get the price from the product
-
-    //             // Calculate subtotal for the order item
+    //             $price = $product->price;
     //             $total = $price * $item['quantity'];
-    //             $subtotal += $total; // Update subtotal for the order
-
-    //             // Create order items with fetched price
+    //             $subtotal += $total;
     //             OrderItem::create([
     //                 'order_id' => $order->id,
     //                 'product_id' => $product->id,
     //                 'quantity' => $item['quantity'],
-    //                 'price' => $price, // Use the fetched price
-    //                 'name' => $product->name, // Use the product name
-    //                 'total' => $total, // Include the total
+    //                 'price' => $price,
+    //                 'name' => $product->name,
+    //                 'total' => $total,
     //             ]);
     //         } else {
-    //             // Handle case where product is not found
-
     //             return response()->json([
     //                 'message' => 'One or more items in your cart could not be found.',
     //                 'status' => false,
     //             ]);
     //         }
     //     }
-
-
-
-    //     // Calculate grand total
     //     $grandTotal = $subtotal + $orderData['shipping'];
-
-    //     // Update the order with calculated values
     //     $order->update([
     //         'subtotal' => $subtotal,
     //         'grand_total' => $grandTotal,
     //     ]);
-
-    //     // Clear the cart for authenticated users
     //     if (Auth::check()) {
     //         Cart::where('user_id', $userId)->delete();
     //     } else {
-    //         // For guests, clear the session cart
     //         session()->forget('cart');
     //     }
-
     //     return response()->json([
     //         'message' => 'Order placed successfully',
     //         'status' => true,
     //     ]);
     // }
 
-
-
     public function processOrder(Request $request)
-    {
-        // Validate incoming request
-        $validate = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|min:3',
-            'email' => 'required|string|email|max:255',
-            'phone' => 'required|string|max:20',
-            'country_id' => 'required|integer',
-            'address' => 'required|string|max:500',
-            'apartment' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'zip_code' => 'nullable|string|max:20',
-            'order_notes' => 'nullable|string',
-        ]);
+{
+    // Validate incoming request
+    $validate = Validator::make($request->all(), [
+        'name' => 'required|string|max:255|min:3',
+        'email' => 'required|string|email|max:255',
+        'phone' => 'required|string|max:20',
+        'country_id' => 'required|integer',
+        'address' => 'required|string|max:500',
+        'apartment' => 'nullable|string|max:255',
+        'city' => 'required|string|max:255',
+        'state' => 'required|string|max:255',
+        'zip_code' => 'nullable|string|max:20',
+        'order_notes' => 'nullable|string',
+        'bank_invoice' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate bank_invoice
+    ]);
 
-        // Check if validation fails
-        if ($validate->fails()) {
-            return response()->json([
-                'message' => 'Please fix the errors',
-                'status' => false,
-                'error' => $validate->errors()
-            ]);
-        }
-
-        // Determine user ID
-        $userId = Auth::check() ? Auth::id() : null;
-
-        // Save the address if the user is authenticated
-        if ($userId) {
-            CustomerAdress::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'apartment' => $request->apartment,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zip' => $request->zip_code,
-                    'country_id' => $request->country_id,
-                ]
-            );
-        }
-
-        // Prepare order data
-        $orderData = [
-            'user_id' => $userId, // Can be null for guests
-            'subtotal' => 0, // Will recalculate later
-            'shipping' => 10.00, // Example shipping cost
-            'discount' => 0.00, // Example discount
-            'grand_total' => 0, // Will recalculate later
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'country_id' => $request->country_id,
-            'address' => $request->address,
-            'apartment' => $request->apartment,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip' => $request->zip_code,
-            'note' => $request->order_notes,
-        ];
-
-        // Create the order
-        $order = Order::create($orderData);
-
-        // Retrieve cart items to calculate subtotal and create order items
-        $cartItems = Auth::check()
-            ? Cart::where('user_id', $userId)->get()
-            : collect(session('cart', []));
-
-        // Calculate subtotal and create order items
-        $subtotal = 0;
-
-        foreach ($cartItems as $item) {
-            $product = Product::find($item['product_id']); // Assuming $item is an associative array for guests
-
-            // Check if the product exists
-            if ($product) {
-                $price = $product->price; // Get the price from the product
-
-                // Calculate subtotal for the order item
-                $total = $price * $item['quantity'];
-                $subtotal += $total; // Update subtotal for the order
-
-                // Create order items with fetched price
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'quantity' => $item['quantity'],
-                    'price' => $price, // Use the fetched price
-                    'name' => $product->name, // Use the product name
-                    'total' => $total, // Include the total
-                ]);
-            } else {
-                // Handle case where product is not found
-                return response()->json([
-                    'message' => 'One or more items in your cart could not be found.',
-                    'status' => false,
-                ]);
-            }
-        }
-
-        // Calculate grand total
-        $grandTotal = $subtotal + $orderData['shipping'];
-
-        // Update the order with calculated values
-        $order->update([
-            'subtotal' => $subtotal,
-            'grand_total' => $grandTotal,
-        ]);
-
-        // Clear the cart for authenticated users
-        if (Auth::check()) {
-            Cart::where('user_id', $userId)->delete();
-        } else {
-            // For guests, clear the session cart
-            session()->forget('cart');
-        }
-
+    if ($validate->fails()) {
         return response()->json([
-            'message' => 'Order placed successfully',
-            'status' => true,
+            'message' => 'Please fix the errors',
+            'status' => false,
+            'error' => $validate->errors()
         ]);
     }
 
+    $userId = Auth::check() ? Auth::id() : null;
+
+    if ($userId) {
+        CustomerAdress::updateOrCreate(
+            ['user_id' => $userId],
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'apartment' => $request->apartment,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zip' => $request->zip_code,
+                'country_id' => $request->country_id,
+            ]
+        );
+    }
+
+    $bankInvoicePath = null;
+
+    if ($request->hasFile('bank_invoice')) {
+        $file = $request->file('bank_invoice');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $destinationPath = public_path('images/customer_image');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true); // Create the directory if it doesn't exist
+        }
+
+        $file->move($destinationPath, $fileName);
+        $bankInvoicePath = 'images/customer_image/' . $fileName;
+    }
+
+    // Save $bankInvoicePath to your database
+
+
+    $orderData = [
+        'user_id' => $userId, // Can be null for guests
+        'subtotal' => 0, // Will recalculate later
+        'shipping' => 10.00, // Example shipping cost
+        'discount' => 0.00, // Example discount
+        'grand_total' => 0, // Will recalculate later
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'country_id' => $request->country_id,
+        'address' => $request->address,
+        'apartment' => $request->apartment,
+        'city' => $request->city,
+        'state' => $request->state,
+        'zip' => $request->zip_code,
+        'note' => $request->order_notes,
+        'payment_method' => $request->payment_method,
+        'bank_invoice' => $bankInvoicePath, // Save the image path
+    ];
+
+    $order = Order::create($orderData);
+
+    $cartItems = Auth::check()
+        ? Cart::where('user_id', $userId)->get()
+        : collect(session('cart', []));
+
+    $subtotal = 0;
+
+    foreach ($cartItems as $item) {
+        $product = Product::find($item['product_id']);
+        if ($product) {
+            $price = $product->price;
+            $total = $price * $item['quantity'];
+            $subtotal += $total;
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'quantity' => $item['quantity'],
+                'price' => $price,
+                'name' => $product->name,
+                'total' => $total,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'One or more items in your cart could not be found.',
+                'status' => false,
+            ]);
+        }
+    }
+
+    $grandTotal = $subtotal + $orderData['shipping'];
+    $order->update([
+        'subtotal' => $subtotal,
+        'grand_total' => $grandTotal,
+    ]);
+
+    if (Auth::check()) {
+        Cart::where('user_id', $userId)->delete();
+    } else {
+        session()->forget('cart');
+    }
+
+    return response()->json([
+        'message' => 'Order placed successfully',
+        'status' => true,
+    ]);
+}
 
 }

@@ -1,0 +1,41 @@
+.card {
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.card-header {
+    background-color: #f8f9fa; /* Light grey background */
+    border-bottom: 1px solid #e0e0e0; /* Subtle bottom border */
+    padding: 15px 20px; /* Padding for header */
+}
+
+.buyer-info {
+    display: flex;
+    align-items: center; /* Center the profile image and text vertically */
+    padding: 10px 0; /* Spacing above and below */
+}
+
+.profile-image {
+    width: 80px; /* Fixed width */
+    height: 80px; /* Fixed height */
+    border-radius: 50%; /* Circular image */
+    margin-right: 15px; /* Space between image and text */
+    border: 2px solid #007bff; /* Border color for profile image */
+}
+
+.buyer-details {
+    flex-grow: 1; /* Allow details to take up available space */
+}
+
+.buyer-name {
+    font-size: 1.25rem; /* Larger font size for name */
+    font-weight: bold; /* Bold name */
+    margin-bottom: 5px; /* Space below name */
+}
+
+.buyer-address {
+    margin: 0; /* Remove default margin */
+    color: #6c757d; /* Muted color for address details */
+    line-height: 1.5; /* Better line height for readability */
+}

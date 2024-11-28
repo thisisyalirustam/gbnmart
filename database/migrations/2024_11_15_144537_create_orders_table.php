@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->nullable(); // user_id is nullable
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete(); // user_id is nullable
             $table->decimal('subtotal', 10, 2);
             $table->decimal('shipping', 10, 2);
             $table->decimal('cuppon_code', 10, 2)->nullable(); // Spelling mistake in coupon

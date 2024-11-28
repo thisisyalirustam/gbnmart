@@ -208,7 +208,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: `/add-user/${id}`,
-            type: "POST", 
+            type: "POST",
             data: formData,
             contentType: false,
             processData: false,
@@ -361,7 +361,7 @@ show.addEventListener("show.bs.modal", function (event) {
 
                   </div>
               </div>
-        
+
 `;
         });
 });
@@ -393,7 +393,7 @@ update.addEventListener("show.bs.modal", function (event) {
 
 //Delete model
 var deleteModal = document.getElementById("delete");
-deleteModal.addEventListener("show.bs.modal", function (event) {  
+deleteModal.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
     document.querySelector("#deleteid").value = id;

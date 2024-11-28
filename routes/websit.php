@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\website\BuyerDashboadController;
 use App\Http\Controllers\website\CartController;
 use App\Http\Controllers\website\WebController;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +22,5 @@ Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'processOrder'])->name('checkout.process');
 
-
+Route::get('/dashboard/orderproduct',[BuyerDashboadController::class,'orderproduct'])->name('website.orderproduct');
+Route::get('/buyer/account',[BuyerDashboadController::class,'account'])->name('website.account');

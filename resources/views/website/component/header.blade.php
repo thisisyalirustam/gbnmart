@@ -135,7 +135,7 @@
                             <nav class="-mx-3 flex flex-1 justify-end">
                                 @auth
                                 <div class="header__top__right__auth">
-                                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                                    <a href="{{ route('dashboard') }}">Profile</a>
                                 </div>
                                 <div class="header__top__right__auth ml-2">
                                     <a href=""><i class="fa fa-user-secret"></i> {{ Auth::user()->name }}</a>

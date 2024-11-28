@@ -39,13 +39,13 @@ class UserController extends Controller
             'user_type' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        
+
         // Handle the image upload
         $img = $request->image;
         $ext = $img->getClientOriginalExtension();
         $imageName = time() . '.' . $ext;
         $img->move(public_path('uploads'), $imageName);
-        
+
         // Create the user instance and set its properties
         $user = new User();
         $user->name = $request->name;
@@ -53,12 +53,12 @@ class UserController extends Controller
         $user->password = bcrypt($request->password);
         $user->user_type = $request->user_type;
         $user->image = $imageName;
-        
+
         // Save the user instance to the database
         $user->save();
-        
+
         return response()->json(['success' => true, 'message' => 'User created successfully']);
-        
+
 
     }
 

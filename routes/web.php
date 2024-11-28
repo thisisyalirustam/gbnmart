@@ -2,22 +2,24 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminMainController;
+use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\OrdersController;
 use App\Http\Controllers\admin\ProdcutSubCategoryController;
 use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\suplair\SuplairController;
+use App\Http\Controllers\website\BuyerDashboadController;
 use App\Http\Controllers\website\CartController;
 use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard',[BuyerDashboadController::class,'dash'])->middleware(['auth','verified'])->name('dashboard');
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -47,11 +49,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/product/{id}/status', [AdminMainController::class, 'updateStatus'])->name('product.updateStatus');
     Route::post('/product/{id}/sof', [AdminMainController::class, 'updateSOF'])->name('product.updateSOF');
 
+    Route::resource('/shipping',ShippingController::class);
+    Route::get('/shiping-show',[AdminController::class,'shipping'])->name('admin.shipingshow');
+
+    Route::resource('/coustomer-orders',OrderController::class);
+    Route::get('/orders',[AdminController::class,'orders'])->name('admin.orders');
+    Route::post('/orders-show/{id}',[AdminController::class,'showorder'])->name('admin.ordersshow');
+   // Update Delivery Date
+Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
+Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
+
+
+
 
 });
 
 Route::middleware(['auth','verified'])->group(function () {
     Route::get('/supplier-Dashboard', [SuplairController::class, 'index'])->name('supplier.auth');
+
+
+
 
 });
 
