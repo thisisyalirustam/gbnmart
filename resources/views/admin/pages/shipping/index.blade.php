@@ -54,28 +54,37 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="row mb-3">
                             <label for="state_id" class="col-sm-2 col-form-label">State</label>
                             <div class="col-sm-10">
                                 <select id="state_id" name="state_id" class="form-select">
                                     <option selected="">Select State</option>
-                                    @foreach ($states as $state)
-                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
+
                         <div class="row mb-3">
                             <label for="city_id" class="col-sm-2 col-form-label">City</label>
                             <div class="col-sm-10">
                                 <select id="city_id" name="city_id" class="form-select">
                                     <option selected="">Select City</option>
-                                    @foreach ($cities as $city)
-                                        <option value="{{ $city->id }}">{{ $city->name }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
+
+                        <!-- New field for weight unit -->
+                        <div class="row mb-3">
+                            <label for="weight_unit" class="col-sm-2 col-form-label">Weight Unit</label>
+                            <div class="col-sm-10">
+                                <select id="weight_unit" name="weight_unit" class="form-select">
+                                    <option value="kg">Kilogram (kg)</option>
+                                    <option value="g">Gram (g)</option>
+                                    <option value="lb">Pound (lb)</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
                             <label for="charge" class="col-sm-2 col-form-label">Shipping Charge</label>
                             <div class="col-sm-10">
@@ -83,6 +92,7 @@
                                     placeholder="Enter Shipping Charge">
                             </div>
                         </div>
+
                         <div class="row mb-3">
                             <label for="description" class="col-sm-2 col-form-label">Description</label>
                             <div class="col-sm-10">
@@ -90,6 +100,7 @@
                                     placeholder="Optional: Add additional details"></textarea>
                             </div>
                         </div>
+
                         <div class="row mb-3">
                             <div class="col-sm-10 offset-sm-2">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -100,6 +111,7 @@
             </div>
         </div>
     </div>
+
 
     {{-- Update Modal --}}
     <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
@@ -192,5 +204,70 @@
 
 @section('tabledev')
     <script src="{{ asset('admin/ajax_crud/shipping.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        // When country is selected, fetch related states
+        $('#country_id').change(function () {
+            var countryId = $(this).val();
+
+            // Reset state and city dropdowns
+            $('#state_id').html('<option selected="">Select State</option>');
+            $('#city_id').html('<option selected="">Select City</option>');
+            $('#state_id').prop('disabled', true); // Disable state dropdown initially
+            $('#city_id').prop('disabled', true); // Disable city dropdown initially
+
+            if (countryId) {
+                $.ajax({
+                    url: '/get-states/' + countryId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#state_id').prop('disabled', false); // Enable state dropdown
+                            $.each(response, function (index, state) {
+                                $('#state_id').append('<option value="' + state.id + '">' + state.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching states.');
+                    }
+                });
+            }
+        });
+
+        // When state is selected, fetch related cities
+        $('#state_id').change(function () {
+            var stateId = $(this).val();
+
+            // Reset city dropdown
+            $('#city_id').html('<option selected="">Select City</option>');
+            $('#city_id').prop('disabled', true); // Disable city dropdown initially
+
+            if (stateId) {
+                $.ajax({
+                    url: '/get-cities/' + stateId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#city_id').prop('disabled', false); // Enable city dropdown
+                            $.each(response, function (index, city) {
+                                $('#city_id').append('<option value="' + city.id + '">' + city.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching cities.');
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+
 @endsection
 @endsection

@@ -22,6 +22,8 @@ Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'processOrder'])->name('checkout.process');
 Route::get('/thank-you/{orderId}', [CheckoutController::class, 'thankYouPage'])->name('checkout.thankyou');
+Route::get('/get-states/{country_id}', [CheckoutController::class, 'getStates'])->name('checkout.getStates');
+Route::get('/get-cities/{state_id}', [CheckoutController::class, 'getCities'])->name('checkout.getCities');
 
 Route::get('/dashboard/orderproduct/{id}', [BuyerDashboadController::class, 'orderproduct'])->name('website.orderproduct');
 Route::get('/buyer/account',[BuyerDashboadController::class,'account'])->name('website.account');

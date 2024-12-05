@@ -52,6 +52,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/shipping',ShippingController::class);
     Route::get('/shiping-show',[AdminController::class,'shipping'])->name('admin.shipingshow');
+    Route::get('/get-states/{country_id}', [AdminController::class, 'getStates'])->name('shipping.getStates');
+    Route::get('/get-cities/{state_id}', [AdminController::class, 'getCities'])->name('shipping.getCities');
 
     Route::resource('/coustomer-orders',OrderController::class);
     Route::get('/orders',[AdminController::class,'orders'])->name('admin.orders');

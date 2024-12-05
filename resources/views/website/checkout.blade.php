@@ -52,35 +52,13 @@
                                     <div class="form-row">
                                         <div class="col-md-6 mb-3">
                                             <label for="address">Street Address</label>
-                                            <input type="text" class="form-control" id="address" name="address"
-                                                placeholder="1234 Main St">
+                                            <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St">
                                             <p></p>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="city">City</label>
-                                            <input type="text" class="form-control" id="city" name="city"
-                                                placeholder="New York">
-                                            <p></p>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="state">State</label>
-                                            <input type="text" class="form-control" id="state" name="state"
-                                                placeholder="NY">
-                                            <p></p>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="zip-code">Zip Code</label>
-                                            <input type="text" class="form-control" id="zip-code" name="zip_code"
-                                                placeholder="10001">
-                                            <p></p>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-12 mb-3">
                                             <label for="country">Country</label>
                                             <select class="form-control custom-country" id="country" name="country_id">
+                                                <option value="">Select Country</option>
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                 @endforeach
@@ -88,8 +66,35 @@
                                             <p></p>
                                         </div>
                                     </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="state">State</label>
+                                            <select class="form-control custom-country" id="state" name="state">
+                                                <option value="">Select State</option>
+                                            </select>
+                                            <p></p>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="city">City</label>
+                                            <select class="form-control custom-country" id="city" name="city">
+                                                <option value="">Select City</option>
+                                            </select>
+                                            <p></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-12 mb-3">
+                                            <label for="zip-code">Zip Code</label>
+                                            <input type="text" class="form-control" id="zip-code" name="zip_code" placeholder="10001">
+                                            <p></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- Order Summary -->
@@ -178,31 +183,72 @@
             </div>
         </div>
     </section>
-<!-- Modal HTML (hidden by default) -->
-<!-- Modal HTML (hidden by default) -->
-<!-- Modal HTML (hidden by default) -->
-<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">Thank You for Shopping!</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Your order has been placed successfully. We will process your order and send you a confirmation email shortly.</p>
-                <p>Order Summary:</p>
-                <ul id="orderSummary" class="list-unstyled">
-                    <!-- Order details will be inserted here dynamically -->
-                </ul>
-                <p>Thank you for shopping with us!</p>
-            </div>
-            <div class="modal-footer">
-                <!-- Button to refresh the page when clicked -->
-                <button type="button" class="btn btn-primary" id="closeModalButton" data-bs-dismiss="modal" onclick="refreshPage()">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // When country is selected, fetch related states
+            $('#country').change(function () {
+                var countryId = $(this).val();
+
+                // Reset state and city dropdowns
+                $('#state').html('<option value="">Select State</option>');
+                $('#city').html('<option value="">Select City</option>');
+                $('#state').prop('disabled', true); // Disable state dropdown initially
+                $('#city').prop('disabled', true); // Disable city dropdown initially
+
+                if (countryId) {
+                    $.ajax({
+                        url: '/get-states/' + countryId,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $('#state').prop('disabled', false); // Enable state dropdown
+                                $.each(response, function (index, state) {
+                                    $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
+                                });
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching states.');
+                        }
+                    });
+                }
+            });
+
+            // When state is selected, fetch related cities
+            $('#state').change(function () {
+                var stateId = $(this).val();
+
+                // Reset city dropdown
+                $('#city').html('<option value="">Select City</option>');
+                $('#city').prop('disabled', true); // Disable city dropdown initially
+
+                if (stateId) {
+                    $.ajax({
+                        url: '/get-cities/' + stateId,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $('#city').prop('disabled', false); // Enable city dropdown
+                                $.each(response, function (index, city) {
+                                    $('#city').append('<option value="' + city.id + '">' + city.name + '</option>');
+                                });
+                            }
+                        },
+                        error: function () {
+                            alert('Error fetching cities.');
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
 
 
 

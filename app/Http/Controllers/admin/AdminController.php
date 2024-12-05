@@ -4,12 +4,14 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrderInvoice;
+use App\Models\City;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
 use App\Models\ShippingCharge;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -167,7 +169,18 @@ public function sendInvoice($orderId)
     Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
 }
 
+public function getStates($country_id)
+{
+    $states = State::where('country_id', $country_id)->get();
+    return response()->json($states);
+}
 
+// Fetch cities based on selected state
+public function getCities($state_id)
+{
+    $cities = City::where('state_id', $state_id)->get();
+    return response()->json($cities);
+}
 
 // public function sendInvoice($orderId)
 // {
