@@ -87,16 +87,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Update cart count in the header
                     document.getElementById('cart-count').innerText = data.count;
 
-                    // Optionally show a success message
-                    alert(data.success);
+                    // Show success toaster message
+                    toastr.success(data.success);
                 } else if (data.error) {
-                    alert(data.error); // Show error message if product already in cart
+                    // Show error toaster message if product already in cart
+                    toastr.error(data.error);
                 }
             })
             .catch(error => console.error('Error:', error));
         });
     });
+
 });
+
+toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "timeOut": "3000", // Duration of the toast in milliseconds
+};
 
 
 

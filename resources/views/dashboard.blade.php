@@ -278,7 +278,7 @@
                                             <span class="badge {{$statusClass}}">{{$item->shipping_status}}</span>
                                         </td>
                                         <td class="cell">{{$item->grand_total}}</td>
-                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>
+                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="{{ route('website.orderproduct', $item->id) }}">View</a></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -352,7 +352,7 @@
                                             <span class="badge {{$statusClass}}">{{$process->shipping_status}}</span>
                                         </td>
                                         <td class="cell">{{$process->grand_total}}</td>
-                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>
+                                        <a class="btn-sm app-btn-secondary" href="{{ route('website.orderproduct', $process->id) }}">View</a>
                                     </tr>
                                     @endforeach
 
@@ -410,7 +410,10 @@
                                             <span class="badge {{$statusClass}}">{{$pending->shipping_status}}</span>
                                         </td>
                                         <td class="cell">{{$pending->grand_total}}</td>
-                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>
+                                        <td class="cell">
+                                            <a class="btn-sm app-btn-secondary" href="{{ route('website.orderproduct', $pending->id) }}">View</a>
+                                        </td>
+
                                     </tr>
                                     @endforeach
 
@@ -466,7 +469,7 @@
                                             <span class="badge {{$statusClass}}">{{$compelte->shipping_status}}</span>
                                         </td>
                                         <td class="cell">{{$compelte->grand_total}}</td>
-                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>
+                                        <td class="cell"><a class="btn-sm app-btn-secondary" href="{{ route('website.orderproduct', $compelte->id) }}>View</a></td>
                                     </tr>
                                     @endforeach
 

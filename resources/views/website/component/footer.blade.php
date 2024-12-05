@@ -65,12 +65,26 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </div>
 </footer>
 <!-- Footer Section End -->
+<script>
+    // Get the header element
+const header = document.querySelector('.header');
 
+// Add a scroll event listener to check the position
+window.addEventListener('scroll', function() {
+    // Check if the window has scrolled past a certain point
+    if (window.scrollY > 0) {
+        header.classList.add('sticky');
+    } else {
+        header.classList.remove('sticky');
+    }
+});
+
+</script>
 <!-- Js Plugins -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 <script src=" {{asset('website/js/jquery-3.3.1.min.js')}}"></script>
 <script src=" {{asset('website/js/bootstrap.min.js')}}"></script>
-<script src=" {{asset('website/js/jquery.nice-select.min.js')}}"></script>
+{{-- <script src=" {{asset('website/js/jquery.nice-select.min.js')}}"></script> --}}
 <script src=" {{asset('website/js/jquery-ui.min.js')}}"></script>
 <script src=" {{asset('website/js/jquery.slicknav.js')}}"></script>
 <script src=" {{asset('website/js/mixitup.min.js')}}"></script>
@@ -83,7 +97,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Include Toastr JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 </body>

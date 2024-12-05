@@ -193,6 +193,18 @@
                             <p>{{ $ordershow->address }}</p>
                         </div>
                     </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Send Invoice</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input type="email" value="{{$ordershow->email}}" readonly class="form-control" name="invoice" required>
+                                <button class="btn btn-sm btn-primary" id="send-invoice-btn" type="submit">Send Invoice</button>
+                                <div id="invoice-message" class="alert d-none mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Payment Method -->
                     <div class="card mb-4">
@@ -341,6 +353,31 @@
                                     }
                                 });
                             });
+
+                            $('#send-invoice-btn').on('click', function() {
+                // Display loading message
+                $('#invoice-message').removeClass('d-none alert-danger alert-success').addClass('alert-info')
+                    .text('Sending email...').fadeIn();
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('orders.sendInvoice', $ordershow->id) }}", // Adjust route to your controller method
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        $('#invoice-message').removeClass('alert-info').addClass('alert-success')
+                            .text('Invoice sent successfully!').fadeIn();
+                        setTimeout(function() {
+                            $('#invoice-message').fadeOut();
+                        }, 3000);
+                    },
+                    error: function(xhr) {
+                        $('#invoice-message').removeClass('alert-info').addClass('alert-danger')
+                            .text('Error sending email: ' + xhr.responseJSON.message).fadeIn();
+                    }
+                });
+            });
                         });
                     </script>
 

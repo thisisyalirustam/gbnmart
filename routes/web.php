@@ -29,6 +29,7 @@ Route::middleware(['auth','user_type:buyer'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.auth');
     Route::resource('/add-user',UserController::class);
     Route::get('/show-data',[AdminController::class,'showuser'])->name('showdata');
@@ -55,6 +56,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/coustomer-orders',OrderController::class);
     Route::get('/orders',[AdminController::class,'orders'])->name('admin.orders');
     Route::post('/orders-show/{id}',[AdminController::class,'showorder'])->name('admin.ordersshow');
+    Route::post('orders/{orderId}/send-invoice', [AdminController::class, 'sendInvoice'])->name('orders.sendInvoice');
+
    // Update Delivery Date
 Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
 Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');

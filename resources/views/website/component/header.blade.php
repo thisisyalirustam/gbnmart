@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{asset('website/css/bootstrap.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/css/font-awesome.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/css/elegant-icons.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css">
+    {{-- <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href=" {{asset('website/css/jquery-ui.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('website/css/owl.carousel.min.css')}}" type="text/css">
     <link rel="stylesheet" href=" {{asset('website/css/slicknav.min.css')}}" type="text/css">
@@ -28,6 +28,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- Toastr JS -->
 
 </head>
 

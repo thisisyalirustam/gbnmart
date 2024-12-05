@@ -178,6 +178,34 @@
             </div>
         </div>
     </section>
+<!-- Modal HTML (hidden by default) -->
+<!-- Modal HTML (hidden by default) -->
+<!-- Modal HTML (hidden by default) -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Thank You for Shopping!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Your order has been placed successfully. We will process your order and send you a confirmation email shortly.</p>
+                <p>Order Summary:</p>
+                <ul id="orderSummary" class="list-unstyled">
+                    <!-- Order details will be inserted here dynamically -->
+                </ul>
+                <p>Thank you for shopping with us!</p>
+            </div>
+            <div class="modal-footer">
+                <!-- Button to refresh the page when clicked -->
+                <button type="button" class="btn btn-primary" id="closeModalButton" data-bs-dismiss="modal" onclick="refreshPage()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     <script>
         function showPaymentDetails(method) {
@@ -202,50 +230,44 @@
             document.getElementById('payment-details').style.display = 'block';
         }
 
-        // AJAX Script for Submitting the Form
         $(document).ready(function() {
-            // Set up CSRF token for AJAX requests
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    // Set up CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Handle form submission with AJAX
+    $("#orderForm").submit(function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        $.ajax({
+            url: '{{ route('checkout.process') }}', // Your checkout processing route
+            type: 'POST',
+            data: $(this).serialize(), // Serialize form data
+            dataType: 'JSON',
+            success: function(response) {
+                if (response.status === true) {
+                    // Redirect to the Thank You page using the order ID from the JSON response
+                    window.location.href = '/thank-you/' + response.orderId;
+                } else {
+                    // Handle errors (if any)
+                    alert("There was an error with your order. Please try again.");
                 }
-            });
-
-            $("#orderForm").submit(function(event) {
-                event.preventDefault(); // Prevent the default form submission
-                $.ajax({
-                    url: '{{ route('checkout.process') }}', // Your checkout processing route
-                    type: 'POST',
-                    data: $(this).serialize(), // Serialize form data
-                    dataType: 'JSON',
-                    success: function(response) {
-                        if (response.status === false) {
-                            // Clear previous errors
-                            $('.form-control').removeClass('is-invalid').siblings("p").removeClass('invalid-feedback').html('');
-
-                            // Display errors
-                            var error = response.error;
-                            if (error.name) {
-                                $("#name").addClass('is-invalid').siblings("p").addClass('invalid-feedback').html(error.name[0]);
-                            }
-                            if (error.email) {
-                                $("#email").addClass('is-invalid').siblings("p").addClass('invalid-feedback').html(error.email[0]);
-                            }
-                            if (error.phone) {
-                                $("#phone").addClass('is-invalid').siblings("p").addClass('invalid-feedback').html(error.phone[0]);
-                            }
-                            // Add more error handling for other fields as necessary
-                        } else {
-                            // Handle successful response (e.g., redirect or display success message)
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle unexpected errors
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
+            },
+            error: function(xhr, status, error) {
+                // Handle unexpected errors
+                console.error(xhr.responseText);
+            }
         });
+    });
+});
+
+
+
+
+
     </script>
 
 @endsection

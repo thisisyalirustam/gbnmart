@@ -25,16 +25,27 @@ class BuyerDashboadController extends Controller
 
     }
 
-    public function orderproduct(){
-        $userId = Auth::check() ? Auth::id() : null;
-        $order=Order::with(['items.product'])->where("user_id", $userId)->get();
-        $ordercount=Order::where("user_id",$userId)->count();
-        $orderprocess=Order::where("user_id",$userId)->where("shipping_status","Process")->get();
-        $orderpending=Order::where("user_id",$userId)->where("shipping_status","Pending")->get();
-        $ordercompelte=Order::where("user_id",$userId)->where("shipping_status","Complete")->get();
-        return view('orderProduct',compact('order','ordercount','orderprocess','orderpending','ordercompelte'));
+    public function orderproduct($id) {
+        $userId = Auth::check() ? Auth::id() : null;  // Check if the user is authenticated
 
+        // Fetch the order with its related data (user, country, and items with products)
+        $ordershow = Order::with(['user', 'country', 'items.product'])->find($id);
+
+        // If the order is not found, redirect back with an error message
+        if (!$ordershow) {
+            return redirect()->route('orders.index')->with('error', 'Order not found.');
+        }
+
+        // Decode product images and set the first image
+        foreach ($ordershow->items as $item) {
+            $images = json_decode($item->product->images, true);
+            $item->product->images = $images[0] ?? 'default-image.jpg';
+        }
+
+        // Return the order details view with the fetched data
+        return view('orderProduct', compact('ordershow'));
     }
+
 
     public function account(){
         return view('account');

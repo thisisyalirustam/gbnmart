@@ -21,6 +21,7 @@ Route::post('/cart/remove/{productId}', [CartController::class, 'removeFromCart'
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout', [CheckoutController::class, 'processOrder'])->name('checkout.process');
+Route::get('/thank-you/{orderId}', [CheckoutController::class, 'thankYouPage'])->name('checkout.thankyou');
 
-Route::get('/dashboard/orderproduct',[BuyerDashboadController::class,'orderproduct'])->name('website.orderproduct');
+Route::get('/dashboard/orderproduct/{id}', [BuyerDashboadController::class, 'orderproduct'])->name('website.orderproduct');
 Route::get('/buyer/account',[BuyerDashboadController::class,'account'])->name('website.account');

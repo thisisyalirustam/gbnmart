@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\UserResgistration;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -43,6 +45,11 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        $username=$request->name;
+        $useremail=$request->email;
+        $create_date=$request->create_date;
+        $subject='';
+        Mail::to($useremail)->queue(new UserResgistration($username, $useremail, $create_date, $subject));
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));

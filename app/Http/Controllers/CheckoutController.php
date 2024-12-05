@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConformation;
 use App\Models\Cart;
 use App\Models\Country;
 use App\Models\CustomerAdress;
@@ -11,6 +12,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CheckoutController extends Controller
@@ -276,10 +278,40 @@ class CheckoutController extends Controller
         session()->forget('cart');
     }
 
-    return response()->json([
-        'message' => 'Order placed successfully',
-        'status' => true,
-    ]);
+    $useremail=$request->input('email');
+    $username=$request->input('name');
+    $useradress=$request->input('address');
+    $userphone=$request->input('phone');
+    $method= $request->payment_method;
+
+    Mail::to($useremail)->queue(new OrderConformation($username, $useremail, $useradress, $grandTotal, $userphone, $subtotal, $cartItems,));
+    $orderDetails = [
+        'orderId' => $order->id,
+        'name' => $order->name,
+        'email' => $order->email,
+        'phone' => $order->phone,
+        'address' => $order->address,
+        'city' => $order->city,
+        'state' => $order->state,
+        'grand_total' => $grandTotal,
+    ];
+
+    // return response()->json([
+    //     'message' => 'Order placed successfully',
+    //     'status' => true,
+    //     'orderId' => $order->id,
+    //     'orderDetails' => $orderDetails,
+    // ]);
+    return redirect()->route('checkout.thankyou', ['orderId' => $order->id])
+    ->with('orderDetails', $orderDetails);
 }
 
+public function thankYouPage($orderId)
+{
+    // Fetch order details from the database using the order ID
+    $order = Order::findOrFail($orderId);
+
+    // Pass the order details to the view
+    return view('website.thankyou', compact('order'));
+}
 }
