@@ -77,11 +77,12 @@
                         <div class="row mb-3">
                             <label for="weight_unit" class="col-sm-2 col-form-label">Weight Unit</label>
                             <div class="col-sm-10">
-                                <select id="weight_unit" name="weight_unit" class="form-select">
-                                    <option value="kg">Kilogram (kg)</option>
-                                    <option value="g">Gram (g)</option>
-                                    <option value="lb">Pound (lb)</option>
-                                </select>
+                                <select id="weight_unit" name="unit_id" class="form-select">
+                                    <option selected="">Select Unit</option>
+                                @foreach ($units as $unit )
+                                    <option value="{{$unit->id}}">{{$unit->name}} ({{$unit->symbol}})</option>
+                                @endforeach
+                            </select>
                             </div>
                         </div>
 

@@ -25,8 +25,8 @@ class Order extends Model
         'country_id',
         'address',
         'apartment',
-        'city',
-        'state',
+        'city_id',
+        'state_id',
         'zip',
         'note',
         'payment_method',
@@ -45,5 +45,14 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class, 'order_id');
+    }
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'state_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 }

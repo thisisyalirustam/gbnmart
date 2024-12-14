@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\City;
 use App\Models\Country;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,8 +24,8 @@ return new class extends Migration
             $table->foreignIdFor(Country::class)->constrained()->cascadeOnDelete();
             $table->text('address');
             $table->string('apartment')->nullable();
-            $table->string('city');
-            $table->string('state');
+            $table->foreignIdFor(State::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(City::class)->constrained()->cascadeOnDelete();
             $table->string('zip')->nullable();
             $table->timestamps();
         });

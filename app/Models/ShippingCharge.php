@@ -9,7 +9,7 @@ class ShippingCharge extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['country_id', 'state_id', 'city_id', 'charge', 'description'];
+    protected $fillable = ['country_id', 'state_id', 'city_id', 'charge', 'description','unit_id'];
 
     public function country()
     {
@@ -24,5 +24,8 @@ class ShippingCharge extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+    public function unit(){
+        return $this->belongsTo(Unit::class);
     }
 }

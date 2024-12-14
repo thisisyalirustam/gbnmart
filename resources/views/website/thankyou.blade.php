@@ -77,7 +77,9 @@
                         <li class="mb-2"><strong>Name:</strong> {{ $order->name }}</li>
                         <li class="mb-2"><strong>Email:</strong> {{ $order->email }}</li>
                         <li class="mb-2"><strong>Phone:</strong> {{ $order->phone }}</li>
-                        <li class="mb-2"><strong>Shipping Address:</strong> {{ $order->address }}, {{ $order->city }}, {{ $order->state }}</li>
+                        <li class="mb-2"><strong>Shipping Address:</strong> {{ $order->address }},
+                             {{ $order->city->name }}, {{ $order->state->name }}
+                            </li>
                         <li class="mb-2"><strong>Country:</strong> {{ $order->country->name }}</li>
                         <li class="mb-2"><strong>Total Amount:</strong> ${{ number_format($order->grand_total, 2) }}</li>
                     </ul>

@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\ShippingCharge;
 use App\Models\State;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class ShippingController extends Controller
@@ -20,7 +21,8 @@ class ShippingController extends Controller
         $countries = Country::all();
         $states = State::all();
         $cities = City::all();
-        return view('admin.pages.shipping.index', compact('countries', 'states', 'cities'));
+        $units=Unit::all();
+        return view('admin.pages.shipping.index', compact('countries', 'states', 'cities','units'));
     }
 
     /**
@@ -41,7 +43,9 @@ class ShippingController extends Controller
             'country_id' => 'required|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
+            'unit_id' => 'nullable|exists:units,id',
             'charge' => 'required|numeric|min:0',
+            'description' => 'nullable',
         ]);
 
        $shipping=ShippingCharge::create($request->all());

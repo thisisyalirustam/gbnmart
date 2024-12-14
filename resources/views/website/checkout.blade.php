@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="country">Country</label>
-                                            <select class="form-control custom-country" id="country" name="country_id">
+                                            <select class="form-control custom-country" id="country_id" name="country_id">
                                                 <option value="">Select Country</option>
                                                 @foreach ($countries as $country)
                                                     <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -70,7 +70,7 @@
                                     <div class="form-row">
                                         <div class="col-md-6 mb-3">
                                             <label for="state">State</label>
-                                            <select class="form-control custom-country" id="state" name="state">
+                                            <select class="form-control custom-country" id="state_id" name="state_id" disabled>
                                                 <option value="">Select State</option>
                                             </select>
                                             <p></p>
@@ -78,7 +78,7 @@
 
                                         <div class="col-md-6 mb-3">
                                             <label for="city">City</label>
-                                            <select class="form-control custom-country" id="city" name="city">
+                                            <select class="form-control custom-country" id="city_id" name="city_id" disabled>
                                                 <option value="">Select City</option>
                                             </select>
                                             <p></p>
@@ -91,6 +91,7 @@
                                             <input type="text" class="form-control" id="zip-code" name="zip_code" placeholder="10001">
                                             <p></p>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -105,14 +106,20 @@
                                 <ul>
                                     @foreach ($cartItems as $item)
                                         <li>{{ $item->name }} (x{{ $item->quantity }})
-                                            <span>${{ number_format($item->price * $item->quantity, 2) }}</span></li>
+                                            <span>${{ number_format($item->price * $item->quantity, 2) }}</span> {{$item->unit}}
+                                            <input type="text" class="form-control" id="unit_id" value="{{$item->unit_id}}" hidden>
+                                        </li>
+
                                     @endforeach
                                 </ul>
                                 <div class="checkout__order__subtotal">Subtotal
                                     <span>${{ number_format($subtotal, 2) }}</span></div>
-                                <div class="checkout__order__total">Total <span>${{ number_format($subtotal, 2) }}</span>
+                                    <div>
+                                        <strong>Shipping Charge: </strong><span id="shipping-charge">$0.00</span>
+                                        <input type="hidden" name="shipping_charge" id="shipping-charge-input" value="0">
+                                    </div>
+                                <div class="checkout__order__total">Total <span id="grand_total">${{ number_format($subtotal, 2) }}</span>
                                 </div>
-
                                 <!-- Payment Methods -->
                                 <h5>Payment Method</h5>
                                 <div class="checkout__input__checkbox">
@@ -165,8 +172,8 @@
                                         <p>You will be redirected to PayPal for payment.</p>
                                     </div>
                                     <div id="credit-details" style="display:none;">
-                                        {{-- <p>Please enter your credit card details below:</p>
-                                    <label for="credit-card-number">Card Number</label>
+                                        <p>Please enter your credit card details below:</p>
+                                    {{-- <label for="credit-card-number">Card Number</label>
                                     <input type="text" class="form-control" id="credit-card-number" name="credit_card_number" placeholder="1234 5678 9012 3456" >
                                     <label for="credit-expiration">Expiration Date</label>
                                     <input type="text" class="form-control" id="credit-expiration" name="credit_expiration" placeholder="MM/YY" >
@@ -187,67 +194,107 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+      $(document).ready(function () {
+    // When country is selected, fetch related states
+    $('#country_id').change(function () {
+        var countryId = $(this).val();  // Correctly define countryId here
+        console.log("Country ID: " + countryId);  // Debugging line to check if countryId is being fetched
 
-            // When country is selected, fetch related states
-            $('#country').change(function () {
-                var countryId = $(this).val();
+        // Reset state and city dropdowns
+        $('#state_id').html('<option value="">Select State</option>');
+        $('#city_id').html('<option value="">Select City</option>');
+        $('#state_id').prop('disabled', true); // Disable state dropdown initially
+        $('#city_id').prop('disabled', true); // Disable city dropdown initially
 
-                // Reset state and city dropdowns
-                $('#state').html('<option value="">Select State</option>');
-                $('#city').html('<option value="">Select City</option>');
-                $('#state').prop('disabled', true); // Disable state dropdown initially
-                $('#city').prop('disabled', true); // Disable city dropdown initially
-
-                if (countryId) {
-                    $.ajax({
-                        url: '/get-states/' + countryId,
-                        method: 'GET',
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.length > 0) {
-                                $('#state').prop('disabled', false); // Enable state dropdown
-                                $.each(response, function (index, state) {
-                                    $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
-                                });
-                            }
-                        },
-                        error: function () {
-                            alert('Error fetching states.');
-                        }
-                    });
+        if (countryId) {
+            $.ajax({
+                url: '/get-states/' + countryId, // Make sure this route is correct
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.length > 0) {
+                        $('#state_id').prop('disabled', false); // Enable state dropdown
+                        $.each(response, function (index, state) {
+                            $('#state_id').append('<option value="' + state.id + '">' + state.name + '</option>');
+                        });
+                    }
+                },
+                error: function () {
+                    alert('Error fetching states.');
                 }
             });
+        }
+    });
 
-            // When state is selected, fetch related cities
-            $('#state').change(function () {
-                var stateId = $(this).val();
+    // When state is selected, fetch related cities
+    $('#state_id').change(function () {
+        var stateId = $(this).val();  // Ensure stateId is correctly defined here
+        console.log("State ID: " + stateId);  // Debugging line to check if stateId is being fetched
 
-                // Reset city dropdown
-                $('#city').html('<option value="">Select City</option>');
-                $('#city').prop('disabled', true); // Disable city dropdown initially
+        // Reset city dropdown
+        $('#city_id').html('<option value="">Select City</option>');
+        $('#city_id').prop('disabled', true); // Disable city dropdown initially
 
-                if (stateId) {
-                    $.ajax({
-                        url: '/get-cities/' + stateId,
-                        method: 'GET',
-                        dataType: 'json',
-                        success: function (response) {
-                            if (response.length > 0) {
-                                $('#city').prop('disabled', false); // Enable city dropdown
-                                $.each(response, function (index, city) {
-                                    $('#city').append('<option value="' + city.id + '">' + city.name + '</option>');
-                                });
-                            }
-                        },
-                        error: function () {
-                            alert('Error fetching cities.');
-                        }
-                    });
+        if (stateId) {
+            $.ajax({
+                url: '/get-cities/' + stateId, // Make sure this route is correct
+                method: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    if (response.length > 0) {
+                        $('#city_id').prop('disabled', false); // Enable city dropdown
+                        $.each(response, function (index, city) {
+                            $('#city_id').append('<option value="' + city.id + '">' + city.name + '</option>');
+                        });
+                    }
+                },
+                error: function () {
+                    alert('Error fetching cities.');
                 }
             });
+        }
+    });
 
-        });
+    // Fetch shipping charge whenever a new address is selected
+    // $('#city_id , #unit_id').change(function () {
+
+    //         $.ajax({
+    //             url: '{{ route("get.shipping.charges") }}',
+    //            type: 'post',
+    //            data: {city_id: $(this).val()},
+    //            dataType: 'JSON',
+    //            success: function(response) {
+    //             if(response.status==true){
+    //                 $("#shipping-charge").text('$' + response.shippingCharge.toFixed(2)); // Format as a currency value
+    //                 $("#grand_total").text('$' + response.grand_total.toFixed(2));
+    //             }
+
+    //            }
+    //         });
+    // });
+
+    $('#city_id, #unit_id').change(function () {
+    $.ajax({
+        url: '{{ route("get.shipping.charges") }}',
+        type: 'post',
+        data: {
+            city_id: $('#city_id').val(),
+            unit_id: $('#unit_id').val(), // Make sure to include the unit_id
+            _token: '{{ csrf_token() }}'  // Include the CSRF token
+        },
+        dataType: 'JSON',
+        success: function(response) {
+            if (response.status == true) {
+                $("#shipping-charge-input").val(response.shippingCharge);
+                $("#shipping-charge").text('$' + response.shippingCharge.toFixed(2)); // Format as a currency value
+                $("#grand_total").text('$' + response.grand_total.toFixed(2)); // Format as a currency value
+            }
+        }
+    });
+});
+
+});
+
     </script>
 
 

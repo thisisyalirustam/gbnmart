@@ -113,10 +113,27 @@
                 <h2 class="mt-5">Additional Information</h2>
                 <div class="row mt-5">
                     <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="weight" class="form-label">Weight (in kg) <span class="text-danger">*</span></label>
-                            <input type="number" step="0.01" name="weight" id="weight" class="form-control" placeholder="Enter weight" required>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="weight" class="form-label">Weight (in kg) <span class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" name="weight" id="weight" class="form-control" placeholder="Enter weight" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="weight" class="form-label">Unit (in kg) <span class="text-danger">*</span></label>
+                                    <select id="p_unit" name="unit_id" class="form-select" required>
+                                        <option value="">Select Unit</option>
+                                        @foreach ($units as $unit)
+                                            <option value="{{ $unit->id }}">{{ $unit->symbol }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+
+
                         <div class="form-group">
                             <label for="dimensions" class="form-label">Dimensions (L x W x H in cm) <span class="text-danger">*</span></label>
                             <input type="text" name="dimensions" id="dimensions" class="form-control" placeholder="Enter dimensions" required>

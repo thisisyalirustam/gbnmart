@@ -10,13 +10,14 @@ $(() => {
             },
         },
         paging: {
-            pageSize: 10,
+            pageSize: 10, // Default page size, can be adjusted dynamically
         },
         pager: {
             showPageSizeSelector: true,
-            allowedPageSizes: [10, 25, 50, 100],
+            allowedPageSizes: [10, 25, 50, 100], // Allows users to select page size
+            showInfo: true, // Optionally, show the page info like "Page 1 of 10"
         },
-        remoteOperations: false,
+        remoteOperations: false, // Set to true if your server supports paging
         searchPanel: {
             visible: true,
             highlightCaseSensitive: true,
@@ -29,9 +30,9 @@ $(() => {
         rowAlternationEnabled: true,
         showBorders: true,
         width: "100%",
-        columnAutoWidth: true, // Automatically adjusts column widths
+        columnAutoWidth: true,
         scrolling: {
-            mode: "virtual", // Enables virtual scrolling
+            mode: "virtual", // Virtual scrolling, great for large data sets
             useNative: true,
         },
         columns: [
@@ -41,14 +42,11 @@ $(() => {
                 alignment: "start",
                 cellTemplate(container, options) {
                     const orderId = options.data.id;
-                    const customerName = options.data.name; // Assuming the data source contains a 'name' field
+                    const customerName = options.data.name;
                     const email = options.data.email;
-
-                    $("<div>")
-                        .html(
-                            `<strong>#${orderId} by ${customerName}</strong><br><span> <a href="mailto:${email}?subject=Hello%20There&body=This%20is%20a%20pre-filled%20email!">${email}</a></span>`
-                        )
-                        .appendTo(container);
+                    $("<div>").html(
+                        `<strong>#${orderId} by ${customerName}</strong><br><span> <a href="mailto:${email}?subject=Hello%20There&body=This%20is%20a%20pre-filled%20email!">${email}</a></span>`
+                    ).appendTo(container);
                 },
             },
             {
@@ -64,15 +62,13 @@ $(() => {
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
                         .attr("data-bs-target", "#update")
-                        .html(
-                            '<i class="bi bi-pencil-square" style="color: #007bff;"></i>'
-                        )
+                        .html('<i class="bi bi-pencil-square" style="color: #007bff;"></i>')
                         .appendTo(container);
 
                     // Show Button
                     $("<a>")
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
-                        .attr("href", `/coustomer-orders/${id}`) // Redirect to show route
+                        .attr("href", `/coustomer-orders/${id}`)
                         .html('<i class="bi bi-eye" style="color: #28a745;"> Show</i>')
                         .appendTo(container);
 
@@ -83,9 +79,7 @@ $(() => {
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
                         .attr("data-bs-target", "#show")
-                        .html(
-                            '<i class="bi bi-eye" style="color: #28a745;">Quick Show</i>'
-                        )
+                        .html('<i class="bi bi-eye" style="color: #28a745;">Quick Show</i>')
                         .appendTo(container);
 
                     // Delete Button
@@ -95,9 +89,7 @@ $(() => {
                         .attr("data-bs-toggle", "modal")
                         .attr("data-bs-userId", id)
                         .attr("data-bs-target", "#delete")
-                        .html(
-                            '<i class="bi bi-trash" style="color: #dc3545;"></i>'
-                        )
+                        .html('<i class="bi bi-trash" style="color: #dc3545;"></i>')
                         .appendTo(container);
                 },
             },
@@ -107,42 +99,20 @@ $(() => {
                 dataField: "shipping_status",
                 caption: "Status",
                 cellTemplate(container, options) {
-                    const status = options.data.shipping_status || 'Unknown'; // Default to 'Unknown' if undefined
+                    const status = options.data.shipping_status || 'Unknown';
                     let badgeClass = '';
-
-                    // Determine the badge class based on shipping status
                     switch (status) {
-                        case 'Pending':
-                            badgeClass = 'badge-warning'; // No 'badge' prefix needed
-                            break;
-                        case 'Process':
-                            badgeClass = 'badge-primary';
-                            break;
-                        case 'Delivered':
-                            badgeClass = 'badge-success';
-                            break;
-                        case 'Return':
-                            badgeClass = 'badge-danger';
-                            break;
-                        case 'Complete':
-                            badgeClass = 'badge-secondary';
-                            break;
-                        default:
-                            badgeClass = 'badge-light';
+                        case 'Pending': badgeClass = 'badge-warning'; break;
+                        case 'Process': badgeClass = 'badge-primary'; break;
+                        case 'Delivered': badgeClass = 'badge-success'; break;
+                        case 'Return': badgeClass = 'badge-danger'; break;
+                        case 'Complete': badgeClass = 'badge-secondary'; break;
+                        default: badgeClass = 'badge-light';
                     }
-
-                    // Create the badge element
-                    const badge = $("<span>")
-                        .addClass(`badge ${badgeClass}`) // Include the 'badge' class here
-                        .text(status)
-                        .css({
-                            padding: '5px 10px',
-                            borderRadius: '5px',
-                            display: 'inline-block', // Ensures the badge displays inline
-                        });
-
-                    // Append the badge to the container
-                    badge.appendTo(container);
+                    $("<span>").addClass(`badge ${badgeClass}`).text(status).css({
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                    }).appendTo(container);
                 },
             },
             {
@@ -151,7 +121,7 @@ $(() => {
                 caption: "Order Date",
                 alignment: "center",
                 dataType: "date",
-                format: "dd MMM yyyy", // Formats the date as "25 Nov 2024"
+                format: "dd MMM yyyy",
             },
             {
                 width: 120,
@@ -188,11 +158,6 @@ $(() => {
                 dataField: "grand_total",
                 caption: "Amount",
             },
-
-
-
-
-
         ],
         onContentReady(e) {
             if (!collapsed) {
@@ -204,6 +169,7 @@ $(() => {
 });
 
 let collapsed = false;
+
 
 // ... (rest of your existing code)
 

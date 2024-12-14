@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\ProdcutSubCategoryController;
 use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\CheckoutController;
@@ -59,6 +60,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders',[AdminController::class,'orders'])->name('admin.orders');
     Route::post('/orders-show/{id}',[AdminController::class,'showorder'])->name('admin.ordersshow');
     Route::post('orders/{orderId}/send-invoice', [AdminController::class, 'sendInvoice'])->name('orders.sendInvoice');
+
+    Route::get('/settings',[SettingsController::class,'index'])->name('admin.setting');
+    Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');
+
 
    // Update Delivery Date
 Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');

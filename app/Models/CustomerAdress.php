@@ -17,8 +17,8 @@ class CustomerAdress extends Model
         'country_id',
         'address',
         'apartment',
-        'city',
-        'state',
+        'city_id',
+        'state_id',
         'zip',
     ];
 }

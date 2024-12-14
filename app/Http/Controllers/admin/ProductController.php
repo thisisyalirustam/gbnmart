@@ -70,6 +70,7 @@ class ProductController extends Controller
     $product->product_brand_id = $request->brand_id;
     $product->description = $request->description;
     $product->weight = $request->weight;
+    $product->unit_id=$request->unit_id;
     $product->dimensions = $request->dimensions;
     $product->color_options = json_encode($request->input('colors'));
     $product->tags = json_encode($request->input('tags'));

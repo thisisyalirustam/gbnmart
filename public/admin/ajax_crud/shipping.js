@@ -30,8 +30,8 @@ $(() => {
         width: "100%",
         columns: [
             {
-                dataField: "name",
-                caption: "Name",
+                dataField: "unit.name",
+                caption: "Unit",
             },
             {
                 dataField: "country.name",

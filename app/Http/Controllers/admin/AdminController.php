@@ -23,7 +23,6 @@ class AdminController extends Controller
     public function index()
     {
 
-
         return view('admin.pages.dashboard.index');
     }
     public function showuser()
@@ -79,21 +78,18 @@ class AdminController extends Controller
 
         return response()->json($products);
     }
-    public function shipping(){
-        $shipping = ShippingCharge::with('country', 'state', 'city')->get();
+    public function shipping()
+    {
+        $shipping = ShippingCharge::with('country', 'state', 'city', 'unit')->get();
         return response()->json($shipping);
     }
-    public function orders(){
+    public function orders()
+    {
         $order = Order::orderBy('id', 'desc')->get();
         return response()->json($order);
-
-
     }
     public function updateDeliveryDate(Request $request, $id)
     {
-
-
-        // Find the order by ID and update the delivery date
         $order = Order::findOrFail($id);
         $order->delivered_date = $request->delivered_date;
         $order->save();
@@ -101,133 +97,130 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Delivery date updated successfully!');
     }
 
-
-
-
     public function updateShippingStatus(Request $request, $id)
-{
-    $order = Order::findOrFail($id);
-    $order->shipping_status = $request->shipping_status;
-    $order->save();
+    {
+        $order = Order::findOrFail($id);
+        $order->shipping_status = $request->shipping_status;
+        $order->save();
 
-    return redirect()->back()->with('success', 'Delivery date updated successfully!');
-}
+        return redirect()->back()->with('success', 'Delivery date updated successfully!');
+    }
 
-
-public function sendInvoice($orderId)
-{
-    // Retrieve the order with the necessary relationships
-    $ordershow = Order::with(['user', 'country', 'items.product'])->find($orderId);
-    $orderData = [
-        'username' => $ordershow->name,
-        'order_id' => $ordershow->id,
-        'email' => $ordershow->email,
-        'address' => $ordershow->address,
-        'city' => $ordershow->city,
-        'phone' => $ordershow->phone,
-        'zip' => $ordershow->zip,
-        'state' => $ordershow->state,
-        'items' => [],
-        'grand_total' => 0, // Grand total of the order
-        'payment_method_details' => '', // Add a place to store payment method details
-    ];
-
-    // Loop through order items to build item data
-    foreach ($ordershow->items as $item) {
-        $images = json_decode($item->product->images, true);
-        $item->product->images = $images[0] ?? 'default-image.jpg';
-
-        // Calculate item subtotal
-        $subtotal = $item->price * $item->quantity;
-        $orderData['items'][] = [
-            'name' => $item->product->name,
-            'image' => $item->product->image ?? 'default.jpg', // fallback image
-            'price' => $item->price,
-            'quantity' => $item->quantity,
-            'subtotal' => $subtotal, // Add subtotal here
+    public function sendInvoice($orderId)
+    {
+        // Retrieve the order with the necessary relationships
+        $ordershow = Order::with(['user', 'country', 'items.product'])->find($orderId);
+        $orderData = [
+            'username' => $ordershow->name,
+            'order_id' => $ordershow->id,
+            'email' => $ordershow->email,
+            'address' => $ordershow->address,
+            'city' => $ordershow->city,
+            'shipping' => $ordershow->shipping,
+            'phone' => $ordershow->phone,
+            'zip' => $ordershow->zip,
+            'state' => $ordershow->state,
+            'items' => [],
+            'grand_total' => 0, // Grand total of the order
+            'payment_method_details' => '', // Add a place to store payment method details
         ];
-        $orderData['grand_total'] += $item->price * $item->quantity;
+
+        // Loop through order items to build item data
+        foreach ($ordershow->items as $item) {
+            $images = json_decode($item->product->images, true);
+            $item->product->images = $images[0] ?? 'default-image.jpg';
+
+            // Calculate item subtotal
+            $subtotal = $item->price * $item->quantity;
+            $orderData['items'][] = [
+                'name' => $item->product->name,
+                'image' => $item->product->image ?? 'default.jpg', // fallback image
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'subtotal' => $subtotal, // Add subtotal here
+            ];
+            $orderData['grand_total'] += $item->price * $item->quantity + $item->shipping;
+        }
+
+        // Handle payment method logic
+        switch ($ordershow->payment_method) {
+            case 'cash':
+                $orderData['payment_method_details'] = 'Cash on Delivery. Delivery will be made upon payment.';
+                break;
+            case 'bank':
+                $orderData['payment_method_details'] = 'Please make the payment via online bank transfer.';
+                break;
+            case 'credit':
+                $orderData['payment_method_details'] = 'Please send payment to the following dummy bank details: Bank Name: Dummy Bank, SWIFT Code: DUMMY123';
+                break;
+            default:
+                $orderData['payment_method_details'] = 'Payment method not specified.';
+                break;
+        }
+
+        // Send the email with the populated order data
+        Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
     }
 
-    // Handle payment method logic
-    switch ($ordershow->payment_method) {
-        case 'cash':
-            $orderData['payment_method_details'] = 'Cash on Delivery. Delivery will be made upon payment.';
-            break;
-        case 'bank':
-            $orderData['payment_method_details'] = 'Please make the payment via online bank transfer.';
-            break;
-        case 'credit':
-            $orderData['payment_method_details'] = 'Please send payment to the following dummy bank details: Bank Name: Dummy Bank, SWIFT Code: DUMMY123';
-            break;
-        default:
-            $orderData['payment_method_details'] = 'Payment method not specified.';
-            break;
+    public function getStates($country_id)
+    {
+        $states = State::where('country_id', $country_id)->get();
+        return response()->json($states);
     }
 
-    // Send the email with the populated order data
-    Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
-}
+    // Fetch cities based on selected state
+    public function getCities($state_id)
+    {
+        $cities = City::where('state_id', $state_id)->get();
+        return response()->json($cities);
+    }
 
-public function getStates($country_id)
-{
-    $states = State::where('country_id', $country_id)->get();
-    return response()->json($states);
-}
+    // public function sendInvoice($orderId)
+    // {
+    //     // Retrieve the order with the necessary relationships
+    //     $ordershow = Order::with(['user', 'country', 'items.product'])->find($orderId);
 
-// Fetch cities based on selected state
-public function getCities($state_id)
-{
-    $cities = City::where('state_id', $state_id)->get();
-    return response()->json($cities);
-}
+    //     // Initialize order data array
+    //     $orderData = [
+    //         'username' => $ordershow->name, // Assuming 'user' relationship exists
+    //         'items' => [],
+    //         'grand_total' => 0, // Grand total of the order
+    //         'order_id' => $ordershow->id,
+    //         'order_date' => $ordershow->created_at->toFormattedDateString(), // Date of order
+    //         'shipping_address' => $ordershow->address ?? 'Not provided', // User's shipping address
+    //         'country' => $ordershow->country->name ?? 'Not specified', // Country name
+    //     ];
 
-// public function sendInvoice($orderId)
-// {
-//     // Retrieve the order with the necessary relationships
-//     $ordershow = Order::with(['user', 'country', 'items.product'])->find($orderId);
+    //     // Loop through each item in the order
+    //     foreach ($ordershow->items as $item) {
+    //         $images = json_decode($item->product->images, true);
+    //         $item->product->images = $images[0] ?? 'default-image.jpg';
 
-//     // Initialize order data array
-//     $orderData = [
-//         'username' => $ordershow->name, // Assuming 'user' relationship exists
-//         'items' => [],
-//         'grand_total' => 0, // Grand total of the order
-//         'order_id' => $ordershow->id,
-//         'order_date' => $ordershow->created_at->toFormattedDateString(), // Date of order
-//         'shipping_address' => $ordershow->address ?? 'Not provided', // User's shipping address
-//         'country' => $ordershow->country->name ?? 'Not specified', // Country name
-//     ];
+    //         // Calculate the subtotal for the item
+    //         $subtotal = $item->price * $item->quantity;
 
-//     // Loop through each item in the order
-//     foreach ($ordershow->items as $item) {
-//         $images = json_decode($item->product->images, true);
-//         $item->product->images = $images[0] ?? 'default-image.jpg';
+    //         // Add item data to order
+    //         $orderData['items'][] = [
+    //             'name' => $item->product->name,
+    //             'image' => $item->product->images,
+    //             'quantity' => $item->quantity,
+    //             'price' => number_format($item->price, 2), // Format price
+    //             'subtotal' => number_format($subtotal, 2), // Format subtotal
+    //         ];
 
-//         // Calculate the subtotal for the item
-//         $subtotal = $item->price * $item->quantity;
+    //         // Add to the grand total
+    //         $orderData['grand_total'] += $subtotal;
+    //     }
 
-//         // Add item data to order
-//         $orderData['items'][] = [
-//             'name' => $item->product->name,
-//             'image' => $item->product->images,
-//             'quantity' => $item->quantity,
-//             'price' => number_format($item->price, 2), // Format price
-//             'subtotal' => number_format($subtotal, 2), // Format subtotal
-//         ];
+    //     // Format grand total as currency
+    //     $orderData['grand_total'] = number_format($orderData['grand_total'], 2);
 
-//         // Add to the grand total
-//         $orderData['grand_total'] += $subtotal;
-//     }
+    //     // Send the invoice (using a mail service, assuming Mail class is set up)
+    //     Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
 
-//     // Format grand total as currency
-//     $orderData['grand_total'] = number_format($orderData['grand_total'], 2);
-
-//     // Send the invoice (using a mail service, assuming Mail class is set up)
-//     Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
-
-//     // Return a success response
-//     return response()->json(['status' => 'Invoice sent successfully!', 'order_id' => $orderId]);
-// }
+    //     // Return a success response
+    //     return response()->json(['status' => 'Invoice sent successfully!', 'order_id' => $orderId]);
+    // }
 
 
 }

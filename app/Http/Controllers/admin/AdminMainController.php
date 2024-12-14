@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class AdminMainController extends Controller
@@ -17,7 +18,8 @@ class AdminMainController extends Controller
         $category = ProductCat::all();
         $subcategory = ProductSubCategory::all();
         $brand = ProductBrand::all();
-        return view('admin.pages.products.product_create', compact('category', 'subcategory', 'brand'));
+        $units=Unit::all();
+        return view('admin.pages.products.product_create', compact('category', 'subcategory', 'brand','units'));
     }
 
     public function getSubcategoriesAndBrands($categoryId)

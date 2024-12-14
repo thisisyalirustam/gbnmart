@@ -165,7 +165,7 @@
                                                         Shipping Fee:
                                                     </td>
                                                     <td style="font-size: 14px; line-height: 18px; color: #666666; padding-bottom: 10px; border-bottom: 1px solid #eeeeee; text-align: right;">
-                                                        $10.20
+                                                        ${{ number_format($orderData['shipping'], 2) }}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -173,7 +173,7 @@
                                                         Order Total
                                                     </td>
                                                     <td style="font-size: 14px; font-weight: bold; line-height: 18px; color: #666666; padding-top: 10px; text-align: right;">
-                                                        ${{ number_format($orderData['grand_total'] + 10.20, 2) }}
+                                                        ${{ number_format($orderData['grand_total'], 2) }}
                                                     </td>
                                                 </tr>
                                             </tbody>
