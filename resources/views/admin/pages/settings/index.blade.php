@@ -12,6 +12,190 @@
         </nav>
     </div>
 
+    <style>
+/* Dashboard Section Styling */
+.dashboard-section .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    height: auto; /* Dynamic height based on content */
+    min-height: 220px; /* Minimum height to keep cards consistent */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+}
+
+.dashboard-section .card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-section .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.dashboard-section .card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.dashboard-section .card p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.dashboard-section .card i {
+    color: #3498db;
+    font-size: 3rem; /* Adjust icon size */
+}
+
+.dashboard-section .btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    background-color: #3498db;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.dashboard-section .btn:hover {
+    background-color: #2980b9;
+}
+
+/* Flexbox for row items */
+.dashboard-section .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Ensure equal spacing between cards */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-section .col-xl-3,
+    .dashboard-section .col-lg-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Profile Section Adjustments (keeping separate for the profile section) */
+.profile-section .profile-card {
+    text-align: center;
+    padding: 30px 15px; /* Adjust padding for the profile card */
+}
+
+.profile-section .profile-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-section .profile-card h2 {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.profile-section .social-links a {
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.profile-section .social-links a:hover {
+    color: #2980b9;
+}
+
+/* Adjust tabs for smaller screens */
+.dashboard-section .nav-tabs-bordered {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dashboard-section .nav-tabs-bordered .nav-item {
+    margin-right: 10px;
+}
+
+.dashboard-section .nav-tabs-bordered .nav-link {
+    padding: 10px 20px;
+}
+
+/* Content inside tabs */
+.dashboard-section .tab-content {
+    padding-top: 20px;
+}
+
+    </style>
+
+<section class="section profile dashboard-section">
+    <div class="row">
+        <!-- Banners Box -->
+        <div class="col-xl-3 col-lg-6">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-image fa-3x mb-3"></i> <!-- Banner Icon -->
+                    <h5 class="card-title">Banners</h5>
+                    <p>Manage your banners here.</p>
+                    <a href="{{route('banners.index')}}" class="btn btn-primary">Manage</a> <!-- Anchor link -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Ads Box -->
+        <div class="col-xl-3 col-lg-6">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-ad fa-3x mb-3"></i> <!-- Ads Icon -->
+                    <h5 class="card-title">Ads</h5>
+                    <p>Manage your ads here.</p>
+                    <a href="#ads" class="btn btn-primary">Manage</a> <!-- Anchor link -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Promotions Box -->
+        <div class="col-xl-3 col-lg-6">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-gift fa-3x mb-3"></i> <!-- Promotions Icon -->
+                    <h5 class="card-title">Promotions</h5>
+                    <p>Manage your promotions here.</p>
+                    <a href="#promotions" class="btn btn-primary">Manage</a> <!-- Anchor link -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Links Box -->
+        <div class="col-xl-3 col-lg-6">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <i class="fas fa-link fa-3x mb-3"></i> <!-- Links Icon -->
+                    <h5 class="card-title">Links</h5>
+                    <p>Manage your links here.</p>
+                    <a href="#links" class="btn btn-primary">Manage</a> <!-- Anchor link -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
     <section class="section profile">
         <div class="row">
           <div class="col-xl-4">

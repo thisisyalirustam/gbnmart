@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminMainController;
+use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\OrdersController;
 use App\Http\Controllers\admin\ProdcutSubCategoryController;
@@ -63,6 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/settings',[SettingsController::class,'index'])->name('admin.setting');
     Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');
+    Route::resource('/settings/banners', BannerController::class);
 
 
    // Update Delivery Date

@@ -36,4 +36,9 @@ class ProductCat extends Model
     {
         return $this->hasMany(ProductSubCategory::class);
     }
+
+    public function banners()
+    {
+        return $this->hasMany(Banner::class); // The inverse of the 'belongsTo' relationship
+    }
 }

@@ -14,7 +14,7 @@ class WebController extends Controller
     //
     public function home()
     {
-        $product = Product::where('status', 'active')->where('sof', 'Yes')->take(8)->get();
+        $product = Product::with('product_cat')->where('status', 'active')->where('sof', 'Yes')->take(8)->get();
         $category = ProductCat::where('status', '1')->where('sof', 'yes')->get();
         return view('website.index', compact('product', 'category'));
     }
@@ -74,6 +74,10 @@ class WebController extends Controller
             $products = $products->whereIn('product_brand_id', $brandsArray);
         }
 
+        if(!empty($request->get('search'))){
+            $products=$products->where('name','like','%'.$request->get('search').'%');
+        }
+
         $maxPriceProduct = Product::max('discounted_price');
         $min_price = intval($request->input('minprice', 0));
         $max_price = intval($request->input('maxprice', $maxPriceProduct));
@@ -97,5 +101,5 @@ class WebController extends Controller
         return view('website.shop', compact('categories', 'brands', 'products', 'brandsArray', 'min_price', 'max_price', 'maxPriceProduct', 'sort'));
     }
 
-    
+
 }

@@ -5,12 +5,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="hero__item set-bg" data-setbg="{{ asset('website/img/hero/banner.jpg') }}">
+                    <div class="hero__item set-bg" data-setbg="{{ asset(getbanners()->image) }}">
                         <div class="hero__text">
-                            <span>FRUIT FRESH</span>
-                            <h2>Vegetable <br />100% Organic</h2>
-                            <p>Free Pickup and Delivery Available</p>
-                            <a href="{{ route('shoppage') }}" class="primary-btn">SHOP NOW</a>
+                            <span>{{getbanners()->title}}</span>
+                        <h2>{{getbanners()->product_cat->name}} <br />{{getbanners()->percentage}} % </h2>
+                            <p>{{getbanners()->description}}</p>
+                            <a href="{{ route('shoppage', getbanners()->product_cat->slug) }}" class="primary-btn">SHOP NOW</a>
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     @foreach ($category as $cat)
                         <div class="col-lg-3 ">
                             <div class="categories__item set-bg" data-setbg="{{ $cat->image }}">
-                                <h5><a href="#">{{ $cat->name }}</a></h5>
+                                <h5><a href="{{ route('shoppage', $cat->slug) }}">{{ $cat->name }}</a></h5>
                             </div>
                         </div>
                     @endforeach
@@ -48,10 +48,9 @@
                     <div class="featured__controls">
                         <ul>
                             <li class="active" data-filter="*">All</li>
-                            <li data-filter=".oranges">Oranges</li>
-                            <li data-filter=".fresh-meat">Fresh Meat</li>
-                            <li data-filter=".vegetables">Vegetables</li>
-                            <li data-filter=".fastfood">Fastfood</li>
+                            @foreach ($category as $cat)
+                            <li data-filter=".{{$cat->slug}}">{{$cat->name}}</li>
+                          @endforeach
                         </ul>
                     </div>
                 </div>
@@ -61,7 +60,7 @@
                     @php
                         $images = json_decode($item->images, true);
                     @endphp
-                    <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4">
+                    <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4 mix {{$item->product_cat->slug}}">
                         <div class="card h-100 border-1 shadow-sm position-relative">
                             <!-- Product Image Slider -->
                             <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">

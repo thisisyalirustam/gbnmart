@@ -1,29 +1,13 @@
 function toggleDropdown(categoryId) {
     var submenu = document.getElementById('submenu' + categoryId);
-    var isActive = submenu.classList.contains('active-submenu');
+    var chevronDown = submenu.previousElementSibling.querySelector('.fas.fa-chevron-down');
+    var chevronUp = submenu.previousElementSibling.querySelector('.fas.fa-chevron-up');
 
-    // Close all open submenus
-    var allSubmenus = document.querySelectorAll('.submenu');
-    allSubmenus.forEach(function(menu) {
-        menu.classList.remove('active-submenu');
-    });
-
-    // Reset all chevron icons to downward
-    var allToggles = document.querySelectorAll('.dropdown-toggle');
-    allToggles.forEach(function(toggle) {
-        var icons = toggle.querySelectorAll('i');
-        icons[0].style.display = 'inline';  // Chevron down
-        icons[1].style.display = 'none';    // Chevron up
-    });
-
-    // Toggle the current submenu and icon, if it was not active before
-    if (!isActive) {
-        submenu.classList.add('active-submenu');
-        var icons = submenu.previousElementSibling.querySelectorAll('i');
-        icons[0].style.display = 'none';   // Chevron down
-        icons[1].style.display = 'inline'; // Chevron up
-    }
+    submenu.classList.toggle('show');
+    chevronDown.style.display = submenu.classList.contains('show') ? 'none' : 'inline-block';
+    chevronUp.style.display = submenu.classList.contains('show') ? 'inline-block' : 'none';
 }
+
 
 function getSelectedSizes() {
     var sizes = [];

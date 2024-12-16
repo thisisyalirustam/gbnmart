@@ -5,12 +5,12 @@
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="footer__about">
                     <div class="footer__about__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="./index.html"><img src="{{asset(settings()->logo)}}" alt=""></a>
                     </div>
                     <ul>
-                        <li>Address: 60-49 Road 11378 New York</li>
-                        <li>Phone: +65 11.188.888</li>
-                        <li>Email: hello@colorlib.com</li>
+                        <li>Address: {{settings()->address}}</li>
+                        <li>Phone: {{settings()->phone}}</li>
+                        <li>Email: {{settings()->email}}</li>
                     </ul>
                 </div>
             </div>
@@ -44,10 +44,10 @@
                         <button type="submit" class="site-btn">Subscribe</button>
                     </form>
                     <div class="footer__widget__social">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-instagram"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                        <a href="{{(settings()->facebook)}}"><i class="fa fa-facebook"></i></a>
+                        <a href="{{(settings()->instagram)}}"><i class="fa fa-instagram"></i></a>
+                        <a href="{{(settings()->twitter)}}"><i class="fa fa-twitter"></i></a>
+                        <a href="{{(settings()->facebook)}}"><i class="fa fa-pinterest"></i></a>
                     </div>
                 </div>
             </div>

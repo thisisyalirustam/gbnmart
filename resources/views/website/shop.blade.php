@@ -17,7 +17,126 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
+<style>
+/* Main Sidebar Container */
+.sidebar__item {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
 
+/* Title Styling */
+.sidebar__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Main Category Link */
+.main-category-link {
+    display: block;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 600;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-category-link:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Subcategory Item */
+.sub-category-item {
+    padding-left: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.sub-category-link {
+    font-size: 1rem;
+    color: #555;
+    padding: 8px;
+    display: block;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.sub-category-link:hover {
+    color: #007bff;
+}
+
+/* Dropdown Arrow and Animation */
+.dropdown-toggle {
+    display: inline-block;
+    font-size: 18px;
+    color: #007bff;
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+.fas.fa-chevron-down, .fas.fa-chevron-up {
+    transition: transform 0.3s ease;
+}
+
+.fas.fa-chevron-up {
+    display: none;
+}
+
+.collapse.show .fas.fa-chevron-down {
+    display: none;
+}
+
+.collapse.show .fas.fa-chevron-up {
+    display: inline-block;
+    transform: rotate(180deg);
+}
+
+/* Submenu Styling */
+.submenu {
+    display: none;
+    padding-left: 15px;
+    margin-top: 10px;
+}
+
+.submenu.show {
+    display: block;
+}
+
+/* Hover Effects */
+.category-item:hover .category-name {
+    color: #007bff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar__item {
+        padding: 15px;
+    }
+
+    .sidebar__title {
+        font-size: 1.3rem;
+    }
+
+    .main-category-link {
+        font-size: 1rem;
+    }
+
+    .sub-category-link {
+        font-size: 0.9rem;
+    }
+}
+
+
+</style>
     <!-- Product Section Begin -->
     <section class="product spad">
         <div class="container">
@@ -25,14 +144,14 @@
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
                         <div class="sidebar__item">
-                            <h4>Department</h4>
+                            <h4 class="sidebar__title">Department</h4>
                             <ul class="category-list">
                                 @if ($categories->isNotEmpty())
                                     @foreach ($categories as $category)
                                         <li class="category-item">
                                             <!-- Category name for filtering -->
                                             <a href="{{ route('shoppage', $category->slug) }}" class="main-category-link">
-                                                {{ $category->name }}
+                                                <span class="category-name">{{ $category->name }}</span>
                                             </a>
                                             @if ($category->product_sub_category->isNotEmpty())
                                                 <a href="javascript:void(0);" class="dropdown-toggle"
@@ -43,8 +162,7 @@
                                                 <ul class="collapse list-unstyled submenu" id="submenu{{ $category->id }}">
                                                     @foreach ($category->product_sub_category as $subCategory)
                                                         <li class="sub-category-item">
-                                                            <a
-                                                                href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}">
+                                                            <a href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}" class="sub-category-link">
                                                                 {{ $subCategory->name }}
                                                             </a>
                                                         </li>
@@ -55,9 +173,8 @@
                                     @endforeach
                                 @endif
                             </ul>
-
                         </div>
-                        <script></script>
+
                         <div class="sidebar__item">
                             <h4>Select Brands</h4>
                             <ul class="brand-list">
@@ -400,6 +517,10 @@
 
                         url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
                             '');
+                        var keyword = $("#search").val();
+                        if(keyword.length > 0){
+                            url += '&sort=' + keyword;
+                        }
 
                         url += '&sort=' + $("#sort").val();
                         if (brands) {
@@ -408,6 +529,8 @@
                         window.location.href = url;
                     }
                 });
+
+
             </script>
 
         @endsection
