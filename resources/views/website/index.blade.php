@@ -55,73 +55,95 @@
                     </div>
                 </div>
             </div>
+            <style>
+                ..wishlist-icon {
+    transition: color 0.3s ease;
+}
+
+.wishlist-icon:hover {
+    color: red !important; /* Wishlist icon color turns red on hover */
+}
+
+.wishlist-icon.clicked {
+    color: green !important; /* Wishlist icon turns green when clicked */
+}
+
+.card-link {
+    display: block;
+    text-decoration: none;
+}
+
+.card-link:hover {
+    text-decoration: none;
+}
+
+
+            </style>
             <div class="row featured__filter">
                 @foreach ($product as $item)
                     @php
                         $images = json_decode($item->images, true);
                     @endphp
                     <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4 mix {{$item->product_cat->slug}}">
-                        <div class="card h-100 border-1 shadow-sm position-relative">
-                            <!-- Product Image Slider -->
-                            <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                    @foreach ($images as $index => $imageName)
-                                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                            <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100"
-                                                alt="...">
-                                        </div>
-                                    @endforeach
+                        <a href="{{ route('product.detail', $item->slug) }}" class="card-link"> <!-- Wrap the entire card in <a> -->
+                            <div class="card h-100 border-1 shadow-sm position-relative">
+                                <!-- Product Image Slider -->
+                                <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @foreach ($images as $index => $imageName)
+                                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100" alt="...">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    </a>
                                 </div>
-                                <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button"
-                                    data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+                                <!-- Wishlist Icon Always Visible -->
+                                <a href="#" class="wishlist-icon position-absolute top-0 right-0 p-2 text-red" title="Add to Wishlist" onclick="toggleWishlist(event)">
+                                    <i class="fa fa-heart"></i>
                                 </a>
-                                <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button"
-                                    data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                </a>
-                            </div>
-                            <!-- Overlay Icons (Wishlist, Share, and Read More) -->
-                            <div class="overlay-icons d-flex align-items-center justify-content-center">
-                                <a href="#" class="text-white mx-2" title="Add to Wishlist"><i
-                                        class="fa fa-heart"></i></a>
-                                <a href="#" class="text-white mx-2" title="Share"><i
-                                        class="fa fa-share-alt"></i></a>
-                                <a href="{{ route('product.detail', $item->slug) }}" class="text-white mx-2"
-                                    title="Read More"><i class="fa fa-ellipsis-h"></i></a>
-                            </div>
-                            <!-- Product Details -->
-                            <div class="card-body text-center p-3">
-                                <h6 class="product-name text-truncate font-weight-bold mb-2">
-                                    <a href="{{ route('product.detail', $item->slug) }}"
-                                        class="text-dark">{{ $item->name }}</a>
-                                </h6>
-                                <p class="product-description text-muted small mb-2">
-                                    {{ Str::limit(strip_tags($item->description), 50) }}
-                                </p>
-                                <!-- Product Price -->
-                                <div class="product-price mb-2">
-                                    @if ($item->discounted_price)
-                                        <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
-                                        <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
-                                    @else
-                                        <span class="text-primary">${{ $item->price }}</span>
-                                    @endif
+
+                                <!-- Product Details -->
+                                <div class="card-body text-center p-3">
+                                    <h6 class="product-name text-truncate font-weight-bold mb-2">
+                                        {{ $item->name }}
+                                    </h6>
+                                    <p class="product-description text-muted small mb-2">
+                                        {{ Str::limit(strip_tags($item->description), 50) }}
+                                    </p>
+                                    <!-- Product Price -->
+                                    <div class="product-price mb-2">
+                                        @if ($item->discounted_price)
+                                            <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
+                                            <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
+                                        @else
+                                            <span class="text-primary">${{ $item->price }}</span>
+                                        @endif
+                                    </div>
+                                    <!-- Stock Status -->
+                                    <p class="text-muted small fixed-stock-status">
+                                        {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
+                                    </p>
                                 </div>
-                                <!-- Stock Status -->
-                                <p class="text-muted small fixed-stock-status">
-                                    {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
-                                </p>
+
+                                <!-- Action Buttons -->
+                                <div class="card-footer d-flex justify-content-between bg-light">
+                                    <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
+                                    <button class="btn btn-primary btn-sm">Buy Now</button>
+                                </div>
                             </div>
-                            <!-- Action Buttons -->
-                            <div class="card-footer d-flex justify-content-around bg-light">
-                                <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
-                                <button class="btn btn-primary btn-sm">Buy Now</button>
-                            </div>
-                        </div>
+                        </a> <!-- Close the anchor tag here -->
                     </div>
                 @endforeach
             </div>
+
+
         </div>
     </section>
     <div class="banner">

@@ -16,127 +16,7 @@
             </div>
         </div>
     </section>
-    <!-- Breadcrumb Section End -->
-<style>
-/* Main Sidebar Container */
-.sidebar__item {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
 
-/* Title Styling */
-.sidebar__title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Main Category Link */
-.main-category-link {
-    display: block;
-    font-size: 1.2rem;
-    color: #333;
-    font-weight: 600;
-    padding: 10px;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.main-category-link:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Subcategory Item */
-.sub-category-item {
-    padding-left: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-
-.sub-category-link {
-    font-size: 1rem;
-    color: #555;
-    padding: 8px;
-    display: block;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.sub-category-link:hover {
-    color: #007bff;
-}
-
-/* Dropdown Arrow and Animation */
-.dropdown-toggle {
-    display: inline-block;
-    font-size: 18px;
-    color: #007bff;
-    cursor: pointer;
-    padding-left: 10px;
-}
-
-.fas.fa-chevron-down, .fas.fa-chevron-up {
-    transition: transform 0.3s ease;
-}
-
-.fas.fa-chevron-up {
-    display: none;
-}
-
-.collapse.show .fas.fa-chevron-down {
-    display: none;
-}
-
-.collapse.show .fas.fa-chevron-up {
-    display: inline-block;
-    transform: rotate(180deg);
-}
-
-/* Submenu Styling */
-.submenu {
-    display: none;
-    padding-left: 15px;
-    margin-top: 10px;
-}
-
-.submenu.show {
-    display: block;
-}
-
-/* Hover Effects */
-.category-item:hover .category-name {
-    color: #007bff;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .sidebar__item {
-        padding: 15px;
-    }
-
-    .sidebar__title {
-        font-size: 1.3rem;
-    }
-
-    .main-category-link {
-        font-size: 1rem;
-    }
-
-    .sub-category-link {
-        font-size: 0.9rem;
-    }
-}
-
-
-</style>
     <!-- Product Section Begin -->
     <section class="product spad">
         <div class="container">
@@ -162,7 +42,8 @@
                                                 <ul class="collapse list-unstyled submenu" id="submenu{{ $category->id }}">
                                                     @foreach ($category->product_sub_category as $subCategory)
                                                         <li class="sub-category-item">
-                                                            <a href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}" class="sub-category-link">
+                                                            <a href="{{ route('shoppage', [$category->slug, $subCategory->slug]) }}"
+                                                                class="sub-category-link">
                                                                 {{ $subCategory->name }}
                                                             </a>
                                                         </li>
@@ -284,7 +165,7 @@
                     </div>
                 </div>
                 <div class="col-lg-9 col-md-7">
-                    <div class="product__discount">
+                    {{-- <div class="product__discount">
                         <div class="section-title product__discount__title">
                             <h2>Sale Off</h2>
                         </div>
@@ -356,7 +237,7 @@
                                             </div>
                                             <!-- Action Buttons -->
                                             <div class="card-footer d-flex justify-content-around bg-light">
-                                                <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
+                                              <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
                                                 <button class="btn btn-primary btn-sm">Buy Now</button>
                                             </div>
                                         </div>
@@ -364,7 +245,7 @@
                                 @endforeach
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="filter__item">
                         <div class="row">
                             <div class="col-lg-4 col-md-5">
@@ -457,7 +338,8 @@
                                     </div>
                                     <!-- Action Buttons -->
                                     <div class="card-footer d-flex justify-content-around bg-light">
-                                        <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
+                                        <button class="add-to-cart-btn btn btn-outline-primary btn-sm"
+                                            data-product-id="{{ $item->id }}">Add to Cart</button>
                                         <button class="btn btn-primary btn-sm">Buy Now</button>
                                     </div>
                                 </div>
@@ -475,62 +357,83 @@
         </div>
     </section>
     <!-- Product Section End -->
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script>
-                $(document).ready(function() {
-                    var rangeSlider = $(".price-range"),
-                        minamount = $("#minamount"),
-                        maxamount = $("#maxamount"),
-                        minPrice = parseInt(rangeSlider.data('min')),
-                        maxPrice = parseInt(rangeSlider.data('max'));
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function toggleDropdown(categoryId) {
+            var submenu = document.getElementById('submenu' + categoryId);
+            var chevronDown = submenu.previousElementSibling.querySelector('.fas.fa-chevron-down');
+            var chevronUp = submenu.previousElementSibling.querySelector('.fas.fa-chevron-up');
 
-                    rangeSlider.slider({
-                        range: true,
-                        min: 0,
-                        max: {{ $maxPriceProduct }},
-                        values: [minPrice, maxPrice],
-                        slide: function(event, ui) {
-                            minamount.val('$' + ui.values[0]);
-                            maxamount.val('$' + ui.values[1]);
-                        },
-                        change: function(event, ui) {
-                            apply_filters();
-                        }
-                    });
-
-                    minamount.val('$' + minPrice);
-                    maxamount.val('$' + maxPrice);
-
-                    $(".brand-label").change(function() {
-                        apply_filters();
-                    });
-                    $('#sort').change(function() {
-                        apply_filters();
-                    });
-
-                    function apply_filters() {
-                        var brands = $(".brand-label:checked").map(function() {
-                            return $(this).val();
-                        }).get().join(',');
-
-                        var url = '{{ url()->current() }}';
-
-                        url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
-                            '');
-                        var keyword = $("#search").val();
-                        if(keyword.length > 0){
-                            url += '&sort=' + keyword;
-                        }
-
-                        url += '&sort=' + $("#sort").val();
-                        if (brands) {
-                            url += '&brand=' + brands;
-                        }
-                        window.location.href = url;
-                    }
-                });
+            submenu.classList.toggle('show');
+            chevronDown.style.display = submenu.classList.contains('show') ? 'none' : 'inline-block';
+            chevronUp.style.display = submenu.classList.contains('show') ? 'inline-block' : 'none';
+        }
 
 
-            </script>
+        function getSelectedSizes() {
+            var sizes = [];
+            document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
+                sizes.push(item.parentNode.textContent.trim());
+            });
+            alert('Selected Sizes: ' + sizes.join(', '));
+        }
 
-        @endsection
+
+        $(document).ready(function() {
+            var rangeSlider = $(".price-range"),
+                minamount = $("#minamount"),
+                maxamount = $("#maxamount"),
+                minPrice = parseInt(rangeSlider.data('min')),
+                maxPrice = parseInt(rangeSlider.data('max'));
+
+            rangeSlider.slider({
+                range: true,
+                min: 0,
+                max: {{ $maxPriceProduct }},
+                values: [minPrice, maxPrice],
+                slide: function(event, ui) {
+                    minamount.val('$' + ui.values[0]);
+                    maxamount.val('$' + ui.values[1]);
+                },
+                change: function(event, ui) {
+                    apply_filters();
+                }
+            });
+
+            minamount.val('$' + minPrice);
+            maxamount.val('$' + maxPrice);
+
+            $(".brand-label").change(function() {
+                apply_filters();
+            });
+
+            $('#sort').change(function() {
+                apply_filters();
+            });
+
+            function apply_filters() {
+                var brands = $(".brand-label:checked").map(function() {
+                    return $(this).val();
+                }).get().join(',');
+
+
+                var url = '{{ url()->current() }}';
+
+                url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
+                    '');
+                var keyword = $("#search").val();
+
+                if (keyword.length > 0) {
+                    url += '&sort=' + keyword;
+                }
+
+                url += '&sort=' + $("#sort").val();
+                if (brands) {
+                    url += '&brand=' + brands;
+                }
+                window.location.href = url;
+            }
+        });
+    </script>
+
+@endsection

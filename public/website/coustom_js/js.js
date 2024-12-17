@@ -1,21 +1,4 @@
-function toggleDropdown(categoryId) {
-    var submenu = document.getElementById('submenu' + categoryId);
-    var chevronDown = submenu.previousElementSibling.querySelector('.fas.fa-chevron-down');
-    var chevronUp = submenu.previousElementSibling.querySelector('.fas.fa-chevron-up');
 
-    submenu.classList.toggle('show');
-    chevronDown.style.display = submenu.classList.contains('show') ? 'none' : 'inline-block';
-    chevronUp.style.display = submenu.classList.contains('show') ? 'inline-block' : 'none';
-}
-
-
-function getSelectedSizes() {
-    var sizes = [];
-    document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
-        sizes.push(item.parentNode.textContent.trim());
-    });
-    alert('Selected Sizes: ' + sizes.join(', '));
-}
 
 //index page
 
@@ -105,3 +88,29 @@ $(document).ready(function() {
     });
 });
 
+function toggleWishlist(event) {
+    // Prevent default behavior for the anchor tag
+    event.preventDefault();
+
+    const wishlistIcon = event.target.closest('a');
+    if (!wishlistIcon.classList.contains('clicked')) {
+        wishlistIcon.classList.add('clicked');
+    } else {
+        wishlistIcon.classList.remove('clicked');
+    }
+    console.log('Product added to wishlist (this is just a demo action).');
+}
+
+let timeout = null;
+document.querySelectorAll('.card-link').forEach(link => {
+    link.addEventListener('click', function(event) {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(() => {
+            window.location.href = link.href;
+        }, 500);
+        event.preventDefault(); // Prevent immediate redirection
+    });
+});

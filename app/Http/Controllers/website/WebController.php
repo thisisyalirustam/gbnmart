@@ -78,19 +78,19 @@ class WebController extends Controller
             $products=$products->where('name','like','%'.$request->get('search').'%');
         }
 
-        $maxPriceProduct = Product::max('discounted_price');
+        $maxPriceProduct = Product::max('price');
         $min_price = intval($request->input('minprice', 0));
         $max_price = intval($request->input('maxprice', $maxPriceProduct));
         $sort = $request->get('sort');
-        $products = $products->whereBetween('discounted_price', [$min_price, $max_price]);
+        $products = $products->whereBetween('price', [$min_price, $max_price]);
 
         if ($request->get('sort') != '') {
             if ($request->get('sort') == 'latest_product') {
                 $products = $products->orderBy('id', 'DESC');
             } else if ($request->get('sort') == 'price_high') {
-                $products = $products->orderBy('discounted_price', 'DESC');
+                $products = $products->orderBy('price', 'DESC');
             } else if ($request->get('sort') == 'price_low') {
-                $products = $products->orderBy('discounted_price', 'ASC');
+                $products = $products->orderBy('price', 'ASC');
             }
         } else {
             $products = $products->orderBy('id', 'DESC');
