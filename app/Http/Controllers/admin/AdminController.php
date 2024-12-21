@@ -175,52 +175,11 @@ class AdminController extends Controller
         return response()->json($cities);
     }
 
-    // public function sendInvoice($orderId)
-    // {
-    //     // Retrieve the order with the necessary relationships
-    //     $ordershow = Order::with(['user', 'country', 'items.product'])->find($orderId);
-
-    //     // Initialize order data array
-    //     $orderData = [
-    //         'username' => $ordershow->name, // Assuming 'user' relationship exists
-    //         'items' => [],
-    //         'grand_total' => 0, // Grand total of the order
-    //         'order_id' => $ordershow->id,
-    //         'order_date' => $ordershow->created_at->toFormattedDateString(), // Date of order
-    //         'shipping_address' => $ordershow->address ?? 'Not provided', // User's shipping address
-    //         'country' => $ordershow->country->name ?? 'Not specified', // Country name
-    //     ];
-
-    //     // Loop through each item in the order
-    //     foreach ($ordershow->items as $item) {
-    //         $images = json_decode($item->product->images, true);
-    //         $item->product->images = $images[0] ?? 'default-image.jpg';
-
-    //         // Calculate the subtotal for the item
-    //         $subtotal = $item->price * $item->quantity;
-
-    //         // Add item data to order
-    //         $orderData['items'][] = [
-    //             'name' => $item->product->name,
-    //             'image' => $item->product->images,
-    //             'quantity' => $item->quantity,
-    //             'price' => number_format($item->price, 2), // Format price
-    //             'subtotal' => number_format($subtotal, 2), // Format subtotal
-    //         ];
-
-    //         // Add to the grand total
-    //         $orderData['grand_total'] += $subtotal;
-    //     }
-
-    //     // Format grand total as currency
-    //     $orderData['grand_total'] = number_format($orderData['grand_total'], 2);
-
-    //     // Send the invoice (using a mail service, assuming Mail class is set up)
-    //     Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
-
-    //     // Return a success response
-    //     return response()->json(['status' => 'Invoice sent successfully!', 'order_id' => $orderId]);
-    // }
-
+   public function affiliateget(){
+    return view('admin.pages.affiliate.dashboard');
+   }
+   public function activeMarketers(){
+    return view('admin.pages.affiliate.pages.active-marketers');
+   }
 
 }

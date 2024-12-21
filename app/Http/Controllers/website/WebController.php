@@ -47,6 +47,9 @@ class WebController extends Controller
     public function shop(Request $request, $catslug = null, $subcatslug = null)
     {
 
+        $catSelected='';
+        $subCatSelected='';
+
         $categories = ProductCat::orderBy('name', 'ASC')
             ->with('product_sub_category')
             ->where('status', 1)
@@ -60,12 +63,14 @@ class WebController extends Controller
             $category = ProductCat::where('slug', $catslug)->first();
             if ($category) {
                 $products = $products->where('product_cat_id', $category->id);
+                $catSelected=$category->id;
             }
         }
         if (!empty($subcatslug)) {
             $subcategory = ProductSubCategory::where('slug', $subcatslug)->first();
             if ($subcategory) {
                 $products = $products->where('product_sub_category_id', $subcategory->id);
+                $subCatSelected= $subcategory->id;
             }
         }
         $brandsArray = [];
@@ -82,6 +87,7 @@ class WebController extends Controller
         $min_price = intval($request->input('minprice', 0));
         $max_price = intval($request->input('maxprice', $maxPriceProduct));
         $sort = $request->get('sort');
+
         $products = $products->whereBetween('price', [$min_price, $max_price]);
 
         if ($request->get('sort') != '') {
@@ -98,7 +104,7 @@ class WebController extends Controller
         $products = $products->orderBy('id', 'DESC')->get();
 
 
-        return view('website.shop', compact('categories', 'brands', 'products', 'brandsArray', 'min_price', 'max_price', 'maxPriceProduct', 'sort'));
+        return view('website.shop', compact('categories', 'brands', 'products', 'brandsArray', 'min_price', 'max_price', 'maxPriceProduct', 'sort','catSelected','subCatSelected'));
     }
 
 

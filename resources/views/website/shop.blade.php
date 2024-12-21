@@ -16,6 +16,9 @@
             </div>
         </div>
     </section>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" type="text/css" media="all" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
 
     <!-- Product Section Begin -->
     <section class="product spad">
@@ -92,6 +95,7 @@
 
                             </div>
                         </div>
+
 
 
                         <div class="sidebar__item sidebar__item__color--option">
@@ -356,8 +360,10 @@
             </div>
         </div>
     </section>
-    <!-- Product Section End -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    < !-- Product Section End -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
     <script>
         function toggleDropdown(categoryId) {
             var submenu = document.getElementById('submenu' + categoryId);
@@ -379,12 +385,16 @@
         }
 
 
-        $(document).ready(function() {
-            var rangeSlider = $(".price-range"),
+
+    var rangeSlider = $(".price-range"),
                 minamount = $("#minamount"),
                 maxamount = $("#maxamount"),
                 minPrice = parseInt(rangeSlider.data('min')),
                 maxPrice = parseInt(rangeSlider.data('max'));
+
+
+        $(document).ready(function() {
+
 
             rangeSlider.slider({
                 range: true,
@@ -419,18 +429,19 @@
 
                 var url = '{{ url()->current() }}';
 
-                url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
-                    '');
+                url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$','');
                 var keyword = $("#search").val();
 
                 if (keyword.length > 0) {
-                    url += '&sort=' + keyword;
+                    url += '&search=' + keyword;
                 }
 
                 url += '&sort=' + $("#sort").val();
+
                 if (brands) {
-                    url += '&brand=' + brands;
+                    url += '&brand=' +brands.toString();
                 }
+
                 window.location.href = url;
             }
         });

@@ -71,6 +71,14 @@
         <span>Shipping</span>
       </a>
     </li><!-- End Profile Page Nav -->
+    <li class="nav-heading">Affiliate Marketing</li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{route('affiliate.index')}}">
+        <i class="ri-user-shared-fill"></i>
+        <span>Affiliate Marketers</span>
+      </a>
+    </li><!-- End Profile Page Nav -->
     <li class="nav-heading">Orders Management</li>
 
     <li class="nav-item">

@@ -66,6 +66,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');
     Route::resource('/settings/banners', BannerController::class);
 
+    Route::get('/affiliate/dashboard', [AdminController::class,'affiliateget'])->name('affiliate.index');
+    Route::get('/affiliate/active-marketers', [AdminController::class,'activeMarketers'])->name('affiliate.active');
+
+
 
    // Update Delivery Date
 Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');

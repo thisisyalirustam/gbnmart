@@ -17,6 +17,8 @@
             </div>
         </div>
     </section>
+
+
     <!-- Hero Section End -->
 
     <!-- Categories Section Begin -->
@@ -34,7 +36,7 @@
                 </div>
             </div>
         </div>
-    </section>
+     </section>
     <!-- Categories Section End -->
 
     <!-- Featured Section Begin -->
