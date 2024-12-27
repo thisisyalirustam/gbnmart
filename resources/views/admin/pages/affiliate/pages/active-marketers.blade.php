@@ -17,42 +17,7 @@
   <section class="section dashboard">
     <div class="row">
               <!-- Disabled Backdrop Modal -->
-              <div class="modal fade" id="disablebackdrop" tabindex="-1" data-bs-backdrop="false" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Add New Vendor</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                          <label for="name" class="form-label">Name</label>
-                          <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="password" class="form-label">Password</label>
-                          <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="image" class="form-label">Image</label>
-                          <input type="file" class="form-control" id="image" name="image">
-                        </div>
-                        <input type="hidden" name="user_type" value="vendor">
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
 
       <!-- Left side columns -->
       <div class="col-lg-12">
@@ -77,56 +42,148 @@
                 </ul>
               </div>
 
+              <!-- Modal for approving or deactivating affiliate -->
+<div class="modal fade" id="affiliateStatusModal" tabindex="-1" aria-labelledby="affiliateStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="affiliateStatusModalLabel">Affiliate Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- User details will be populated here -->
+          <img id="userImage" src="" alt="User Image" class="img-fluid mb-3">
+          <p><strong>Name:</strong> <span id="userName"></span></p>
+          <p><strong>CNIC:</strong> <span id="userCnic"></span></p>
+          <p><strong>Address:</strong> <span id="userAddress"></span></p>
+          <p><strong>Phone Number:</strong> <span id="userPhone"></span></p>
+          <p><strong>Email:</strong> <span id="userEmail"></span></p>
+
+          <!-- Bank Details -->
+          <p><strong>Bank Account Name:</strong> <span id="bankAccountName"></span></p>
+          <p><strong>Bank Name:</strong> <span id="bankName"></span></p>
+          <p><strong>Account Number:</strong> <span id="accountNumber"></span></p>
+
+          <!-- Coupon Code Input for activation -->
+          <div class="mb-3">
+            <label for="couponCode" class="form-label">Coupon Code (if applicable)</label>
+            <input type="text" class="form-control" id="couponCode" name="couponCode" required>
+          </div>
+
+          <button type="button" class="btn btn-success" onclick="toggleAffiliateStatus()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for sending funds -->
+<div class="modal fade" id="sendFundsModal" tabindex="-1" aria-labelledby="sendFundsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sendFundsModalLabel">Send Funds to Affiliate</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Total Amount:</strong> <span id="totalAmount"></span></p>
+          <p><strong>Withdrawable Amount:</strong> <span id="withdrawableAmount"></span></p>
+          <div class="mb-3">
+            <label for="sendAmount" class="form-label">Amount to Send</label>
+            <input type="number" class="form-control" id="sendAmount" name="sendAmount" required>
+          </div>
+          <button type="button" class="btn btn-success" onclick="sendFunds()">Send Now</button>
+          <div id="sendErrorMessage" class="text-danger mt-2" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
               <div class="card-body">
                 <h5 class="card-title">Recent Sales <span>| Today</span></h5>
 
                 <table class="table table-borderless datatable">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Customer</th>
-                      <th scope="col">Product</th>
-                      <th scope="col">Price</th>
-                      <th scope="col">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row"><a href="#">#2457</a></th>
-                      <td>Brandon Jacob</td>
-                      <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                      <td>$64</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2147</a></th>
-                      <td>Bridie Kessler</td>
-                      <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                      <td>$47</td>
-                      <td><span class="badge bg-warning">Pending</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2049</a></th>
-                      <td>Ashleigh Langosh</td>
-                      <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                      <td>$147</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2644</a></th>
-                      <td>Angus Grady</td>
-                      <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                      <td>$67</td>
-                      <td><span class="badge bg-danger">Rejected</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2644</a></th>
-                      <td>Raheem Lehner</td>
-                      <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                      <td>$165</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                  </tbody>
+                  <!-- resources/views/affiliate/dashboard.blade.php -->
+
+<thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Rank</th>
+        <th scope="col">Earning</th>
+        <th scope="col">Withdrawal</th>
+        <th scope="col">Coupon</th>
+        <th scope="col">Bank Details</th>
+        <th scope="col">Status</th> <!-- New Column -->
+        <th scope="col">Action</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach ($affiliate as $item)
+
+    <div class="modal fade" id="disablebackdrop-{{ $item->id }}" tabindex="-1" data-bs-backdrop="false" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="affiliateStatusModalLabel">Affiliate Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- User details will be populated here -->
+            <img id="userImage" src="{{asset('uploads/'. $item->user->image)}}" alt="User Image" class="img-fluid mb-3">
+            <p><strong>Name:</strong> <span id="userName">{{$item->user->name}}</span></p>
+            <p><strong>CNIC:</strong> <span id="userCnic">{{$item->user->cnic}}</span></p>
+            <p><strong>Address:</strong> <span id="userAddress">{{$item->user->address}}</span></p>
+            <p><strong>Phone Number:</strong> <span id="userPhone">{{$item->user->phone}}</span></p>
+            <p><strong>Email:</strong> <span id="userEmail">{{$item->user->email}}</span></p>
+            <div class="mb-3">
+              <label for="couponCode" class="form-label">Coupon Code (if applicable)</label>
+              <input type="text" class="form-control" id="couponCode" name="couponCode" required>
+            </div>
+
+            <button type="button" class="btn btn-success" onclick="toggleAffiliateStatus()">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+        <tr>
+            <th scope="row"><a href="#">#{{$item->id}}</a></th>
+            <td>{{$item->user->name}}</td>
+            <td>{{$item->membership_tier}}</td>
+            <td>{{$item->amount}}</td>
+            <td>{{$item->withdrawal}}</td>
+            <td>{{$item->coupan}}</td>
+
+            <td>
+                <!-- Show Bank Details -->
+                <small>
+                    {{ isset($item->bank_details['account_name']) ? $item->bank_details['account_name'] : '' }}<br>
+                    {{ isset($item->bank_details['bank_name']) ? $item->bank_details['bank_name'] : '' }}<br>
+                    {{ isset($item->bank_details['account_number']) ? $item->bank_details['account_number'] : '' }}<br>
+                    {{ isset($item->bank_details['ifsc_code']) ? $item->bank_details['ifsc_code'] : '' }}
+                </small>
+            </td>
+            <td>
+                <button type="button" class="btn btn-sm btn-{{ $item->status == 0 ? 'warning' : 'success' }}" data-bs-toggle="modal" data-bs-target="#disablebackdrop-{{ $item->id }}">
+                  {{ $item->status == 0 ? 'Pending' : 'Active' }}
+                </button>
+                </td>
+            <td>
+                <button class="btn btn-sm btn-primary">Edit</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+                <button class="btn btn-warning btn-sm" onclick="openSendFundsModal({{ $item->id }}, {{ $item->amount }})">Send Funds</button>
+
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
+
                 </table>
 
               </div>
@@ -140,6 +197,49 @@
 
 
     </div>
+
+
+
   </section>
+
+  <script>
+
+
+function openSendFundsModal(affiliateId, totalAmount) {
+  window.affiliateId = affiliateId;
+  $('#totalAmount').text(totalAmount);
+  $('#sendFundsModal').modal('show');
+}
+
+function sendFunds() {
+  const sendAmount = $('#sendAmount').val();
+  const totalAmount = $('#totalAmount').text();
+
+  if (sendAmount > totalAmount) {
+    $('#sendErrorMessage').text('Insufficient funds').show();
+    return;
+  }
+
+  $.ajax({
+    url: '/affiliate/send-funds',
+    method: 'POST',
+    data: {
+      affiliate_id: window.affiliateId,
+      send_amount: sendAmount,
+      _token: '{{ csrf_token() }}'
+    },
+    success: function(response) {
+      if (response.success) {
+        alert('Funds sent successfully!');
+        $('#sendFundsModal').modal('hide');
+        location.reload();  // Refresh to update the balances
+      } else {
+        $('#sendErrorMessage').text('Error occurred. Please try again.').show();
+      }
+    }
+  });
+}
+
+  </script>
 
 @endsection

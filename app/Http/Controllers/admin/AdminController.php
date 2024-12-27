@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrderInvoice;
+use App\Models\Affiliate;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\Product;
@@ -179,7 +180,73 @@ class AdminController extends Controller
     return view('admin.pages.affiliate.dashboard');
    }
    public function activeMarketers(){
-    return view('admin.pages.affiliate.pages.active-marketers');
+    $affiliate=Affiliate::with('user')->get();
+    return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
    }
+
+// Controller Method for Approving or Deactivating Affiliate
+public function deactivateAffiliate(Request $request)
+{
+    $request->validate([
+        'affiliate_id' => 'required|exists:affiliates,id',
+    ]);
+
+    $affiliate = Affiliate::find($request->affiliate_id);
+    if (!$affiliate) {
+        return response()->json(['success' => false, 'message' => 'Affiliate not found']);
+    }
+
+    // Deactivate the affiliate (set status to 0, "Pending")
+    $affiliate->status = 0;
+    $affiliate->coupon = null; // Optionally, remove the coupon code
+    $affiliate->save();
+
+    return response()->json(['success' => true, 'message' => 'Affiliate deactivated']);
+}
+
+public function approveAffiliate(Request $request)
+{
+    // Validate incoming data
+    $validated = $request->validate([
+        'affiliate_id' => 'required|exists:affiliates,id',
+        'coupon_code' => 'required|unique:coupons,code', // Ensure the coupon code is unique
+    ]);
+
+    // Find affiliate and update status
+    $affiliate = Affiliate::find($validated['affiliate_id']);
+    if (!$affiliate) {
+        return response()->json(['success' => false, 'message' => 'Affiliate not found']);
+    }
+
+    $affiliate->status = 1; // Set status to Active
+    $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code
+    $affiliate->save();
+
+    return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
+}
+
+
+// Controller Method for Sending Funds
+public function sendFunds(Request $request)
+{
+  $validated = $request->validate([
+    'affiliate_id' => 'required|exists:affiliates,id',
+    'send_amount' => 'required|numeric|min:1',
+  ]);
+
+  $affiliate = Affiliate::findOrFail($request->affiliate_id);
+
+  if ($affiliate->amount < $request->send_amount) {
+    return response()->json(['success' => false, 'message' => 'Insufficient funds.']);
+  }
+
+  // Subtract the send amount from the affiliate's total amount
+  $affiliate->amount -= $request->send_amount;
+  $affiliate->withdrawal += $request->send_amount;
+  $affiliate->save();
+
+  return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
+}
+
 
 }

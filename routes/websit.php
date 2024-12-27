@@ -32,3 +32,4 @@ Route::post('/get-shipping-charge', [CheckoutController::class, 'getShippingChar
 
 Route::get('/dashboard/orderproduct/{id}', [BuyerDashboadController::class, 'orderproduct'])->name('website.orderproduct');
 Route::get('/buyer/account',[BuyerDashboadController::class,'account'])->name('website.account');
+Route::get('/affliate',[BuyerDashboadController::class,'affliate'])->name('website.affliate');

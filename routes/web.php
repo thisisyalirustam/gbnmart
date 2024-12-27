@@ -31,9 +31,14 @@ Route::middleware(['auth','user_type:buyer'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/affliate',[BuyerDashboadController::class,'affliate'])->name('website.affliate');
+    Route::get('/affliate/applay',[BuyerDashboadController::class,'applayAffliate'])->name('website.affliate.applay');
+    Route::post('/affliate/store',[BuyerDashboadController::class,'affliateStore'])->name('website.affliate.store');
+    Route::post('/affliate/saveBankDetails', [BuyerDashboadController::class, 'saveBankDetails'])->name('website.affliate.storeBankDetails');
 
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.auth');
     Route::resource('/add-user',UserController::class);
+
     Route::get('/show-data',[AdminController::class,'showuser'])->name('showdata');
 
     Route::resource('/product-cat',ProductCategoryController::class);
@@ -68,7 +73,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/affiliate/dashboard', [AdminController::class,'affiliateget'])->name('affiliate.index');
     Route::get('/affiliate/active-marketers', [AdminController::class,'activeMarketers'])->name('affiliate.active');
-
+    Route::post('/affiliate/send-funds', [AdminController::class, 'sendFunds']);
+    Route::post('/affiliate/approve', [AdminController::class, 'approveAffiliate']);
+    Route::post('/affiliate/deactivate', [AdminController::class, 'deactivateAffiliate']);
 
 
    // Update Delivery Date
