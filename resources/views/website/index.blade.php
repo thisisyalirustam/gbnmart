@@ -1,22 +1,32 @@
 @extends('website.layout.content')
 @section('webcontent')
     <!-- Hero Section Begin -->
-    <section class="hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="hero__item set-bg" data-setbg="{{ asset(getbanners()->image) }}">
-                        <div class="hero__text">
-                            <span>{{getbanners()->title}}</span>
-                        <h2>{{getbanners()->product_cat->name}} <br />{{getbanners()->percentage}} % </h2>
-                            <p>{{getbanners()->description}}</p>
-                            <a href="{{ route('shoppage', getbanners()->product_cat->slug) }}" class="primary-btn">SHOP NOW</a>
-                        </div>
+    @php
+    $banner = getbanners();
+@endphp
+
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero__item set-bg" 
+                    data-setbg="{{ asset($banner ? $banner->image : 'path/to/default/image.jpg') }}">
+                    <div class="hero__text">
+                        <span>{{ $banner ? $banner->title : 'Default Title' }}</span>
+                        <h2>
+                            {{ $banner && $banner->product_cat ? $banner->product_cat->name : 'Default Category' }} <br />
+                            {{ $banner ? $banner->percentage : 0 }} %
+                        </h2>
+                        <p>{{ $banner ? $banner->description : 'Default Description' }}</p>
+                        <a href="{{ $banner && $banner->product_cat ? route('shoppage', $banner->product_cat->slug) : '#' }}" class="primary-btn">SHOP NOW</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+
 
 
     <!-- Hero Section End -->

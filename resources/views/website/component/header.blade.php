@@ -172,13 +172,20 @@
                         <ul>
                             <li class="active"><a href="{{ route('homepage') }}">Home</a></li>
                             <li><a href="{{route('shoppage')}}">Shop</a>
-                                <ul class="header__menu__dropdown">
+                            <ul class="header__menu__dropdown">
+    @php
+        $categories = getCategories();
+    @endphp
 
-                                        @foreach (getCategories() as $category)
-                                        <li><a href="{{ route('shoppage', $category->slug) }}">{{$category->name}}</a></li>
-                                        @endforeach
+    @if ($categories->isEmpty())
+        <li><a href="javascript:void(0);">No categories available</a></li>
+    @else
+        @foreach ($categories as $category)
+            <li><a href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a></li>
+        @endforeach
+    @endif
+</ul>
 
-                                </ul>
                             </li>
                             <li><a href="./blog.html">Blog</a></li>
                             <li><a href="./contact.html">Contact</a></li>

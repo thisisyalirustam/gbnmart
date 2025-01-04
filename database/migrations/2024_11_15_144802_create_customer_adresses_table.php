@@ -24,8 +24,6 @@ return new class extends Migration
             $table->foreignIdFor(Country::class)->constrained()->cascadeOnDelete();
             $table->text('address');
             $table->string('apartment')->nullable();
-            $table->foreignIdFor(State::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(City::class)->constrained()->cascadeOnDelete();
             $table->string('zip')->nullable();
             $table->timestamps();
         });

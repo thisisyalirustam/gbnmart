@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "laravel/breeze": "^2.1",
+        "laravel/breeze": "*",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
@@ -65,13 +65,7 @@
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }
-    },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "repositories": {
-        "grocery-crud": {
-            "type": "composer",
-            "url": "https://composer.grocerycrud.com/"
-        }
     }
+   
+  
 }
