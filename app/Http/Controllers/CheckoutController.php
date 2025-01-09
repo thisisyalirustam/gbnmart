@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Affiliate;
 
 class CheckoutController extends Controller
 {
@@ -59,14 +60,8 @@ class CheckoutController extends Controller
         $city = City::orderBy('name', 'asc')->get();
         return view('website.checkout', compact('cartItems', 'subtotal', 'countries', 'state', 'city'));
     }
-
-
-
     public function processOrder(Request $request)
     {
-
-
-
         $validate = Validator::make($request->all(), [
             'name' => 'required|string|max:255|min:3',
             'email' => 'required|string|email|max:255',
@@ -127,11 +122,11 @@ class CheckoutController extends Controller
 
 
         $orderData = [
-            'user_id' => $userId, // Can be null for guests
-            'subtotal' => 0, // Will recalculate later
-            // 'shipping' => 10.00, // Example shipping cost
-            'discount' => 0.00, // Example discount
-            'grand_total' => 0, // Will recalculate later
+            'user_id' => $userId,
+            'subtotal' => 0,
+            'discount' => $request->discount,
+            'coupon_code' => $request->coupon_code,
+            'grand_total' => 0,
             'shipping' => $request->shipping_charge,
             'name' => $request->name,
             'email' => $request->email,
@@ -177,7 +172,11 @@ class CheckoutController extends Controller
             }
         }
 
-        $grandTotal = $subtotal + $orderData['shipping'];
+        if($request->coupon_code){
+            $discount=$request->discount;
+        }
+
+        $grandTotal = ($subtotal-$discount) + $orderData['shipping'];
         $order->update([
             'subtotal' => $subtotal,
             'grand_total' => $grandTotal,
@@ -237,135 +236,106 @@ class CheckoutController extends Controller
         return response()->json($cities);
     }
 
-    // In CheckoutController.php or the relevant controller
 
-    // public function getShippingCharge(Request $request)
-    // {
-    //     if($request->city_id>0){
-
-    //         $cartItems = [];
-    //         $subtotal = 0;
-
-    //         if (Auth::check()) {
-    //             $userId = Auth::id();
-    //             $cartItems = Cart::where('carts.user_id', $userId)
-    //                 ->join('products', 'carts.product_id', '=', 'products.id')
-    //                 ->get(['products.id as product_id', 'products.name', 'products.price', 'carts.quantity',  'carts.weight', 'products.unit_id', 'products.images']);
-    //         } else {
-    //             // Fetch cart items from session for guest users
-    //             $sessionCart = session('cart', []);
-    //             foreach ($sessionCart as $productId => $item) {
-    //                 $product = Product::with('unit')->find($productId);
-    //                 if ($product) {
-    //                     $cartItems[] = (object)[
-    //                         'product_id' => $product->id,
-    //                         'name' => $product->name,
-    //                         'unit_id'=>$product->id,
-    //                         'price' => $product->price,
-    //                         'quantity' => $item['quantity'],
-
-    //                     ];
-    //                 }
-    //             }
-    //         }
-    //         foreach ($cartItems as $item) {
-    //             $subtotal += $item->price * $item->quantity;
-    //             $qty= $item->quantity;
-    //         }
-    //         $unitcharge =ShippingCharge::where('unit_id', $request->unit_id)->first();
-    //         $shippingInfo =  ShippingCharge::where('city_id',$request->city_id)->first();
-    //         if($shippingInfo != null){
-    //             $shippingCharge = $qty*$shippingInfo->charge;
-    //             $grand_total= $subtotal+ $shippingCharge;
-
-    //             return response()->json([
-    //                 'status'=>true,
-    //                 'grand_total'=> $grand_total,
-    //                 'shippingCharge' => $shippingCharge
-    //             ]);
-    //         } else{
-    //             $shippingCharge=10;
-    //         return response()->json([
-    //             'status'=>true,
-    //             'shippingCharge' => $shippingCharge
-    //         ]);
-    //         }
-    //     }else{
-    //         $shippingCharge=0;
-    //         return response()->json([
-    //             'status'=>true,
-    //             'shippingCharge' => $shippingCharge
-    //         ]);
-    //     }
-    // }
-
-
-    public function getShippingCharge(Request $request)
+public function getShippingCharge(Request $request)
 {
-    if ($request->city_id > 0) {
-        $cartItems = [];
-        $subtotal = 0;
-        $totalShippingCharge = 0;
+    // Initialize variables
+    $subtotal = 0;
+    $totalShippingCharge = 0;
+    $discount = 0;  // Default discount is zero
 
-        // Fetch cart items
-        if (Auth::check()) {
-            $userId = Auth::id();
-            $cartItems = Cart::where('carts.user_id', $userId)
-                ->join('products', 'carts.product_id', '=', 'products.id')
-                ->get(['products.id as product_id', 'products.name', 'products.price', 'carts.quantity', 'products.weight', 'products.unit_id', 'products.images']);
-        } else {
-            // Fetch cart items for guest users
-            $sessionCart = session('cart', []);
-            foreach ($sessionCart as $productId => $item) {
-                $product = Product::with('unit')->find($productId);
-                if ($product) {
-                    $cartItems[] = (object)[
-                        'product_id' => $product->id,
-                        'name' => $product->name,
-                        'weight'=>$product->weight,
-                        'unit_id' => $product->unit_id,
-                        'price' => $product->price,
-                        'quantity' => $item['quantity'],
-                    ];
-                }
-            }
-        }
+    // Check if a coupon code exists in the session
 
-        // Loop through cart items and calculate the subtotal and shipping charges
-        foreach ($cartItems as $item) {
-            $subtotal += $item->price * $item->quantity;
-            $qty = $item->quantity;
-            $weight =$item->weight;
+    $cartItems = [];
 
-            // Get the shipping charge for the unit of this product
-            $shippingChargeForUnit = ShippingCharge::where('unit_id', $item->unit_id)
-                ->where('city_id', $request->city_id)
-                ->first();
-
-            if ($shippingChargeForUnit) {
-                // Calculate the shipping charge for this product
-                $weightCharge=$shippingChargeForUnit->charge*$weight;
-                $totalShippingCharge += $weightCharge * $qty;
-            } else {
-                // If no specific charge is found, set a default shipping charge
-                $totalShippingCharge += 10; // Default charge if no specific charge is found
-            }
-        }
-
-        // Calculate the grand total (subtotal + total shipping charge)
-        $grand_total = $subtotal + $totalShippingCharge;
-
-        return response()->json([
-            'status' => true,
-            'grand_total' => $grand_total,
-            'shippingCharge' => $totalShippingCharge
-        ]);
+    // Fetch cart items
+    if (Auth::check()) {
+        $userId = Auth::id();
+        $cartItems = Cart::where('carts.user_id', $userId)
+            ->join('products', 'carts.product_id', '=', 'products.id')
+            ->get(['products.id as product_id', 'products.name', 'products.price', 'carts.quantity', 'products.weight', 'products.unit_id', 'products.images']);
     } else {
+        // Fetch cart items for guest users
+        $sessionCart = session('cart', []);
+        foreach ($sessionCart as $productId => $item) {
+            $product = Product::with('unit')->find($productId);
+            if ($product) {
+                $cartItems[] = (object)[
+                    'product_id' => $product->id,
+                    'name' => $product->name,
+                    'weight' => $product->weight,
+                    'unit_id' => $product->unit_id,
+                    'price' => $product->price,
+                    'quantity' => $item['quantity'],
+                ];
+            }
+        }
+    }
+
+    // Loop through cart items and calculate the subtotal and shipping charges
+    foreach ($cartItems as $item) {
+        $subtotal += $item->price * $item->quantity;
+        $qty = $item->quantity;
+        $weight = $item->weight;
+
+        // Get the shipping charge for the unit of this product
+        $shippingChargeForUnit = ShippingCharge::where('unit_id', $item->unit_id)
+            ->where('city_id', $request->city_id)
+            ->first();
+
+        if ($shippingChargeForUnit) {
+            $weightCharge = $shippingChargeForUnit->charge * $weight;
+            $totalShippingCharge += $weightCharge * $qty;
+        } else {
+            // Default shipping charge if no specific rate is found
+            $totalShippingCharge += 10;
+        }
+    }
+    if (session()->has('code')) {
+        $code = session()->get('code');
+        $discount = ($code->percentage / 100) * $subtotal;
+        $coupon = $code->coupon;
+    }
+
+    // Apply the discount after calculating the subtotal
+    $subtotal = $subtotal - $discount;
+
+    // Calculate the grand total
+    $grand_total = $subtotal + $totalShippingCharge;
+
+    // Return the response with the calculated values
+    return response()->json([
+        'status' => true,
+        'discount' => $discount,
+        'subtotal' => $subtotal,
+        'grand_total' => $grand_total,
+        'shippingCharge' => $totalShippingCharge,
+        'coupon'=>$coupon
+    ]);
+}
+
+
+public function applyCoupon(Request $request)
+{
+    // Fetch the coupon from the database
+    $code = Affiliate::where('coupon', $request->code)
+        ->where('status', 1) // Ensure the coupon is active
+        ->first();
+
+    // Check if the coupon exists
+    if ($code == null) {
         return response()->json([
             'status' => false,
-            'shippingCharge' => 0
+            'message' => 'Invalid Coupon Code',
         ]);
     }
+
+    // Save the coupon code in session for future use
+    session()->put('code', $code);
+
+    // Now, recalculate the shipping charge with the coupon applied
+    return $this->getShippingCharge($request);
 }
+
 
 }

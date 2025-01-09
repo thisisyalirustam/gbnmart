@@ -126,38 +126,43 @@
 <tbody>
     @foreach ($affiliate as $item)
 
-    <div class="modal fade" id="disablebackdrop-{{ $item->id }}" tabindex="-1" data-bs-backdrop="false" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
+    <!-- Modal for Affiliate Details -->
+<div class="modal fade" id="affiliateStatusModal-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="affiliateStatusModalLabel">Affiliate Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 class="modal-title">Affiliate Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <!-- User details will be populated here -->
-            <img id="userImage" src="{{asset('uploads/'. $item->user->image)}}" alt="User Image" class="img-fluid mb-3">
-            <p><strong>Name:</strong> <span id="userName">{{$item->user->name}}</span></p>
-            <p><strong>CNIC:</strong> <span id="userCnic">{{$item->user->cnic}}</span></p>
-            <p><strong>Address:</strong> <span id="userAddress">{{$item->user->address}}</span></p>
-            <p><strong>Phone Number:</strong> <span id="userPhone">{{$item->user->phone}}</span></p>
-            <p><strong>Email:</strong> <span id="userEmail">{{$item->user->email}}</span></p>
-            <div class="mb-3">
-              <label for="couponCode" class="form-label">Coupon Code (if applicable)</label>
-              <input type="text" class="form-control" id="couponCode" name="couponCode" required>
-            </div>
+              <img src="{{ asset('uploads/' . $item->user->image) }}" alt="User Image" class="img-fluid mb-3">
+              <p><strong>Name:</strong> <span>{{ $item->user->name }}</span></p>
+              <p><strong>CNIC:</strong> <span>{{ $item->user->cnic }}</span></p>
+              <p><strong>Address:</strong> <span>{{ $item->user->address }}</span></p>
+              <p><strong>Phone Number:</strong> <span>{{ $item->user->phone }}</span></p>
+              <p><strong>Email:</strong> <span>{{ $item->user->email }}</span></p>
 
-            <button type="button" class="btn btn-success" onclick="toggleAffiliateStatus()">Confirm</button>
+              <!-- Show Coupon Code and Percentage based on status -->
+              <div class="mb-3" id="couponPercentageFields-{{ $item->id }}" style="{{ $item->status == 1 ? 'display:none;' : '' }}">
+                  <label for="couponCode-{{ $item->id }}" class="form-label">Coupon Code</label>
+                  <input type="text" class="form-control" id="couponCode-{{ $item->id }}" name="couponCode" required>
+                  <label for="percentage-{{ $item->id }}" class="form-label">Percentage</label>
+                  <input type="number" class="form-control" id="percentage-{{ $item->id }}" name="percentage" required>
+              </div>
+
+              <button type="button" class="btn btn-success" onclick="approveAffiliate({{ $item->id }})">Confirm</button>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
+</div>
+
         <tr>
             <th scope="row"><a href="#">#{{$item->id}}</a></th>
             <td>{{$item->user->name}}</td>
             <td>{{$item->membership_tier}}</td>
             <td>{{$item->amount}}</td>
             <td>{{$item->withdrawal}}</td>
-            <td>{{$item->coupan}}</td>
+            <td>{{$item->coupon}}</td>
 
             <td>
                 <!-- Show Bank Details -->
@@ -169,9 +174,10 @@
                 </small>
             </td>
             <td>
-                <button type="button" class="btn btn-sm btn-{{ $item->status == 0 ? 'warning' : 'success' }}" data-bs-toggle="modal" data-bs-target="#disablebackdrop-{{ $item->id }}">
-                  {{ $item->status == 0 ? 'Pending' : 'Active' }}
-                </button>
+              <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#affiliateStatusModal-{{ $item->id }}">
+                {{ $item->status == 0 ? 'Pending' : 'Active' }}
+            </button>
+            
                 </td>
             <td>
                 <button class="btn btn-sm btn-primary">Edit</button>
@@ -201,6 +207,7 @@
 
 
   </section>
+  
 
   <script>
 
@@ -239,6 +246,37 @@ function sendFunds() {
     }
   });
 }
+
+
+function approveAffiliate(affiliateId) {
+    const couponCode = $(`#couponCode-${affiliateId}`).val();
+    const percentage = $(`#percentage-${affiliateId}`).val();
+
+    $.ajax({
+        url: '/affiliate/approve',
+        method: 'POST',
+        data: {
+            affiliate_id: affiliateId,
+            coupon_code: couponCode,
+            percentage: percentage,
+            _token: '{{ csrf_token() }}' // Laravel CSRF token
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Affiliate approved successfully!');
+                location.reload();  // Refresh the page to see updated status
+            } else {
+                alert('Error: ' + response.message);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            alert('An error occurred while processing the request.');
+        }
+    });
+}
+
+
 
   </script>
 

@@ -24,6 +24,7 @@ Route::post('/checkout', [CheckoutController::class, 'processOrder'])->name('che
 Route::get('/thank-you/{orderId}', [CheckoutController::class, 'thankYouPage'])->name('checkout.thankyou');
 Route::get('/get-states/{country_id}', [CheckoutController::class, 'getStates']);
 Route::get('/get-cities/{state_id}', [CheckoutController::class, 'getCities']);
+Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('checkout.applyCoupon');
 
 // In routes/web.php
 Route::post('/get-shipping-charge', [CheckoutController::class, 'getShippingCharge'])->name('get.shipping.charges');

@@ -109,17 +109,33 @@
                                             <span>${{ number_format($item->price * $item->quantity, 2) }}</span> {{$item->unit}}
                                             <input type="text" class="form-control" id="unit_id" value="{{$item->unit_id}}" hidden>
                                         </li>
-
                                     @endforeach
                                 </ul>
                                 <div class="checkout__order__subtotal">Subtotal
-                                    <span>${{ number_format($subtotal, 2) }}</span></div>
+                                    <span id="subtotal">${{ number_format($subtotal, 2) }}</span></div>
+                                    <div>
+                                        <strong>Discount: </strong><span id="discount">$0.00</span>
+                                        <input type="hidden" name="discount" id="coupon-input" value="0">
+                                        <input type="hidden" name="coupon_code" id="coupon_code" value="">
+
+                                    </div>
                                     <div>
                                         <strong>Shipping Charge: </strong><span id="shipping-charge">$0.00</span>
                                         <input type="hidden" name="shipping_charge" id="shipping-charge-input" value="0">
                                     </div>
                                 <div class="checkout__order__total">Total <span id="grand_total">${{ number_format($subtotal, 2) }}</span>
                                 </div>
+
+
+                                        <div class="shoping__discount mt-1 mb-2">
+                                            <h5>Discount Codes</h5>
+
+                                                <input type="text" class="form-control" id="coupon" name="coupon" placeholder="Enter your coupon code">
+                                                <button type="button" class="site-btn btn-sm" id="coupon_button">APPLY COUPON</button>
+                                                <span id="coupon-message" class="text-danger"></span>
+                                        </div>
+
+
                                 <!-- Payment Methods -->
                                 <h5>Payment Method</h5>
                                 <div class="checkout__input__checkbox">
@@ -255,23 +271,7 @@
         }
     });
 
-    // Fetch shipping charge whenever a new address is selected
-    // $('#city_id , #unit_id').change(function () {
 
-    //         $.ajax({
-    //             url: '{{ route("get.shipping.charges") }}',
-    //            type: 'post',
-    //            data: {city_id: $(this).val()},
-    //            dataType: 'JSON',
-    //            success: function(response) {
-    //             if(response.status==true){
-    //                 $("#shipping-charge").text('$' + response.shippingCharge.toFixed(2)); // Format as a currency value
-    //                 $("#grand_total").text('$' + response.grand_total.toFixed(2));
-    //             }
-
-    //            }
-    //         });
-    // });
 
     $('#city_id, #unit_id').change(function () {
     $.ajax({
@@ -295,10 +295,7 @@
 
 });
 
-    </script>
-
-
-
+</script>
 
     <script>
         function showPaymentDetails(method) {
@@ -357,6 +354,34 @@
     });
 });
 
+
+
+$("#coupon_button").click(function(){
+    $.ajax({
+        url: '{{ route('checkout.applyCoupon') }}', // Your checkout processing route
+        type: 'POST',
+        data: {
+            code: $("#coupon").val(),
+            _token: '{{ csrf_token() }}' // Added CSRF token correctly
+        },
+        dataType: 'JSON',
+        success: function(response) {
+            // Handle success response here
+            if (response.status == true) {
+                // Format as a currency value
+                $("#coupon-input").val(response.discount);
+                $("#coupon_code").val(response.coupon);
+                $("#subtotal").text('$' + response.subtotal.toFixed(2)); // Format as a currency value
+                $("#discount").text('$' + response.discount.toFixed(2)); // Format as a currency value
+                $("#grand_total").text('$' + response.grand_total.toFixed(2));
+                $("#coupon-message").text("Your coupon is Correct You Have Dissount Now");
+            }
+            if(response.status == false){
+               $("#coupon-message").text("coupon is invlid")
+            }
+        },
+    });
+});
 
 
 

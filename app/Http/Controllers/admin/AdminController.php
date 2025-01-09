@@ -126,6 +126,7 @@ class AdminController extends Controller
             'payment_method_details' => '', // Add a place to store payment method details
         ];
 
+
         // Loop through order items to build item data
         foreach ($ordershow->items as $item) {
             $images = json_decode($item->product->images, true);
@@ -184,46 +185,32 @@ class AdminController extends Controller
     return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
    }
 
-// Controller Method for Approving or Deactivating Affiliate
-public function deactivateAffiliate(Request $request)
-{
-    $request->validate([
-        'affiliate_id' => 'required|exists:affiliates,id',
-    ]);
-
-    $affiliate = Affiliate::find($request->affiliate_id);
-    if (!$affiliate) {
-        return response()->json(['success' => false, 'message' => 'Affiliate not found']);
-    }
-
-    // Deactivate the affiliate (set status to 0, "Pending")
-    $affiliate->status = 0;
-    $affiliate->coupon = null; // Optionally, remove the coupon code
-    $affiliate->save();
-
-    return response()->json(['success' => true, 'message' => 'Affiliate deactivated']);
-}
 
 public function approveAffiliate(Request $request)
 {
     // Validate incoming data
     $validated = $request->validate([
         'affiliate_id' => 'required|exists:affiliates,id',
-        'coupon_code' => 'required|unique:coupons,code', // Ensure the coupon code is unique
+        'coupon_code' => 'nullable|string', // Make it nullable if it's optional
+        'percentage' => 'required|numeric|min:0|max:100', // Validate percentage
     ]);
 
-    // Find affiliate and update status
+    // Find the affiliate
     $affiliate = Affiliate::find($validated['affiliate_id']);
     if (!$affiliate) {
         return response()->json(['success' => false, 'message' => 'Affiliate not found']);
     }
 
+    // Update the affiliate details
     $affiliate->status = 1; // Set status to Active
-    $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code
+    $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
+    $affiliate->percentage = $validated['percentage']; // Assign percentage
     $affiliate->save();
 
     return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
 }
+
+
 
 
 // Controller Method for Sending Funds

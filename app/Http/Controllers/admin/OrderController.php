@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Affiliate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -90,8 +91,10 @@ class OrderController extends Controller
                 $images = json_decode($item->product->images, true);
                 $item->product->images = $images[0] ?? 'default-image.jpg';
             }
+            $coupon=$ordershow->coupon_code;
+            $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
 
-            return view('admin.pages.orders.ordersDetails', compact('ordershow'));
+            return view('admin.pages.orders.ordersDetails', compact('ordershow','vendor'));
 
     }
 

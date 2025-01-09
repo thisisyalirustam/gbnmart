@@ -91,8 +91,8 @@
                                     <span class="font-weight-bold">{{ number_format($ordershow->shipping, 2) }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span>Tax (GST):</span>
-                                    <span class="font-weight-bold">${{ number_format($ordershow->tax, 2) }}</span>
+                                    <span>Discount:</span>
+                                    <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                     <span>Total Price:</span>
@@ -116,57 +116,90 @@
                                             This contract outlines the terms and conditions between the parties involved.
                                         </p>
 
-
                                         <h5 class="card-title">Profile Details</h5>
 
                                         <div class="row">
-                                          <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->user->name }}</div>
+                                            <div class="col-lg-3 col-md-4 label">Full Name</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->user->name ?? 'N/A' }}</div>
                                         </div>
 
                                         <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">City</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->city }}</div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">State</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->state }}</div>
-                                        </div>
-                                        <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Country</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->country->name }}</div>
+                                            <div class="col-lg-3 col-md-4 label">City</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->city->name ?? 'N/A' }}</div>
                                         </div>
 
                                         <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Address</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->address }}</div>
+                                            <div class="col-lg-3 col-md-4 label">State</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->state->name ?? 'N/A' }}</div>
                                         </div>
 
                                         <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Phone</div>
-                                          <div class="col-lg-9 col-md-8">({{ $ordershow->country->phonecode }}) {{ $ordershow->phone}}</div>
+                                            <div class="col-lg-3 col-md-4 label">Country</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->country->name ?? 'N/A' }}</div>
                                         </div>
 
                                         <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Email</div>
-                                          <div class="col-lg-9 col-md-8">{{ $ordershow->email}}</div>
+                                            <div class="col-lg-3 col-md-4 label">Address</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->address ?? 'N/A' }}</div>
                                         </div>
 
-                                      </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Phone</div>
+                                            <div class="col-lg-9 col-md-8">({{ $ordershow->country->phonecode ?? 'N/A' }}) {{ $ordershow->phone ?? 'N/A' }}</div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-4 label">Email</div>
+                                            <div class="col-lg-9 col-md-8">{{ $ordershow->email ?? 'N/A' }}</div>
+                                        </div>
+
+                                    </div>
 
                                 @else
                                     <img src="{{ asset('images/images (9).jpeg') }}" alt="Profile Image" class="img-fluid rounded-circle me-3" style="width: 80px; height: 80px;">
                                     <div>
                                         <h6 class="mb-1 fw-bold">User Information Unavailable</h6>
-                                        <p class="mb-0 text-muted">State: {{ $ordershow->state ?? 'N/A' }}</p>
-                                        <p class="mb-0 text-muted">City: {{ $ordershow->city ?? 'N/A' }}</p>
+                                        <p class="mb-0 text-muted">State: {{ $ordershow->state->name ?? 'N/A' }}</p>
+                                        <p class="mb-0 text-muted">City: {{ $ordershow->city->name ?? 'N/A' }}</p>
                                         <p class="mb-0 text-muted">Address: {{ $ordershow->address ?? 'N/A' }}</p>
                                         <p class="mb-0 text-muted">Country: {{ $ordershow->country->name ?? 'N/A' }}</p>
                                     </div>
                                 @endif
                             </div>
                         </div>
+
                     </div>
+                    @if ($ordershow->coupon_code !=null)
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0 text-center">Vendor Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>Coupon:</span>
+                                    <span class="font-weight-bold">{{$vendor->coupon}}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>Name:</span>
+                                        <span class="font-weight-bold">{{ $vendor->user->name}}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>Discount:</span>
+                                        <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                                        <span>Total Price:</span>
+                                        <span class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    @endif
+
 
                 </div>
 

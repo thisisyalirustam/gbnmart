@@ -149,6 +149,12 @@ $(() => {
             {
                 width: 80,
                 alignment: "center",
+                dataField: "discount",
+                caption: "Discount",
+            },
+            {
+                width: 80,
+                alignment: "center",
                 dataField: "shipping",
                 caption: "Shipping",
             },
