@@ -67,6 +67,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+// document.addEventListener('DOMContentLoaded', function() {
+//     // Select all Add to Cart buttons
+//     const wishList = document.querySelectorAll('.addToWishlistButton');
+
+//     wishList.forEach(button => {
+//         button.addEventListener('click', function(event) {
+//             event.preventDefault(); // Prevent page refresh
+//             const productId = this.getAttribute('data-product-id');
+
+//             // Perform the AJAX request
+//             fetch('/wishlist-add', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//                 },
+//                 body: JSON.stringify({ product_id: productId })
+//             })
+//             .then(response => response.json())
+//             .then(data => {
+//                 if (data.success) {
+//                     // Update cart count in the header
+//                     // document.getElementById('cart-count').innerText = data.count;
+
+//                     // Show success toaster message
+//                     toastr.success(data.success);
+//                 } else if (data.error) {
+//                     // Show error toaster message if product already in cart
+//                     toastr.error(data.error);
+//                 }
+//             })
+//             .catch(error => console.error('Error:', error));
+//         });
+//     });
+
+// });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all Add to Wishlist buttons
+    const wishList = document.querySelectorAll('.addToWishlistButton');
+
+    wishList.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent page refresh
+            const productId = this.getAttribute('data-product-id');
+
+            // Perform the AJAX request
+            fetch('/wishlist-add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update wishlist count in the header
+                    $('#wishlist-count').text(data.count);  // This updates the count displayed in the header
+
+                    // Show success toaster message
+                    toastr.success(data.success);
+                } else if (data.error) {
+                    // Show error toaster message if product is already in wishlist
+                    toastr.error(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+
+
 toastr.options = {
     "closeButton": true,
     "progressBar": true,
@@ -87,6 +161,15 @@ $(document).ready(function() {
         }
     });
 });
+// $(document).ready(function() {
+//     $.ajax({
+//         url: '/wishlist-count', // Create a route and method to return the cart count
+//         method: 'GET',
+//         success: function(response) {
+//             $('#wishlist-count').text(response.count);
+//         }
+//     });
+// });
 
 function toggleWishlist(event) {
     // Prevent default behavior for the anchor tag
@@ -114,3 +197,5 @@ document.querySelectorAll('.card-link').forEach(link => {
         event.preventDefault(); // Prevent immediate redirection
     });
 });
+
+

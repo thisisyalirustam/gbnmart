@@ -107,11 +107,11 @@
               <div class="card-body">
                 <h5 class="card-title">Recent Sales <span>| Today</span></h5>
 
-                <table class="table table-borderless datatable">
+                <table class="table datatable  table-hover table-sm mx-auto">
                   <!-- resources/views/affiliate/dashboard.blade.php -->
 
-<thead>
-    <tr>
+<thead lass="thead-dark">
+    <tr class="text-center">
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Rank</th>
@@ -127,36 +127,43 @@
     @foreach ($affiliate as $item)
 
     <!-- Modal for Affiliate Details -->
-<div class="modal fade" id="affiliateStatusModal-{{ $item->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Affiliate Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <img src="{{ asset('uploads/' . $item->user->image) }}" alt="User Image" class="img-fluid mb-3">
-              <p><strong>Name:</strong> <span>{{ $item->user->name }}</span></p>
-              <p><strong>CNIC:</strong> <span>{{ $item->user->cnic }}</span></p>
-              <p><strong>Address:</strong> <span>{{ $item->user->address }}</span></p>
-              <p><strong>Phone Number:</strong> <span>{{ $item->user->phone }}</span></p>
-              <p><strong>Email:</strong> <span>{{ $item->user->email }}</span></p>
+    <div class="modal fade" id="affiliateStatusModal-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Affiliate Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ asset('uploads/' . $item->user->image) }}" alt="User Image" class="img-fluid mb-3">
+                    <p><strong>Name:</strong> <span>{{ $item->user->name }}</span></p>
+                    <p><strong>CNIC:</strong> <span>{{ $item->user->cnic }}</span></p>
+                    <p><strong>Address:</strong> <span>{{ $item->user->address }}</span></p>
+                    <p><strong>Phone Number:</strong> <span>{{ $item->user->phone }}</span></p>
+                    <p><strong>Email:</strong> <span>{{ $item->user->email }}</span></p>
 
-              <!-- Show Coupon Code and Percentage based on status -->
-              <div class="mb-3" id="couponPercentageFields-{{ $item->id }}" style="{{ $item->status == 1 ? 'display:none;' : '' }}">
-                  <label for="couponCode-{{ $item->id }}" class="form-label">Coupon Code</label>
-                  <input type="text" class="form-control" id="couponCode-{{ $item->id }}" name="couponCode" required>
-                  <label for="percentage-{{ $item->id }}" class="form-label">Percentage</label>
-                  <input type="number" class="form-control" id="percentage-{{ $item->id }}" name="percentage" required>
-              </div>
+                    <!-- Show Coupon Code and Percentage based on status -->
+                    <div class="mb-3" id="couponPercentageFields-{{ $item->id }}" style="{{ $item->status == 1 ? 'display:none;' : '' }}">
+                        <label for="couponCode-{{ $item->id }}" class="form-label">Coupon Code</label>
+                        <input type="text" class="form-control" id="couponCode-{{ $item->id }}" name="couponCode" value="{{ $item->coupon }}" required>
 
-              <button type="button" class="btn btn-success" onclick="approveAffiliate({{ $item->id }})">Confirm</button>
-          </div>
+                        <label for="percentage-{{ $item->id }}" class="form-label">Percentage</label>
+                        <input type="number" class="form-control" id="percentage-{{ $item->id }}" name="percentage" value="{{ $item->percentage }}" required>
+
+                        <label for="vendor_percentage-{{ $item->id }}" class="form-label">Vendor Percentage</label>
+                        <input type="number" class="form-control" id="vendor_percentage-{{ $item->id }}" name="vendor_percentage" value="{{ $item->vendor_percentage }}" required>
+                    </div>
+
+                    <div id="errorMessage-{{ $item->id }}" class="text-danger" style="display: none;"></div> <!-- Error Message Display -->
+
+                    <button type="button" class="btn btn-success" onclick="approveAffiliate({{ $item->id }})">Confirm</button>
+                </div>
+            </div>
+        </div>
       </div>
-  </div>
-</div>
 
-        <tr>
+
+        <tr class="text-center">
             <th scope="row"><a href="#">#{{$item->id}}</a></th>
             <td>{{$item->user->name}}</td>
             <td>{{$item->membership_tier}}</td>
@@ -164,22 +171,23 @@
             <td>{{$item->withdrawal}}</td>
             <td>{{$item->coupon}}</td>
 
-            <td>
-                <!-- Show Bank Details -->
-                <small>
-                    {{ isset($item->bank_details['account_name']) ? $item->bank_details['account_name'] : '' }}<br>
-                    {{ isset($item->bank_details['bank_name']) ? $item->bank_details['bank_name'] : '' }}<br>
-                    {{ isset($item->bank_details['account_number']) ? $item->bank_details['account_number'] : '' }}<br>
-                    {{ isset($item->bank_details['ifsc_code']) ? $item->bank_details['ifsc_code'] : '' }}
-                </small>
+            <td class="border p-2">
+                <div class="bg-light  rounded shadow-sm">
+                    <small>
+                        {{ isset($item->bank_details['account_name']) ? $item->bank_details['account_name'] : '' }}<br>
+                        {{ isset($item->bank_details['bank_name']) ? $item->bank_details['bank_name'] : '' }}<br>
+                        {{ isset($item->bank_details['account_number']) ? $item->bank_details['account_number'] : '' }}<br>
+                        {{ isset($item->bank_details['ifsc_code']) ? $item->bank_details['ifsc_code'] : '' }}
+                    </small>
+                </div>
             </td>
             <td>
               <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#affiliateStatusModal-{{ $item->id }}">
                 {{ $item->status == 0 ? 'Pending' : 'Active' }}
             </button>
-            
+
                 </td>
-            <td>
+            <td class="">
                 <button class="btn btn-sm btn-primary">Edit</button>
                 <button class="btn btn-sm btn-danger">Delete</button>
                 <button class="btn btn-warning btn-sm" onclick="openSendFundsModal({{ $item->id }}, {{ $item->amount }})">Send Funds</button>
@@ -207,7 +215,7 @@
 
 
   </section>
-  
+
 
   <script>
 
@@ -251,6 +259,7 @@ function sendFunds() {
 function approveAffiliate(affiliateId) {
     const couponCode = $(`#couponCode-${affiliateId}`).val();
     const percentage = $(`#percentage-${affiliateId}`).val();
+    const vendor_percentage = $(`#vendor_percentage-${affiliateId}`).val();
 
     $.ajax({
         url: '/affiliate/approve',
@@ -259,6 +268,7 @@ function approveAffiliate(affiliateId) {
             affiliate_id: affiliateId,
             coupon_code: couponCode,
             percentage: percentage,
+            vendor_percentage: vendor_percentage,
             _token: '{{ csrf_token() }}' // Laravel CSRF token
         },
         success: function(response) {
@@ -271,10 +281,28 @@ function approveAffiliate(affiliateId) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
-            alert('An error occurred while processing the request.');
+
+            // Parse the response errors and show them in the modal
+            const errors = jqXHR.responseJSON.errors;
+            let errorMessage = '';
+
+            if (errors) {
+                // Concatenate all error messages into a single string
+                for (let key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        errorMessage += errors[key].join(' ') + '<br>';
+                    }
+                }
+
+                // Show error message in the modal
+                $(`#errorMessage-${affiliateId}`).html(errorMessage).show();
+            } else {
+                alert('An unexpected error occurred. Please try again.');
+            }
         }
     });
 }
+
 
 
 

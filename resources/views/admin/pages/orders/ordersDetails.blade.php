@@ -360,32 +360,33 @@
                             });
 
                             // Handle shipping status form submission
-                            $('#shipping-status-form').on('submit', function(event) {
-                                event.preventDefault(); // Prevent default form submission
-                                let formData = $(this).serialize(); // Serialize form data
-                                $.ajax({
-                                    type: 'POST',
-                                    url: "{{ route('orders.updateShippingStatus', $ordershow->id) }}",
-                                    data: formData,
-                                    success: function(response) {
-                                        // Update the message and shipping status
-                                        $('#message').removeClass('d-none alert-danger').addClass('alert-success')
-                                                     .text('Shipping status updated successfully!').fadeIn();
-                                        $('#shipping-status').text(response.shipping_status);
+$('#shipping-status-form').on('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    let formData = $(this).serialize(); // Serialize form data
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' =>$vendor->coupon]) }}", // Correct URL
+        data: formData,
+        success: function(response) {
+            // Update the message and shipping status
+            $('#message').removeClass('d-none alert-danger').addClass('alert-success')
+                         .text('Shipping status updated successfully!').fadeIn();
+            $('#shipping-status').text(response.shipping_status);
 
-                                        // Update the header for shipping status
-                                        $('.card-header h5').text('Shipping Status: ' + response.shipping_status);
+            // Update the header for shipping status
+            $('.card-header h5').text('Shipping Status: ' + response.shipping_status);
 
-                                        setTimeout(function() {
-                                            $('#message').fadeOut();
-                                        }, 3000);
-                                    },
-                                    error: function(xhr) {
-                                        $('#message').removeClass('d-none alert-success').addClass('alert-danger')
-                                                     .text('Error updating shipping status: ' + xhr.responseJSON.message).fadeIn();
-                                    }
-                                });
-                            });
+            setTimeout(function() {
+                $('#message').fadeOut();
+            }, 3000);
+        },
+        error: function(xhr) {
+            $('#message').removeClass('d-none alert-success').addClass('alert-danger')
+                         .text('Error updating shipping status: ' + xhr.responseJSON.message).fadeIn();
+        }
+    });
+});
+
 
                             $('#send-invoice-btn').on('click', function() {
                 // Display loading message

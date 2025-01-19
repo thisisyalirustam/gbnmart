@@ -22,7 +22,7 @@
 
     <!-- Product Section Begin -->
     <section class="product spad">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">

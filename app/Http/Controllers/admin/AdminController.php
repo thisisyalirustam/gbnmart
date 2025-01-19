@@ -98,14 +98,28 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Delivery date updated successfully!');
     }
 
-    public function updateShippingStatus(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
-        $order->shipping_status = $request->shipping_status;
-        $order->save();
+    public function updateShippingStatus(Request $request, $id, $coupon = null)
+{
+    $order = Order::findOrFail($id);
+    $order->shipping_status = $request->shipping_status;
+    $order->save();
+    $sub_total = $order->subtotal;
+    $bonnes = 0;
 
-        return redirect()->back()->with('success', 'Delivery date updated successfully!');
+    if ($request->shipping_status == 'Complete') {
+        if ($coupon) {
+            $vendor = Affiliate::where('coupon', $coupon)->first();
+            $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+            $vendor->sales = $vendor->sales + 1;
+            $vendor->amount = $vendor->amount+$bonnes;
+            $vendor->save();
+        }
     }
+
+
+    return redirect()->back()->with('success', 'Delivery date updated successfully!');
+}
+
 
     public function sendInvoice($orderId)
     {
@@ -186,29 +200,32 @@ class AdminController extends Controller
    }
 
 
-public function approveAffiliate(Request $request)
-{
-    // Validate incoming data
-    $validated = $request->validate([
-        'affiliate_id' => 'required|exists:affiliates,id',
-        'coupon_code' => 'nullable|string', // Make it nullable if it's optional
-        'percentage' => 'required|numeric|min:0|max:100', // Validate percentage
-    ]);
+   public function approveAffiliate(Request $request)
+   {
+       // Validate incoming data
+       $validated = $request->validate([
+           'affiliate_id' => 'required|exists:affiliates,id',
+           'coupon_code' => 'nullable|string', // Make it nullable if it's optional
+           'percentage' => 'required|numeric|min:0|max:100', // Validate percentage
+           'vendor_percentage' => 'required|numeric|min:0|max:100', // Validate percentage
+       ]);
 
-    // Find the affiliate
-    $affiliate = Affiliate::find($validated['affiliate_id']);
-    if (!$affiliate) {
-        return response()->json(['success' => false, 'message' => 'Affiliate not found']);
-    }
+       // Find the affiliate
+       $affiliate = Affiliate::find($validated['affiliate_id']);
+       if (!$affiliate) {
+           return response()->json(['success' => false, 'message' => 'Affiliate not found']);
+       }
 
-    // Update the affiliate details
-    $affiliate->status = 1; // Set status to Active
-    $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
-    $affiliate->percentage = $validated['percentage']; // Assign percentage
-    $affiliate->save();
+       // Update the affiliate details
+       $affiliate->status = 1; // Set status to Active
+       $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
+       $affiliate->percentage = $validated['percentage']; // Assign percentage
+       $affiliate->vendor_percentage = $validated['vendor_percentage']; // Assign vendor percentage
+       $affiliate->save();
 
-    return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
-}
+       return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
+   }
+
 
 
 

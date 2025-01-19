@@ -443,7 +443,7 @@
                                         <td class="cell">#{{$compelte->id}}</td>
                                         <td class="cell">
                                             <span>{{ \Carbon\Carbon::parse($compelte->created_at)->format('d M') }}</span>
-                                            <span class="note">{{ \Carbon\Carbon::parse($pending->created_at)->format('h:i A') }}</span>
+                                            {{-- <span class="note">{{ \Carbon\Carbon::parse($pending->created_at)->format('h:i A') }}</span> --}}
                                         </td>
                                         <td class="cell">
                                             @php

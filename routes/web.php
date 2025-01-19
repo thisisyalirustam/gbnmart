@@ -20,7 +20,7 @@ use App\Http\Controllers\website\CartController;
 use Illuminate\Support\Facades\Route;
 
 
-
+Route::get('/wishlist',[CartController::class, 'getWishlist'])->name('wishlist.show');
 Route::get('/dashboard',[BuyerDashboadController::class,'dash'])->middleware(['auth','verified'])->name('dashboard');
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
@@ -80,7 +80,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
    // Update Delivery Date
 Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
-Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
+// Route::post('/customer-orders/{id}/{coupon}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
+Route::post('/customer-orders/{id}/{
+
+}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
+
 
 
 

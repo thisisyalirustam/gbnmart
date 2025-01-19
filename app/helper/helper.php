@@ -14,8 +14,5 @@ function getCategories(){
     return ProductCat::where('status', '1')->where('sof', 'yes')->get();
 }
 function getbanners(){
-    return Banner::with('product_cat','product_sub_category', 'product_brand')->first();
+    return Banner::with('product_cat','product_sub_category', 'product_brand')->get();
 }
-
-?>
-

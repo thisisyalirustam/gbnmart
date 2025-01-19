@@ -5,8 +5,10 @@ namespace App\Http\Controllers\website;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
@@ -178,4 +180,80 @@ class CartController extends Controller
   public function checkoption(){
     return view('website.middlepage');
   }
+
+  public function wishlistShow(){
+    $wishlistCount = Auth::check() ? Wishlist::where('user_id', Auth::id())->sum('product_id') : array_sum(array_column(session('wishlist', []), 'product_id'));
+    $data = [
+        'wishlistCount' => $wishlistCount,
+    ];
+
+    return view('website.component.header', $data);
+  }
+
+  public function addWishlist(Request $request)
+  {
+      $productId = $request->input('product_id');
+      if (Auth::check()) {
+          $userId = Auth::id();
+          $wishlist = Wishlist::where('user_id', $userId)->where('product_id', $productId)->first();
+
+          if ($wishlist) {
+              return response()->json(['error' => 'This Product is Already In Your Wishlist.'], 409);
+          } else {
+              Wishlist::create([
+                  'user_id' => $userId,
+                  'product_id' => $productId,
+              ]);
+
+              // Return updated wishlist count after adding a product
+              return response()->json(['success' => 'Product added to your wishlist via table.', 'count' => $this->wishlistCount()]);
+          }
+      } else {
+          $wishlist = session()->get('wishlist', []);
+          if (isset($wishlist[$productId])) {
+              return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
+          } else {
+              $wishlist[$productId] = [
+                  'product_id' => $productId,
+              ];
+              session()->put('wishlist', $wishlist);
+
+              // Return updated wishlist count after adding a product
+              return response()->json(['success' => 'Product added to your wishlist via session.', 'count' => $this->wishlistCount()]);
+          }
+      }
+  }
+
+  public function wishlistCount()
+  {
+    $wishlistCount = Auth::check()
+        ? Wishlist::where('user_id', Auth::id())->count()  // Count the number of wishlist items for logged-in users
+        : count(session('wishlist', [])); // Count the items in session for non-logged-in users
+
+    return response()->json(['count' => $wishlistCount]);
+   }
+
+   public function getWishlist()
+   {
+       $wishlist = session()->get('wishlist', []);
+
+       if (Auth::check()) {
+           $userId = Auth::id();
+           $wishlist = Wishlist::with('product')->where('user_id', $userId)->get();
+       } else {
+           if (!empty($wishlist)) {
+               $productIds = array_column($wishlist, 'product_id');
+               $wishlist = Product::whereIn('id', $productIds)->get();
+           } else {
+               $wishlist = collect(); // If no products in session
+           }
+       }
+
+       return view('website.wishlist', compact('wishlist'));
+   }
+
+
+
+
+
 }
