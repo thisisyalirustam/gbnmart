@@ -1,208 +1,195 @@
 @extends('website.layout.content')
 @section('webcontent')
     <!-- Hero Section Begin -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
     <!-- Custom CSS -->
 
-@php
-$banners = getbanners();
-@endphp
+    @php
+        $banners = getbanners();
+    @endphp
 
+    {{-- <style>
+        /* General Styling for the Carousel */
+        .carousel-item {
+            position: relative;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+        }
 
+        /* Overlay to Darken Carousel Item */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
 
-<!-- CSS (Style tag) -->
-<style>
-    /* General Styling for the Carousel */
-    .carousel-item {
-        position: relative;
-        height: 500px;
-        background-size: cover;
-        background-position: center;
-    }
+        /* Carousel Caption Styling */
+        .carousel-caption {
+            position: absolute;
+            top: 45%;
+            transform: translate(0, -50%);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
 
-    /* Overlay to Darken Carousel Item */
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+        .carousel-caption h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
 
-    /* Carousel Caption Styling */
-    .carousel-caption {
-        position: absolute;
-        top: 45%;
-        transform: translate(0, -50%);
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
+        .carousel-caption p {
+            font-size: 1.2rem;
+        }
 
-    .carousel-caption h1 {
-        font-size: 3rem;
-        font-weight: bold;
-    }
+        /* Button Styling */
+        .btn-shop-now {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #FF5733, #FF8F33);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
 
-    .carousel-caption p {
-        font-size: 1.2rem;
-    }
+        .btn-shop-now:hover {
+            background: linear-gradient(135deg, #FF8F33, #FF5733);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
 
-    /* Button Styling */
-    .btn-shop-now {
-        padding: 12px 25px;
-        background: linear-gradient(135deg, #FF5733, #FF8F33);
-        color: white;
-        border: none;
-        border-radius: 30px;
-        font-size: 1.2rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: bold;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-    }
+        .arrow-icon {
+            margin-left: 10px;
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
 
-    .btn-shop-now:hover {
-        background: linear-gradient(135deg, #FF8F33, #FF5733);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
+        .btn-shop-now:hover .arrow-icon {
+            transform: translateX(5px);
+        }
 
-    .arrow-icon {
-        margin-left: 10px;
-        font-size: 1.4rem;
-        transition: transform 0.3s ease;
-    }
+        /* Carousel Control Buttons Styling */
+        .carousel-control-prev,
+        .carousel-control-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
 
-    .btn-shop-now:hover .arrow-icon {
-        transform: translateX(5px);
-    }
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
 
-    /* Carousel Control Buttons Styling */
-    .carousel-control-prev,
-    .carousel-control-next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 2rem;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 50%;
-        padding: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
-    }
+        /* Adjust Left and Right Controls */
+        .carousel-control-prev {
+            left: 10px;
+        }
 
-    .carousel-control-prev:hover,
-    .carousel-control-next:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-        transform: scale(1.1);
-    }
+        .carousel-control-next {
+            right: 10px;
+        }
+    </style> --}}
 
-    /* Adjust Left and Right Controls */
-    .carousel-control-prev {
-        left: 10px;
-    }
-
-    .carousel-control-next {
-        right: 10px;
-    }
-</style>
-
-<!-- HTML (Carousel Structure) -->
-<div id="carouselExample" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner">
-      <!-- Loop through banners dynamically -->
-      @foreach($banners as $index => $banner)
-        <div class="carousel-item @if($index == 0) active @endif" style="background-image: url('{{ asset($banner->image ? $banner->image : 'path/to/default/image.jpg') }}');">
-          <div class="overlay"></div>
-          <div class="carousel-caption">
-            <h1 class="text-warning">{{ $banner->title ?? 'Default Title' }}</h1>
-            <p>{{ $banner->product_cat->name ?? 'Default Category' }} <br />
-              {{ $banner->percentage ?? 0 }} %
-            </p>
-            <p>{{ $banner->description ?? 'Default Description' }}</p>
-            <a href="{{ route('shoppage', $banner->product_cat->slug ?? '#') }}" class="btn btn-shop-now">
-              Shop Now <i class="fas fa-arrow-right arrow-icon"></i>
-            </a>
-          </div>
+    <!-- HTML (Carousel Structure) -->
+    {{-- <div id="carouselExample" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Loop through banners dynamically -->
+            @foreach ($banners as $index => $banner)
+                <div class="carousel-item @if ($index == 0) active @endif"
+                    style="background-image: url('{{ asset($banner->image ? $banner->image : 'path/to/default/image.jpg') }}');">
+                    <div class="overlay"></div>
+                    <div class="carousel-caption">
+                        <h1 class="text-warning">{{ $banner->title ?? 'Default Title' }}</h1>
+                        <p>{{ $banner->product_cat->name ?? 'Default Category' }} <br />
+                            {{ $banner->percentage ?? 0 }} %
+                        </p>
+                        <p>{{ $banner->description ?? 'Default Description' }}</p>
+                        <a href="{{ route('shoppage', $banner->product_cat->slug ?? '#') }}" class="btn btn-shop-now">
+                            Shop Now <i class="fas fa-arrow-right arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
         </div>
-      @endforeach
-    </div>
 
-    <!-- Carousel Controls -->
-    <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+        <!-- Carousel Controls -->
+        <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div> --}}
 
-<!-- JavaScript (Script tag) -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script>
-    $(document).ready(function(){
-        var isDragging = false;
-        var startX;
-        var carousel = $('#carouselExample');
+    <!-- JavaScript (Script tag) -->
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> --}}
+    {{-- <script>
+        $(document).ready(function() {
+            var isDragging = false;
+            var startX;
+            var carousel = $('#carouselExample');
 
-        // Dragging Start
-        carousel.on('mousedown', function(e){
-            isDragging = true;
-            startX = e.pageX;
-            carousel.css('cursor', 'grabbing');
-        });
+            // Dragging Start
+            carousel.on('mousedown', function(e) {
+                isDragging = true;
+                startX = e.pageX;
+                carousel.css('cursor', 'grabbing');
+            });
 
-        // Dragging Movement
-        carousel.on('mousemove', function(e){
-            if (!isDragging) return;
+            // Dragging Movement
+            carousel.on('mousemove', function(e) {
+                if (!isDragging) return;
 
-            var moveX = e.pageX - startX;
-            if (moveX > 100) {
-                $('#carouselExample').carousel('prev');
+                var moveX = e.pageX - startX;
+                if (moveX > 100) {
+                    $('#carouselExample').carousel('prev');
+                    isDragging = false;
+                    carousel.css('cursor', 'grab');
+                } else if (moveX < -100) {
+                    $('#carouselExample').carousel('next');
+                    isDragging = false;
+                    carousel.css('cursor', 'grab');
+                }
+            });
+
+            // Dragging End
+            carousel.on('mouseup', function() {
                 isDragging = false;
                 carousel.css('cursor', 'grab');
-            } else if (moveX < -100) {
-                $('#carouselExample').carousel('next');
-                isDragging = false;
-                carousel.css('cursor', 'grab');
-            }
+            });
         });
+    </script> --}}
 
-        // Dragging End
-        carousel.on('mouseup', function(){
-            isDragging = false;
-            carousel.css('cursor', 'grab');
-        });
-    });
-</script>
+    <section class="hero " style="margin-top: 300px">
+        <div class="container-fluid">
+            <div class="row">
 
-
-
-
-
-
-<section class="hero " style="margin-top: 300px">
-    <div class="container-fluid">
-        <div class="row">
-
+            </div>
         </div>
-    </div>
-</section>
-
-
-
-
-    <!-- Hero Section End -->
-
+    </section>
     <!-- Categories Section Begin -->
     <section class="categories">
         <div class="container">
@@ -218,7 +205,7 @@ $banners = getbanners();
                 </div>
             </div>
         </div>
-     </section>
+    </section>
     <!-- Categories Section End -->
 
     <!-- Featured Section Begin -->
@@ -233,67 +220,69 @@ $banners = getbanners();
                         <ul>
                             <li class="active" data-filter="*">All</li>
                             @foreach ($category as $cat)
-                            <li data-filter=".{{$cat->slug}}">{{$cat->name}}</li>
-                          @endforeach
+                                <li data-filter=".{{ $cat->slug }}">{{ $cat->name }}</li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
             <style>
                 ..wishlist-icon {
-    transition: color 0.3s ease;
-}
+                    transition: color 0.3s ease;
+                }
 
-.wishlist-icon:hover {
-    color: red !important; /* Wishlist icon color turns red on hover */
-}
+                .wishlist-icon:hover {
+                    color: red !important;
+                    /* Wishlist icon color turns red on hover */
+                }
 
-.wishlist-icon.clicked {
-    color: green !important; /* Wishlist icon turns green when clicked */
-}
+                .wishlist-icon.clicked {
+                    color: green !important;
+                    /* Wishlist icon turns green when clicked */
+                }
 
-.card-link {
-    display: block;
-    text-decoration: none;
-}
+                .card-link {
+                    display: block;
+                    text-decoration: none;
+                }
 
-.card-link:hover {
-    text-decoration: none;
-}
-
-
+                .card-link:hover {
+                    text-decoration: none;
+                }
             </style>
             <div class="row featured__filter">
                 @foreach ($product as $item)
                     @php
                         $images = json_decode($item->images, true);
                     @endphp
-                    <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4 mix {{$item->product_cat->slug}}">
-                        <a href="{{ route('product.detail', $item->slug) }}" class="card-link"> <!-- Wrap the entire card in <a> -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 product-card mb-4 mix {{ $item->product_cat->slug }}">
+                        <a href="{{ route('product.detail', $item->slug) }}" class="card-link">
+                            <!-- Wrap the entire card in <a> -->
                             <div class="card h-100 border-1 shadow-sm position-relative">
                                 <!-- Product Image Slider -->
                                 <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
                                     <div class="carousel-inner">
                                         @foreach ($images as $index => $imageName)
                                             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                                <img src="{{ asset('images/products/' . $imageName) }}" class="d-block w-100" alt="...">
+                                                <img src="{{ asset('images/products/' . $imageName) }}"
+                                                    class="d-block w-100" alt="...">
                                             </div>
                                         @endforeach
                                     </div>
-                                    <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button" data-slide="prev">
+                                    <a class="carousel-control-prev" href="#carousel{{ $item->id }}" role="button"
+                                        data-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     </a>
-                                    <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button" data-slide="next">
+                                    <a class="carousel-control-next" href="#carousel{{ $item->id }}" role="button"
+                                        data-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     </a>
                                 </div>
-
                                 <!-- Wishlist Icon Always Visible -->
-                               <!-- Wishlist Icon Always Visible -->
-                                    <a href="#" class="wishlist-icon position-absolute top-0 right-0 p-2 text-red" title="Add to Wishlist" >
-                                     <i class="fa fa-heart"></i>
-                                    </a>
-
+                                <a href="#" class="wishlist-icon position-absolute top-0 right-0 p-2 text-red"
+                                    title="Add to Wishlist">
+                                    <i class="fa fa-heart"></i>
+                                </a>
 
                                 <!-- Product Details -->
                                 <div class="card-body text-center p-3">
@@ -306,7 +295,8 @@ $banners = getbanners();
                                     <!-- Product Price -->
                                     <div class="product-price mb-2">
                                         @if ($item->discounted_price)
-                                            <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
+                                            <span class="text-muted"
+                                                style="text-decoration: line-through;">${{ $item->price }}</span>
                                             <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
                                         @else
                                             <span class="text-primary">${{ $item->price }}</span>
@@ -320,8 +310,11 @@ $banners = getbanners();
 
                                 <!-- Action Buttons -->
                                 <div class="card-footer d-flex justify-content-between bg-light">
-                                    <button class="add-to-cart-btn btn btn-outline-primary btn-sm" data-product-id="{{ $item->id }}">Add to Cart</button>
-                                    <button class="btn btn-primary btn-sm wishlist-icon addToWishlistButton" data-product-id="{{ $item->id }}">Wishlist</button>
+                                    <button class="add-to-cart-btn btn btn-outline-primary btn-sm"
+                                        data-product-id="{{ $item->id }}">Add to Cart</button>
+                                        <button class="btn btn-primary btn-sm wishlist-icon addToWishlistButton"
+                                        data-product-id="{{ $item->id }}">Wishlist</button>
+
 
                                 </div>
                             </div>
@@ -352,9 +345,41 @@ $banners = getbanners();
     <!-- Banner End -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
+    <script>
+        document.querySelectorAll('.addToWishlistButton').forEach(button => {
+           button.addEventListener('click', function(event) {
+              event.preventDefault();
+
+              const productId = this.getAttribute('data-product-id');
+              const button = this;
+
+              // Send AJAX request to add the product to the wishlist
+              fetch("{{ route('wishlist.add') }}", {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                  },
+                  body: JSON.stringify({ product_id: productId })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  // Update the UI: change the button to indicate it's been added to wishlist
+                  button.textContent = 'Added to Wishlist';
+                  button.classList.remove('btn-primary');
+                  button.classList.add('btn-success');
+
+                  // Optionally, update the wishlist count in the header
+                  document.getElementById('wishlist-count').textContent = data.count;
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  // Optionally, show an error message if something goes wrong
+              });
+           });
+        });
+     </script>
 
 
-
-</script>
+    </script>
 @endsection

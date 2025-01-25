@@ -16,9 +16,10 @@
             </div>
         </div>
     </section>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" type="text/css" media="all" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" type="text/css"
+        media="all" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
 
     <!-- Product Section Begin -->
     <section class="product spad">
@@ -344,7 +345,8 @@
                                     <div class="card-footer d-flex justify-content-around bg-light">
                                         <button class="add-to-cart-btn btn btn-outline-primary btn-sm"
                                             data-product-id="{{ $item->id }}">Add to Cart</button>
-                                        <button class="btn btn-primary btn-sm">Buy Now</button>
+                                            <button class="btn btn-primary btn-sm wishlist-icon addToWishlistButton"
+                                            data-product-id="{{ $item->id }}">Wishlist</button>
                                     </div>
                                 </div>
                             </div>
@@ -361,90 +363,93 @@
         </div>
     </section>
     < !-- Product Section End -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-    <script>
-        function toggleDropdown(categoryId) {
-            var submenu = document.getElementById('submenu' + categoryId);
-            var chevronDown = submenu.previousElementSibling.querySelector('.fas.fa-chevron-down');
-            var chevronUp = submenu.previousElementSibling.querySelector('.fas.fa-chevron-up');
+        <script>
+            function toggleDropdown(categoryId) {
+                var submenu = document.getElementById('submenu' + categoryId);
+                var chevronDown = submenu.previousElementSibling.querySelector('.fas.fa-chevron-down');
+                var chevronUp = submenu.previousElementSibling.querySelector('.fas.fa-chevron-up');
 
-            submenu.classList.toggle('show');
-            chevronDown.style.display = submenu.classList.contains('show') ? 'none' : 'inline-block';
-            chevronUp.style.display = submenu.classList.contains('show') ? 'inline-block' : 'none';
-        }
-
-
-        function getSelectedSizes() {
-            var sizes = [];
-            document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
-                sizes.push(item.parentNode.textContent.trim());
-            });
-            alert('Selected Sizes: ' + sizes.join(', '));
-        }
+                submenu.classList.toggle('show');
+                chevronDown.style.display = submenu.classList.contains('show') ? 'none' : 'inline-block';
+                chevronUp.style.display = submenu.classList.contains('show') ? 'inline-block' : 'none';
+            }
 
 
+            function getSelectedSizes() {
+                var sizes = [];
+                document.querySelectorAll('.sidebar__item__size input[type="checkbox"]:checked').forEach(function(item) {
+                    sizes.push(item.parentNode.textContent.trim());
+                });
+                alert('Selected Sizes: ' + sizes.join(', '));
+            }
 
-    var rangeSlider = $(".price-range"),
+
+
+            var rangeSlider = $(".price-range"),
                 minamount = $("#minamount"),
                 maxamount = $("#maxamount"),
                 minPrice = parseInt(rangeSlider.data('min')),
                 maxPrice = parseInt(rangeSlider.data('max'));
 
 
-        $(document).ready(function() {
+            $(document).ready(function() {
 
 
-            rangeSlider.slider({
-                range: true,
-                min: 0,
-                max: {{ $maxPriceProduct }},
-                values: [minPrice, maxPrice],
-                slide: function(event, ui) {
-                    minamount.val('$' + ui.values[0]);
-                    maxamount.val('$' + ui.values[1]);
-                },
-                change: function(event, ui) {
+                rangeSlider.slider({
+                    range: true,
+                    min: 0,
+                    max: {{ $maxPriceProduct }},
+                    values: [minPrice, maxPrice],
+                    slide: function(event, ui) {
+                        minamount.val('$' + ui.values[0]);
+                        maxamount.val('$' + ui.values[1]);
+                    },
+                    change: function(event, ui) {
+                        apply_filters();
+                    }
+                });
+
+                minamount.val('$' + minPrice);
+                maxamount.val('$' + maxPrice);
+
+                $(".brand-label").change(function() {
                     apply_filters();
+                });
+
+                $('#sort').change(function() {
+                    apply_filters();
+                });
+
+                function apply_filters() {
+                    var brands = $(".brand-label:checked").map(function() {
+                        return $(this).val();
+                    }).get().join(',');
+
+
+                    var url = '{{ url()->current() }}';
+
+                    url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$',
+                        '');
+                    var keyword = $("#search").val();
+
+                    if (keyword.length > 0) {
+                        url += '&search=' + keyword;
+                    }
+
+                    url += '&sort=' + $("#sort").val();
+
+                    if (brands) {
+                        url += '&brand=' + brands.toString();
+                    }
+
+                    window.location.href = url;
                 }
             });
-
-            minamount.val('$' + minPrice);
-            maxamount.val('$' + maxPrice);
-
-            $(".brand-label").change(function() {
-                apply_filters();
-            });
-
-            $('#sort').change(function() {
-                apply_filters();
-            });
-
-            function apply_filters() {
-                var brands = $(".brand-label:checked").map(function() {
-                    return $(this).val();
-                }).get().join(',');
+        </script>
 
 
-                var url = '{{ url()->current() }}';
 
-                url += '?minprice=' + minamount.val().replace('$', '') + '&maxprice=' + maxamount.val().replace('$','');
-                var keyword = $("#search").val();
-
-                if (keyword.length > 0) {
-                    url += '&search=' + keyword;
-                }
-
-                url += '&sort=' + $("#sort").val();
-
-                if (brands) {
-                    url += '&brand=' +brands.toString();
-                }
-
-                window.location.href = url;
-            }
-        });
-    </script>
-
-@endsection
+    @endsection

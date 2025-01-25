@@ -2,7 +2,7 @@
 
 //index page
 
-$(document).ready(function(){
+$(document).ready(function () {
     $(".owl-carousel").owlCarousel({
         items: 1, // Show one image at a time
         loop: true, // Loop through images
@@ -14,15 +14,15 @@ $(document).ready(function(){
     });
 });
 document.querySelectorAll('.slider-left').forEach(button => {
-button.onclick = function() {
-// Logic to slide to the previous image
-};
+    button.onclick = function () {
+        // Logic to slide to the previous image
+    };
 });
 
 document.querySelectorAll('.slider-right').forEach(button => {
-button.onclick = function() {
-// Logic to slide to the next image
-};
+    button.onclick = function () {
+        // Logic to slide to the next image
+    };
 });
 
 $.ajaxSetup({
@@ -30,15 +30,14 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': '{{ csrf_token() }}'
     }
 });
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Select all Add to Cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
 
     addToCartButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent page refresh
             const productId = this.getAttribute('data-product-id');
-
             // Perform the AJAX request
             fetch('/add-to-cart', {
                 method: 'POST',
@@ -48,71 +47,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ product_id: productId })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update cart count in the header
-                    document.getElementById('cart-count').innerText = data.count;
-
-                    // Show success toaster message
-                    toastr.success(data.success);
-                } else if (data.error) {
-                    // Show error toaster message if product already in cart
-                    toastr.error(data.error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('cart-count').innerText = data.count;
+                        toastr.success(data.success);
+                    } else if (data.error) {
+                        toastr.error(data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 
 });
 
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Select all Add to Cart buttons
-//     const wishList = document.querySelectorAll('.addToWishlistButton');
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all Add to Cart buttons
+    const addToCartButtons = document.querySelectorAll('.addToWishlistButton');
 
-//     wishList.forEach(button => {
-//         button.addEventListener('click', function(event) {
-//             event.preventDefault(); // Prevent page refresh
-//             const productId = this.getAttribute('data-product-id');
-
-//             // Perform the AJAX request
-//             fetch('/wishlist-add', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-//                 },
-//                 body: JSON.stringify({ product_id: productId })
-//             })
-//             .then(response => response.json())
-//             .then(data => {
-//                 if (data.success) {
-//                     // Update cart count in the header
-//                     // document.getElementById('cart-count').innerText = data.count;
-
-//                     // Show success toaster message
-//                     toastr.success(data.success);
-//                 } else if (data.error) {
-//                     // Show error toaster message if product already in cart
-//                     toastr.error(data.error);
-//                 }
-//             })
-//             .catch(error => console.error('Error:', error));
-//         });
-//     });
-
-// });
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Select all Add to Wishlist buttons
-    const wishList = document.querySelectorAll('.addToWishlistButton');
-
-    wishList.forEach(button => {
-        button.addEventListener('click', function(event) {
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent page refresh
             const productId = this.getAttribute('data-product-id');
-
             // Perform the AJAX request
             fetch('/wishlist-add', {
                 method: 'POST',
@@ -122,24 +79,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ product_id: productId })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update wishlist count in the header
-                    $('#wishlist-count').text(data.count);  // This updates the count displayed in the header
-
-                    // Show success toaster message
-                    toastr.success(data.success);
-                } else if (data.error) {
-                    // Show error toaster message if product is already in wishlist
-                    toastr.error(data.error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('wishlist-count').innerText = data.wishCount;
+                        toastr.success(data.success);
+                    } else if (data.error) {
+                        toastr.error(data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
-});
 
+});
 
 toastr.options = {
     "closeButton": true,
@@ -148,45 +101,29 @@ toastr.options = {
     "timeOut": "3000", // Duration of the toast in milliseconds
 };
 
-
-
-
-
-$(document).ready(function() {
+$(document).ready(function () {
     $.ajax({
         url: '/cart-count', // Create a route and method to return the cart count
         method: 'GET',
-        success: function(response) {
+        success: function (response) {
             $('#cart-count').text(response.count);
         }
     });
 });
-// $(document).ready(function() {
-//     $.ajax({
-//         url: '/wishlist-count', // Create a route and method to return the cart count
-//         method: 'GET',
-//         success: function(response) {
-//             $('#wishlist-count').text(response.count);
-//         }
-//     });
-// });
+$(document).ready(function () {
+    $.ajax({
+        url: '/wishlist-count', // Create a route and method to return the cart count
+        method: 'GET',
+        success: function (response) {
+            $('#wishlist-count').text(response.wishCount);
+        }
+    });
+});
 
-function toggleWishlist(event) {
-    // Prevent default behavior for the anchor tag
-    event.preventDefault();
-
-    const wishlistIcon = event.target.closest('a');
-    if (!wishlistIcon.classList.contains('clicked')) {
-        wishlistIcon.classList.add('clicked');
-    } else {
-        wishlistIcon.classList.remove('clicked');
-    }
-    console.log('Product added to wishlist (this is just a demo action).');
-}
 
 let timeout = null;
 document.querySelectorAll('.card-link').forEach(link => {
-    link.addEventListener('click', function(event) {
+    link.addEventListener('click', function (event) {
         if (timeout) {
             clearTimeout(timeout);
         }
@@ -197,5 +134,7 @@ document.querySelectorAll('.card-link').forEach(link => {
         event.preventDefault(); // Prevent immediate redirection
     });
 });
+
+
 
 
