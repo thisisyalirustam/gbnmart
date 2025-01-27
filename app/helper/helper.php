@@ -3,6 +3,8 @@
 use App\Models\AppManagement;
 use App\Models\Banner;
 use App\Models\ProductCat;
+use App\Models\Wishlist;
+use Illuminate\Support\Facades\Auth;
 
 function settings(){
     // Assuming you want the first record or a specific record
@@ -16,3 +18,12 @@ function getCategories(){
 function getbanners(){
     return Banner::with('product_cat','product_sub_category', 'product_brand')->get();
 }
+
+function getWishlistCount()
+    {
+        return Auth::check()
+        ? Wishlist::where('user_id', Auth::id())->count()  // Count the number of wishlist items for authenticated user
+        : count(session('wishlist', [])); // Count the number of items in the session for unauthenticated user
+
+
+    }

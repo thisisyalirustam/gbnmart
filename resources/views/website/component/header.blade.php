@@ -231,7 +231,7 @@
                 <div class="col-lg-3 d-flex justify-content-end">
                     <div class="header__cart d-flex align-items-center">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i class="fa fa-heart"></i> <span id="wishlist-count">{{ $wishlistCount ?? 0 }}</span></a></li>
+                            <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i class="fa fa-heart"></i> <span id="wishlist-count">{{ getWishlistCount() }}</span></a></li>
                             <li class="list-inline-item"><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ $cartCount ?? 0 }}</span>
                             </a></li>
                         </ul>

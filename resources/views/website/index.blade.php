@@ -8,7 +8,7 @@
         $banners = getbanners();
     @endphp
 
-    {{-- <style>
+    <style>
         /* General Styling for the Carousel */
         .carousel-item {
             position: relative;
@@ -108,10 +108,10 @@
         .carousel-control-next {
             right: 10px;
         }
-    </style> --}}
+    </style>
 
     <!-- HTML (Carousel Structure) -->
-    {{-- <div id="carouselExample" class="carousel slide" data-ride="carousel">
+    <div id="carouselExample" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <!-- Loop through banners dynamically -->
             @foreach ($banners as $index => $banner)
@@ -141,12 +141,12 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
-    </div> --}}
+    </div>
 
     <!-- JavaScript (Script tag) -->
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> --}}
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             var isDragging = false;
             var startX;
@@ -181,7 +181,7 @@
                 carousel.css('cursor', 'grab');
             });
         });
-    </script> --}}
+    </script>
 
     <section class="hero " style="margin-top: 300px">
         <div class="container-fluid">
@@ -312,9 +312,8 @@
                                 <div class="card-footer d-flex justify-content-between bg-light">
                                     <button class="add-to-cart-btn btn btn-outline-primary btn-sm"
                                         data-product-id="{{ $item->id }}">Add to Cart</button>
-                                        <button class="btn btn-primary btn-sm wishlist-icon addToWishlistButton"
+                                    <button class="btn btn-primary btn-sm wishlist-icon addToWishlistButton"
                                         data-product-id="{{ $item->id }}">Wishlist</button>
-
 
                                 </div>
                             </div>
@@ -345,41 +344,5 @@
     <!-- Banner End -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        document.querySelectorAll('.addToWishlistButton').forEach(button => {
-           button.addEventListener('click', function(event) {
-              event.preventDefault();
-
-              const productId = this.getAttribute('data-product-id');
-              const button = this;
-
-              // Send AJAX request to add the product to the wishlist
-              fetch("{{ route('wishlist.add') }}", {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                  },
-                  body: JSON.stringify({ product_id: productId })
-              })
-              .then(response => response.json())
-              .then(data => {
-                  // Update the UI: change the button to indicate it's been added to wishlist
-                  button.textContent = 'Added to Wishlist';
-                  button.classList.remove('btn-primary');
-                  button.classList.add('btn-success');
-
-                  // Optionally, update the wishlist count in the header
-                  document.getElementById('wishlist-count').textContent = data.count;
-              })
-              .catch(error => {
-                  console.error('Error:', error);
-                  // Optionally, show an error message if something goes wrong
-              });
-           });
-        });
-     </script>
-
-
-    </script>
+    <script></script>
 @endsection

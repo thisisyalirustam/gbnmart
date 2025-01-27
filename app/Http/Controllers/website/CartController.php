@@ -17,12 +17,10 @@ class CartController extends Controller
     public function index()
     {
         $cartCount = Auth::check() ? Cart::where('user_id', Auth::id())->sum('quantity') : array_sum(array_column(session('cart', []), 'quantity'));
-        $data = [
-            'cartCount' => $cartCount,
-
-        ];
-
-        return view('website.component.header', $data);
+        return response()->json([
+            'success' => true,
+            'count' => $cartCount
+        ]);
     }
 
 
@@ -172,14 +170,13 @@ class CartController extends Controller
         return view('website.middlepage');
     }
 
-    public function wishlistShow(){
+    public function wishlistShow()
+    {
         $wishlistCount = Auth::check() ? Wishlist::where('user_id', Auth::id())->sum('product_id') : array_sum(array_column(session('wishlist', []), 'product_id'));
-        $data = [
-            'wishlistCount' => $wishlistCount,
-
-        ];
-
-        return view('website.component.header', $data);
+        return response()->json([
+            'success' => true,
+            'countWish' => $wishlistCount
+        ]);
     }
     public function addWishlist(Request $request)
     {
@@ -188,8 +185,8 @@ class CartController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
             $cartItem = Wishlist::where('user_id', $userId)
-                                ->where('product_id', $productId)
-                                ->first();
+                ->where('product_id', $productId)
+                ->first();
 
             if ($cartItem) {
                 return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
@@ -227,33 +224,29 @@ class CartController extends Controller
     }
 
     public function getWishlist()
-{
-    if (Auth::check()) {
-        $userId = Auth::id();
-        $wishlistItems = Wishlist::with('product')
-                                 ->where('user_id', $userId)
-                                 ->get();
+    {
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $wishlistItems = Wishlist::with('product')
+                ->where('user_id', $userId)
+                ->get();
+
+            return view('website.wishlist', compact('wishlistItems'));
+        }
+
+        $wishlist = session()->get('wishlist', []);
+        $wishlistItems = [];
+
+        foreach ($wishlist as $item) {
+            $product = Product::find($item['product_id']);
+            if ($product) {
+                $wishlistItems[] = [
+                    'product' => $product,
+                    'product_id' => $item['product_id'],
+                ];
+            }
+        }
 
         return view('website.wishlist', compact('wishlistItems'));
     }
-
-    $wishlist = session()->get('wishlist', []);
-    $wishlistItems = [];
-
-    foreach ($wishlist as $item) {
-        $product = Product::find($item['product_id']);
-        if ($product) {
-            $wishlistItems[] = [
-                'product' => $product,
-                'product_id' => $item['product_id'],
-            ];
-        }
-    }
-
-    return view('website.wishlist', compact('wishlistItems'));
-}
-
-
-
-
 }
