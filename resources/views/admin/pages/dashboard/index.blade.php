@@ -24,37 +24,38 @@
           <!-- Sales Card -->
           <div class="col-xxl-4 col-md-6">
             <div class="card info-card sales-card">
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
 
-              <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                  <li class="dropdown-header text-start">
-                    <h6>Filter</h6>
-                  </li>
-
-                  <li><a class="dropdown-item" href="#">Today</a></li>
-                  <li><a class="dropdown-item" href="#">This Month</a></li>
-                  <li><a class="dropdown-item" href="#">This Year</a></li>
-                </ul>
-              </div>
-
-              <div class="card-body">
-                <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-cart"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>145</h6>
-                    <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                  </div>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
                 </div>
-              </div>
 
+                <div class="card-body">
+                    <h5 class="card-title">Sales <span>| Today</span></h5>
+
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 id="todaystotal">Loading...</h6>
+                            <span class="text-success small pt-1 fw-bold">5%</span>
+                            <span class="text-muted small pt-2 ps-1">increase</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div><!-- End Sales Card -->
+        </div>
+
+
+<!-- End Sales Card -->
 
           <!-- Revenue Card -->
           <div class="col-xxl-4 col-md-6">
@@ -647,5 +648,51 @@
 
     </div>
   </section>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+        // Function to fetch and update order details
+        function fetchOrderDetails(filter = 'today') {
+            $.ajax({
+                url: '/admin-dashboard-data', // Your backend route
+                method: 'GET',
+                data: { filter: filter }, // Pass the filter to the backend
+                success: function (response) {
+                    if (response.success) {
+                        // Update the HTML element with the order count
+                        $('#todaystotal').text(response.todayorders);
+                    } else {
+                        console.error('Error fetching data');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request failed: ' + status + ', ' + error);
+                }
+            });
+        }
+
+        // Initially load the "Today" data when the page loads
+        fetchOrderDetails('today');
+
+        // Handle the dropdown filter click event
+        $('.dropdown-item').click(function (e) {
+            e.preventDefault(); // Prevent default link behavior
+
+            const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+            console.log('Selected Filter:', filter); // Debugging: Log the filter value
+
+            // Fetch data based on the selected filter
+            fetchOrderDetails(filter);
+
+            // Optionally, you can change the card title based on the filter selected:
+            $('.card-title span').text(`| ${$(this).text()}`);
+        });
+
+    });
+    </script>
+
+
 
 @endsection

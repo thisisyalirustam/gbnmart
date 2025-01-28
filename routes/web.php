@@ -9,6 +9,7 @@ use App\Http\Controllers\admin\ProdcutSubCategoryController;
 use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductMainController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
@@ -38,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/admin-dashboard', [AdminController::class, 'index'])->name('admin.auth');
     Route::resource('/add-user',UserController::class);
-
+    Route::get('/admin-dashboard-data', [ProductMainController::class, 'getOrderDetails'])->name('admin.getDetails');
     Route::get('/show-data',[AdminController::class,'showuser'])->name('showdata');
 
     Route::resource('/product-cat',ProductCategoryController::class);
@@ -84,10 +85,6 @@ Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::clas
 Route::post('/customer-orders/{id}/{
 
 }/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
-
-
-
-
 
 });
 
