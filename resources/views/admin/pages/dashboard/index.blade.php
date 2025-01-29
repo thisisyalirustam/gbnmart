@@ -30,7 +30,6 @@
                         <li class="dropdown-header text-start">
                             <h6>Filter</h6>
                         </li>
-
                         <li><a class="dropdown-item" href="#">Today</a></li>
                         <li><a class="dropdown-item" href="#">This Month</a></li>
                         <li><a class="dropdown-item" href="#">This Year</a></li>
@@ -38,96 +37,80 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="card-title">Sales <span>| Today</span></h5>
-
+                    <h5 class="card-title">Orders <span>| Today</span></h5>
                     <div class="d-flex align-items-center">
                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                             <i class="bi bi-cart"></i>
                         </div>
                         <div class="ps-3">
                             <h6 id="todaystotal">Loading...</h6>
-                            <span class="text-success small pt-1 fw-bold">5%</span>
+                            <span id="orderPercentageIncrease" class="text-success small pt-1 fw-bold">5%</span>
                             <span class="text-muted small pt-2 ps-1">increase</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-<!-- End Sales Card -->
-
           <!-- Revenue Card -->
           <div class="col-xxl-4 col-md-6">
             <div class="card info-card revenue-card">
-
-              <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                  <li class="dropdown-header text-start">
-                    <h6>Filter</h6>
-                  </li>
-
-                  <li><a class="dropdown-item" href="#">Today</a></li>
-                  <li><a class="dropdown-item" href="#">This Month</a></li>
-                  <li><a class="dropdown-item" href="#">This Year</a></li>
-                </ul>
-              </div>
-
-              <div class="card-body">
-                <h5 class="card-title">Revenue <span>| This Month</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-currency-dollar"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>$3,264</h6>
-                    <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                  </div>
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
                 </div>
-              </div>
 
+                <div class="card-body">
+                    <h5 class="card-title">Revenue <span>| This Month</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 id="revenueAmount">Loading...</h6>
+                            <span id="revenuePercentageChange" class="text-success small pt-1 fw-bold">0%</span>
+                            <span class="text-muted small pt-2 ps-1">increase</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div><!-- End Revenue Card -->
+        </div><!-- End Revenue Card -->
 
           <!-- Customers Card -->
           <div class="col-xxl-4 col-xl-12">
-
             <div class="card info-card customers-card">
-
-              <div class="filter">
-                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                  <li class="dropdown-header text-start">
-                    <h6>Filter</h6>
-                  </li>
-
-                  <li><a class="dropdown-item" href="#">Today</a></li>
-                  <li><a class="dropdown-item" href="#">This Month</a></li>
-                  <li><a class="dropdown-item" href="#">This Year</a></li>
-                </ul>
-              </div>
-
-              <div class="card-body">
-                <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                <div class="d-flex align-items-center">
-                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                    <i class="bi bi-people"></i>
-                  </div>
-                  <div class="ps-3">
-                    <h6>1244</h6>
-                    <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                  </div>
+                <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <li class="dropdown-header text-start">
+                            <h6>Filter</h6>
+                        </li>
+                        <li><a class="dropdown-item" href="#">Today</a></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                    </ul>
                 </div>
-
-              </div>
+                <div class="card-body">
+                    <h5 class="card-title">Customers <span>| This Year</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h6 id="customersCount">Loading...</h6>
+                            <span id="customersPercentageChange" class="text-success small pt-1 fw-bold">12%</span>
+                            <span class="text-muted small pt-2 ps-1">increase</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-          </div><!-- End Customers Card -->
+        </div><!-- End Customers Card -->
 
           <!-- Reports -->
           <div class="col-12">
@@ -154,55 +137,101 @@
 
                 <script>
                   document.addEventListener("DOMContentLoaded", () => {
-                    new ApexCharts(document.querySelector("#reportsChart"), {
-                      series: [{
-                        name: 'Sales',
-                        data: [31, 40, 28, 51, 42, 82, 56],
-                      }, {
-                        name: 'Revenue',
-                        data: [11, 32, 45, 32, 34, 52, 41]
-                      }, {
-                        name: 'Customers',
-                        data: [15, 11, 32, 18, 9, 24, 11]
-                      }],
-                      chart: {
-                        height: 350,
-                        type: 'area',
-                        toolbar: {
-                          show: false
-                        },
-                      },
-                      markers: {
-                        size: 4
-                      },
-                      colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                      fill: {
-                        type: "gradient",
-                        gradient: {
-                          shadeIntensity: 1,
-                          opacityFrom: 0.3,
-                          opacityTo: 0.4,
-                          stops: [0, 90, 100]
-                        }
-                      },
-                      dataLabels: {
-                        enabled: false
-                      },
-                      stroke: {
-                        curve: 'smooth',
-                        width: 2
-                      },
-                      xaxis: {
-                        type: 'datetime',
-                        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                      },
-                      tooltip: {
-                        x: {
-                          format: 'dd/MM/yy HH:mm'
-                        },
-                      }
-                    }).render();
-                  });
+    let chart;
+
+    // Initialize the chart
+    function initializeChart(series, categories) {
+        chart = new ApexCharts(document.querySelector("#reportsChart"), {
+            series: series,
+            chart: {
+                height: 350,
+                type: 'area',
+                toolbar: {
+                    show: false
+                },
+            },
+            markers: {
+                size: 4
+            },
+            colors: ['#4154f1', '#2eca6a', '#ff771d'],
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.3,
+                    opacityTo: 0.4,
+                    stops: [0, 90, 100]
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: categories
+            },
+            tooltip: {
+                x: {
+                    format: 'dd/MM/yy HH:mm'
+                },
+            }
+        });
+
+        chart.render();
+    }
+
+    // Fetch data from the backend
+    function fetchGraphData(filter = 'today') {
+        $.ajax({
+            url: '/admin-graph-data', // Your backend route
+            method: 'GET',
+            data: { filter: filter },
+            success: function (response) {
+                if (response.success) {
+                    console.log('Graph Data:', response); // Debugging: Log the response
+                    if (chart) {
+                        // Update the chart with new data
+                        chart.updateOptions({
+                            series: response.series,
+                            xaxis: {
+                                categories: response.categories
+                            }
+                        });
+                    } else {
+                        // Initialize the chart if it doesn't exist
+                        initializeChart(response.series, response.categories);
+                    }
+                } else {
+                    console.error('Error fetching graph data');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX request failed: ' + status + ', ' + error);
+            }
+        });
+    }
+
+    // Initially load the "Today" data when the page loads
+    fetchGraphData('today');
+
+    // Handle the dropdown filter click event
+    $('.dropdown-item').click(function (e) {
+        e.preventDefault(); // Prevent default link behavior
+
+        const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+        console.log('Selected Filter:', filter); // Debugging: Log the filter value
+
+        // Fetch data based on the selected filter
+        fetchGraphData(filter);
+
+        // Update the card title based on the filter selected
+        $('.card-title span').text(`| ${$(this).text()}`);
+    });
+});
                 </script>
                 <!-- End Line Chart -->
 
@@ -653,42 +682,233 @@
   <script>
     $(document).ready(function () {
 
-        // Function to fetch and update order details
         function fetchOrderDetails(filter = 'today') {
-            $.ajax({
-                url: '/admin-dashboard-data', // Your backend route
-                method: 'GET',
-                data: { filter: filter }, // Pass the filter to the backend
-                success: function (response) {
-                    if (response.success) {
-                        // Update the HTML element with the order count
-                        $('#todaystotal').text(response.todayorders);
-                    } else {
-                        console.error('Error fetching data');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX request failed: ' + status + ', ' + error);
+    $.ajax({
+        url: '/admin-dashboard-data', // Your backend route
+        method: 'GET',
+        data: { filter: filter }, // Pass the filter to the backend
+        success: function (response) {
+            if (response.success) {
+                // Update the HTML element with the order count
+                $('#todaystotal').text(response.orders);
+
+                // Update the percentage increase
+                const percentageIncreaseElement = $('#orderPercentageIncrease');
+                if (response.percentage_increase >= 0) {
+                    percentageIncreaseElement.removeClass('text-danger').addClass('text-success').text(response.percentage_increase + '%');
+                } else {
+                    percentageIncreaseElement.removeClass('text-success').addClass('text-danger').text(response.percentage_increase + '%');
                 }
-            });
+            } else {
+                console.error('Error fetching data');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed: ' + status + ', ' + error);
         }
+    });
+}
 
-        // Initially load the "Today" data when the page loads
-        fetchOrderDetails('today');
+// Initially load the "Today" data when the page loads
+fetchOrderDetails('today');
 
-        // Handle the dropdown filter click event
-        $('.dropdown-item').click(function (e) {
-            e.preventDefault(); // Prevent default link behavior
+// Handle the dropdown filter click event
+$('.dropdown-item').click(function (e) {
+    e.preventDefault(); // Prevent default link behavior
 
-            const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
-            console.log('Selected Filter:', filter); // Debugging: Log the filter value
+    const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+    console.log('Selected Filter:', filter); // Debugging: Log the filter value
 
-            // Fetch data based on the selected filter
-            fetchOrderDetails(filter);
+    // Fetch data based on the selected filter
+    fetchOrderDetails(filter);
 
-            // Optionally, you can change the card title based on the filter selected:
-            $('.card-title span').text(`| ${$(this).text()}`);
+    // Optionally, you can change the card title based on the filter selected:
+    $('.card-title span').text(`| ${$(this).text()}`);
+});
+
+        function fetchCustomerDetails(filter = 'today') {
+    $.ajax({
+        url: '/admin-customer-data', // Your backend route for customer details
+        method: 'GET',
+        data: { filter: filter }, // Pass the filter to the backend
+        success: function (response) {
+            if (response.success) {
+                // Update the HTML element with the customer count
+                $('#customersCount').text(response.customers);
+
+                // Update the percentage change
+                const percentageChangeElement = $('#customersPercentageChange');
+                if (response.percentage_change >= 0) {
+                    percentageChangeElement.removeClass('text-danger').addClass('text-success').text(response.percentage_change + '%');
+                } else {
+                    percentageChangeElement.removeClass('text-success').addClass('text-danger').text(response.percentage_change + '%');
+                }
+            } else {
+                console.error('Error fetching customer data');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed: ' + status + ', ' + error);
+        }
+    });
+}
+
+// Initially load the "Today" data when the page loads
+fetchCustomerDetails('today');
+
+// Handle the dropdown filter click event for customers
+$('.dropdown-item').click(function (e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+    console.log('Selected Filter:', filter); // Debugging: Log the filter value
+
+    // Fetch data based on the selected filter
+    fetchCustomerDetails(filter);
+
+    // Optionally, you can change the card title based on the filter selected:
+    $('.card-title span').text(`| ${$(this).text()}`);
+});
+
+function fetchRevenueDetails(filter = 'today') {
+    $.ajax({
+        url: '/admin-revenue-data', // Your backend route for revenue details
+        method: 'GET',
+        data: { filter: filter }, // Pass the filter to the backend
+        success: function (response) {
+            if (response.success) {
+                // Update the HTML element with the revenue amount
+                $('#revenueAmount').text(response.revenue.toLocaleString());
+
+                // Update the percentage change
+                const percentageChangeElement = $('#revenuePercentageChange');
+                if (response.percentage_change >= 0) {
+                    percentageChangeElement.removeClass('text-danger').addClass('text-success').text(response.percentage_change + '%');
+                } else {
+                    percentageChangeElement.removeClass('text-success').addClass('text-danger').text(response.percentage_change + '%');
+                }
+            } else {
+                console.error('Error fetching revenue data');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX request failed: ' + status + ', ' + error);
+        }
+    });
+}
+
+// Initially load the "Today" data when the page loads
+fetchRevenueDetails('today');
+
+// Handle the dropdown filter click event for revenue
+$('.dropdown-item').click(function (e) {
+    e.preventDefault(); // Prevent default link behavior
+
+    const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+    console.log('Selected Filter:', filter); // Debugging: Log the filter value
+
+    // Fetch data based on the selected filter
+    fetchRevenueDetails(filter);
+
+    // Optionally, you can change the card title based on the filter selected:
+    $('.card-title span').text(`| ${$(this).text()}`);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    let chart;
+
+    // Initialize the chart
+    function initializeChart(series, categories) {
+        chart = new ApexCharts(document.querySelector("#reportsChart"), {
+            series: series,
+            chart: {
+                height: 350,
+                type: 'area',
+                toolbar: {
+                    show: false
+                },
+            },
+            markers: {
+                size: 4
+            },
+            colors: ['#4154f1', '#2eca6a', '#ff771d'],
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.3,
+                    opacityTo: 0.4,
+                    stops: [0, 90, 100]
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 2
+            },
+            xaxis: {
+                type: 'datetime',
+                categories: categories
+            },
+            tooltip: {
+                x: {
+                    format: 'dd/MM/yy HH:mm'
+                },
+            }
         });
+
+        chart.render();
+    }
+
+    // Fetch data from the backend
+    function fetchGraphData(filter = 'today') {
+        $.ajax({
+            url: '/admin-graph-data', // Your backend route
+            method: 'GET',
+            data: { filter: filter },
+            success: function (response) {
+                if (response.success) {
+                    // Update the chart with new data
+                    if (chart) {
+                        chart.updateOptions({
+                            series: response.series,
+                            xaxis: {
+                                categories: response.categories
+                            }
+                        });
+                    } else {
+                        // Initialize the chart if it doesn't exist
+                        initializeChart(response.series, response.categories);
+                    }
+                } else {
+                    console.error('Error fetching graph data');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX request failed: ' + status + ', ' + error);
+            }
+        });
+    }
+
+    // Initially load the "Today" data when the page loads
+    fetchGraphData('today');
+
+    // Handle the dropdown filter click event
+    $('.dropdown-item').click(function (e) {
+        e.preventDefault(); // Prevent default link behavior
+
+        const filter = $(this).text().toLowerCase(); // Get the filter text and convert to lowercase
+        console.log('Selected Filter:', filter); // Debugging: Log the filter value
+
+        // Fetch data based on the selected filter
+        fetchGraphData(filter);
+
+        // Update the card title based on the filter selected
+        $('.card-title span').text(`| ${$(this).text()}`);
+    });
+});
 
     });
     </script>
