@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin-graph-data', [ProductMainController::class, 'getGraphData'])->name('admin.getGraphData');
     Route::get('/admin-revenue-data', [ProductMainController::class, 'getRevenueDetails'])->name('admin.getRevenueDetails');
     Route::get('/admin-customer-data', [ProductMainController::class, 'getCustomerDetails'])->name('admin.getCustomerDetails');
+    Route::get('/recent-product',[ProductMainController::class, 'getProduct']);
     Route::get('/admin-dashboard-data', [ProductMainController::class, 'getOrderDetails'])->name('admin.getDetails');
     Route::get('/show-data',[AdminController::class,'showuser'])->name('showdata');
 

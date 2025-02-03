@@ -270,42 +270,8 @@
                       <th scope="col">Status</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row"><a href="#">#2457</a></th>
-                      <td>Brandon Jacob</td>
-                      <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                      <td>$64</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2147</a></th>
-                      <td>Bridie Kessler</td>
-                      <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                      <td>$47</td>
-                      <td><span class="badge bg-warning">Pending</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2049</a></th>
-                      <td>Ashleigh Langosh</td>
-                      <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                      <td>$147</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2644</a></th>
-                      <td>Angus Grady</td>
-                      <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                      <td>$67</td>
-                      <td><span class="badge bg-danger">Rejected</span></td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#">#2644</a></th>
-                      <td>Raheem Lehner</td>
-                      <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                      <td>$165</td>
-                      <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
+                  <tbody id="product-tbody">
+                    <!-- Data will be inserted here -->
                   </tbody>
                 </table>
 
@@ -910,7 +876,73 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+              
+
     });
+
+    $(document).ready(function() {
+    $.ajax({
+        url: '/recent-product', // Your backend route
+        method: 'GET',
+        success: function(response) {
+            if(response.success) {
+                let products = response.products;
+                let tbodyContent = '';
+
+                // Check if products array is not empty
+                if (products && products.length > 0) {
+                    products.forEach(function(product) {
+                        // Generate row with product details
+                        let row = `
+                            <tr>
+                                <th scope="row"><a href="#">#${product.id}</a></th>
+                                <td>${product.name}</td>
+                                <td><a href="#" class="text-primary">${product.description}</a></td>
+                                <td>$${product.price}</td>
+                                <td><span class="badge ${getBadgeClass(product.status)}">${getStatusText(product.status)}</span></td>
+                            </tr>
+                        `;
+                        tbodyContent += row;
+                    });
+
+                    // Insert the generated rows into the table body
+                    $('#product-tbody').html(tbodyContent);
+                } else {
+                    // In case there are no products
+                    $('#product-tbody').html('<tr><td colspan="5">No products available.</td></tr>');
+                }
+            } else {
+                console.log('Error: API returned failure');
+                $('#product-tbody').html('<tr><td colspan="5">Failed to load products.</td></tr>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('AJAX error: ' + status + ' ' + error);
+            $('#product-tbody').html('<tr><td colspan="5">Failed to load products.</td></tr>');
+        }
+    });
+
+    // Helper function to get the status badge class
+    function getBadgeClass(status) {
+        switch(status) {
+            case 1: return 'bg-success'; // Approved
+            case 2: return 'bg-warning'; // Pending
+            case 0: return 'bg-danger';  // Rejected
+            default: return '';
+        }
+    }
+
+    // Helper function to get the status text
+    function getStatusText(status) {
+        switch(status) {
+            case 1: return 'Approved';
+            case 2: return 'Pending';
+            case 0: return 'Rejected';
+            default: return 'Unknown';
+        }
+    }
+});
+
     </script>
 
 

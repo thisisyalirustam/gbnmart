@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Carbon\Carbon;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
@@ -261,6 +262,13 @@ class ProductMainController extends Controller
                 ['name' => 'Customers', 'data' => array_values($customersData)]
             ],
             'categories' => $categories
+        ]);
+    }
+    public function getProduct(){
+        $products = Product::all();
+        return response()->json([
+            'success' => true,
+            'products'=>$products,
         ]);
     }
 

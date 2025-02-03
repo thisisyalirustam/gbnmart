@@ -199,12 +199,12 @@
                                     </div>
                                     <div id="credit-details" style="display:none;">
                                         <p>Please enter your credit card details below:</p>
-                                        {{-- <label for="credit-card-number">Card Number</label>
+                                        <label for="credit-card-number">Card Number</label>
                                     <input type="text" class="form-control" id="credit-card-number" name="credit_card_number" placeholder="1234 5678 9012 3456" >
                                     <label for="credit-expiration">Expiration Date</label>
                                     <input type="text" class="form-control" id="credit-expiration" name="credit_expiration" placeholder="MM/YY" >
                                     <label for="credit-cvc">CVC</label>
-                                    <input type="text" class="form-control" id="credit-cvc" name="credit_cvc" placeholder="123" > --}}
+                                    <input type="text" class="form-control" id="credit-cvc" name="credit_cvc" placeholder="123" >
                                     </div>
                                 </div>
 
