@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('website/css/font-awesome.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('website/css/elegant-icons.css') }}" type="text/css">
-    {{-- <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css"> --}}
+    {{--
+    <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css"> --}}
     <link rel="stylesheet" href=" {{ asset('website/css/jquery-ui.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('website/css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href=" {{ asset('website/css/slicknav.min.css') }}" type="text/css">
@@ -63,6 +64,7 @@
         body.sticky-header-active {
             padding-top: 100px;
         }
+
         /* .user-details{
             background-color: rgb(247, 243, 233);
         } */
@@ -110,7 +112,9 @@
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ route('dashboard') }}"><i class="fa fa-user"></i> Profile</a>
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out"></i> Logout</a>
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                class="fa fa-sign-out"></i> Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
@@ -196,7 +200,8 @@
                 <!-- Logo Section -->
                 <div class="col-lg-2">
                     <div class="header__logo">
-                        <a href="{{ route('homepage')}}"><img src="{{ asset(settings()->logo) }}" alt="Logo" class="img-fluid"></a>
+                        <a href="{{ route('homepage')}}"><img src="{{ asset(settings()->logo) }}" alt="Logo"
+                                class="img-fluid"></a>
                     </div>
                 </div>
 
@@ -206,16 +211,18 @@
                         <ul class="nav ">
                             <li class="nav-item"><a class="nav-link active" href="{{ route('homepage') }}">Home</a></li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link " href="{{ route('shoppage') }}" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                                <a class="nav-link " href="{{ route('shoppage') }}" id="shopDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                                 <ul class="header__menu__dropdown">
                                     @php
                                         $categories = getCategories();
                                     @endphp
                                     @if ($categories->isEmpty())
-                                        <li><a  href="javascript:void(0);">No categories available</a></li>
+                                        <li><a href="javascript:void(0);">No categories available</a></li>
                                     @else
                                         @foreach ($categories as $category)
-                                            <li ><a  href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a></li>
+                                            <li><a href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a>
+                                            </li>
                                         @endforeach
                                     @endif
                                 </ul>
@@ -231,9 +238,13 @@
                 <div class="col-lg-3 d-flex justify-content-end">
                     <div class="header__cart d-flex align-items-center">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i class="fa fa-heart"></i> <span id="wishlist-count">{{ getWishlistCount() }}</span></a></li>
-                            <li class="list-inline-item"><a href="{{ route('cart.show') }}"><i class="fa fa-shopping-bag"></i> <span id="cart-count">{{ $cartCount ?? 0 }}</span>
-                            </a></li>
+                            <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i
+                                        class="fa fa-heart"></i> <span
+                                        id="wishlist-count">{{ getWishlistCount() }}</span></a></li>
+                            <li class="list-inline-item"><a href="{{ route('cart.show') }}"><i
+                                        class="fa fa-shopping-bag"></i> <span
+                                        id="cart-count">{{ $cartCount ?? 0 }}</span>
+                                </a></li>
                         </ul>
                         {{-- <div class="header__cart__price ms-3">Items: <span>$150.00</span></div> --}}
                     </div>
@@ -245,18 +256,22 @@
                         <nav class="d-flex align-items-center">
                             @auth
                                 <div class="user-profile-dropdown me-2">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i> Profile</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i>
+                                        Profile</a>
                                 </div>
                                 <div class="user-profile-dropdown me-2">
-                                    <a href="javascript:void(0);" class="btn btn-link text-dark"><i class="fa fa-user-secret"></i> {{ Auth::user()->name }}</a>
+                                    <a href="javascript:void(0);" class="btn btn-link text-dark"><i
+                                            class="fa fa-user-secret"></i> {{ Auth::user()->name }}</a>
                                 </div>
                             @else
                                 <div class="user-auth-buttons me-2">
-                                    <a href="{{ route('login') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i> Login</a>
+                                    <a href="{{ route('login') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i>
+                                        Login</a>
                                 </div>
                                 @if (Route::has('register'))
                                     <div class="user-auth-buttons">
-                                        <a href="{{ route('register') }}" class="btn btn-link text-dark"><i class="fa fa-user-secret"></i> Register</a>
+                                        <a href="{{ route('register') }}" class="btn btn-link text-dark"><i
+                                                class="fa fa-user-secret"></i> Register</a>
                                     </div>
                                 @endif
                             @endauth
@@ -298,8 +313,8 @@
                                     All Categories
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" name="search" value="{{ Request::get('search') }}"
-                                    id="search" placeholder="What do yo u need?">
+                                <input type="text" name="search" value="{{ Request::get('search') }}" id="search"
+                                    placeholder="What do yo u need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
                         </div>
@@ -319,7 +334,7 @@
     </section>
 
     <script>
-        window.onscroll = function() {
+        window.onscroll = function () {
             stickyHeader();
         };
 
@@ -337,4 +352,3 @@
         }
 
     </script>
-

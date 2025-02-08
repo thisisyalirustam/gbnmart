@@ -360,12 +360,16 @@
                             });
 
                             // Handle shipping status form submission
-$('#shipping-status-form').on('submit', function(event) {
+                            $('#shipping-status-form').on('submit', function(event) {
     event.preventDefault(); // Prevent default form submission
     let formData = $(this).serialize(); // Serialize form data
+
+    // Check if $vendor is null and provide a default coupon value
+    let coupon = "{{ $vendor ? ($vendor->coupon ?? 'null123') : 'null123' }}";
+
     $.ajax({
         type: 'POST',
-        url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' =>$vendor->coupon]) }}", // Correct URL
+        url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' => $vendor ? ($vendor->coupon ?? 'null123') : 'null123']) }}", // Correct URL
         data: formData,
         success: function(response) {
             // Update the message and shipping status
@@ -378,11 +382,15 @@ $('#shipping-status-form').on('submit', function(event) {
 
             setTimeout(function() {
                 $('#message').fadeOut();
-            }, 3000);
+            }, 3000); // Hide the message after 3 seconds
         },
         error: function(xhr) {
+            // Handle errors
             $('#message').removeClass('d-none alert-success').addClass('alert-danger')
-                         .text('Error updating shipping status: ' + xhr.responseJSON.message).fadeIn();
+                         .text('An error occurred while updating the shipping status.').fadeIn();
+            setTimeout(function() {
+                $('#message').fadeOut();
+            }, 3000); // Hide the message after 3 seconds
         }
     });
 });

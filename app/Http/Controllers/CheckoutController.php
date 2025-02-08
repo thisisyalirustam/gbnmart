@@ -171,6 +171,7 @@ class CheckoutController extends Controller
                 ]);
             }
         }
+        $discount= 0;
 
         if($request->coupon_code){
             $discount=$request->discount;
@@ -291,6 +292,7 @@ public function getShippingCharge(Request $request)
             $totalShippingCharge += 10;
         }
     }
+    $coupon=0;                 
     if (session()->has('code')) {
         $code = session()->get('code');
         $discount = ($code->percentage / 100) * $subtotal;
