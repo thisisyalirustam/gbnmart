@@ -1,9 +1,6 @@
 @extends('website.layout.content')
 @section('webcontent')
-    <!-- Hero Section Begin -->
-    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <!-- Custom CSS -->
-
+   
     @php
         $banners = getbanners();
     @endphp

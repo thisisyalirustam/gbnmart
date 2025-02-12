@@ -92,16 +92,9 @@ class OrderController extends Controller
                 $item->product->images = $images[0] ?? 'default-image.jpg';
             }
             $coupon=$ordershow->coupon_code;
-            if($coupon!='null'){
-                $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
-                return view('admin.pages.orders.ordersDetails', compact('ordershow','vendor'));
-            }else{
-                $coupon= 0;
-                return view('admin.pages.orders.ordersDetails', compact('ordershow','vendor','coupon'));
-            }
+            $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
 
-           
-           
+            return view('admin.pages.orders.ordersDetails', compact('ordershow','vendor'));
 
     }
 

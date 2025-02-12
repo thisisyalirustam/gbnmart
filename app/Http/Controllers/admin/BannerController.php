@@ -19,10 +19,10 @@ class BannerController extends Controller
     {
         //
         $products = Banner::with(['product_cat', 'product_sub_category', 'product_brand'])->get();
-    $categories = ProductCat::all();
-    $subcategories = ProductSubCategory::all();
-    $brands = ProductBrand::all();
-        return view('admin.pages.settings.banner',compact('products', 'categories', 'subcategories', 'brands'));
+        $categories = ProductCat::all();
+        $subcategories = ProductSubCategory::all();
+        $brands = ProductBrand::all();
+        return view('admin.pages.settings.banner', compact('products', 'categories', 'subcategories', 'brands'));
     }
 
     /**

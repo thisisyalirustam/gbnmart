@@ -103,7 +103,7 @@ $(() => {
                 caption: "Status",
                 alignment: "center",
                 width: 110,
-                cellTemplate: function(container, options) {
+                cellTemplate: function (container, options) {
                     let buttonClass = 'btn-outline-secondary'; // Default class
                     let iconClass = 'bi bi-pencil-square'; // Default icon
                     if (options.data.status === 'active') {
@@ -122,7 +122,7 @@ $(() => {
                     $("<button/>")
                         .addClass(`btn ${buttonClass} btn-sm mx-1`)
                         .html(`<i class="${iconClass}"></i> ${options.data.status}`)
-                        .on("click", function() {
+                        .on("click", function () {
                             showStatusChangeModal(options.data.id, options.data.status);
                         })
                         .appendTo(container);
@@ -134,13 +134,13 @@ $(() => {
                 caption: "Show on Front",
                 width: 80,
                 alignment: "center",
-                cellTemplate: function(container, options) {
+                cellTemplate: function (container, options) {
                     let buttonClass = options.data.sof === 'Yes' ? 'btn-success' : 'btn-danger';
                     let buttonText = options.data.sof === 'Yes' ? '<i class="bi bi-eye-fill"></i> Yes' : '<i class="bi bi-eye-slash-fill"></i> No';
                     $("<button/>")
                         .addClass(`btn ${buttonClass} btn-sm mx-1`)
                         .html(buttonText)
-                        .on("click", function() {
+                        .on("click", function () {
                             showSOFModal(options.data.id, options.data.sof);
                         })
                         .appendTo(container);
@@ -218,42 +218,9 @@ let collapsed = false;
 
 //create record
 $(document).ready(function () {
-    $("#addform").on("submit", function (e) {
-        e.preventDefault();
-
-        const csrfToken = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
-        const formData = new FormData(this);
-
-        $.ajax({
-            url: "/add-user", //route for create
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (response) {
-                if (response.success) {
-                    $("#gridContainer").dxDataGrid("instance").refresh();
-                    $("#add").modal("hide");
-
-                    $("#addform")[0].reset();
-                } else {
-                    alert("Error: " + response.message);
-                }
-            },
-            error: function (response) {
-                console.log("Error:", response);
-            },
-        });
-    });
-    // edn of create data
-
+   
     //update code
-    $("#updateform").on("submit", function (e) {
+    $("#updateProductForm").on("submit", function (e) {
         e.preventDefault();
 
         const csrfToken = document
@@ -264,7 +231,7 @@ $(document).ready(function () {
         formData.append("_method", "PUT"); // Append the _method to override with PUT
 
         $.ajax({
-            url: `/show_product/${id}`, // The resource controller update route
+            url: `/product/${id}`, // The resource controller update route
             type: "POST", // Still use POST, but we include _method=PUT in the form data
             data: formData,
             contentType: false,
@@ -273,19 +240,13 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success: function (response) {
-                if (response.success) {
-                    // Refresh the DataGrid to reflect the updated record
                     $("#gridContainer").dxDataGrid("instance").refresh();
-                    // Hide the modal
                     $("#update").modal("hide");
-                    // Reset the form
                     $("#updateform")[0].reset();
-                } else {
-                    alert("Error: " + response.message);
-                }
             },
             error: function (response) {
                 console.log("Error:", response);
+
             },
         });
     });
@@ -341,7 +302,7 @@ var show = document.getElementById("show");
 show.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
-    fetch(`/show_product/${id}`, {
+    fetch(`/product/${id}`, {
         method: "Get",
         headers: {
             "Content-Type": "application/json",
@@ -349,118 +310,15 @@ show.addEventListener("show.bs.modal", function (event) {
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
-            const user = data.user[0];
-            const modelbody = document.querySelector("#show .modal-body");
-            modelbody.innerHTML = "";
-            modelbody.innerHTML = `
-
-              <div class="row">
-                  <div class="col-xl-4">
-
-                      <div class="card">
-                          <div
-                              class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                              <img src="http://127.0.0.1:8000/uploads/${user.image}"
-                                  alt="Profile" class="rounded-circle"
-                                  style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
-                              <h2>${user.name}</h2>
-                              <h3>Web Designer</h3>
-                              <div class="social-links mt-2">
-                                  <a href="#" class="twitter"><i
-                                          class="bi bi-twitter"></i></a>
-                                  <a href="#" class="facebook"><i
-                                          class="bi bi-facebook"></i></a>
-                                  <a href="#" class="instagram"><i
-                                          class="bi bi-instagram"></i></a>
-                                  <a href="#" class="linkedin"><i
-                                          class="bi bi-linkedin"></i></a>
-                              </div>
-                          </div>
-                      </div>
-
-                  </div>
-
-                  <div class="col-xl-8">
-
-                      <div class="card">
-                          <div class="card-body pt-3">
-                              <div class="tab-content pt-2">
-
-                                  <div class="tab-pane fade show active profile-overview"
-                                      id="profile-overview" role="tabpanel">
-                                      <h5 class="card-title">About</h5>
-                                      <p class="small fst-italic">Sunt est soluta
-                                          temporibus accusantium neque nam
-                                          maiores cumque temporibus. Tempora libero
-                                          non est unde veniam est qui dolor.
-                                          Ut sunt iure rerum quae quisquam autem
-                                          eveniet perspiciatis odit. Fuga sequi
-                                          sed ea saepe at unde.</p>
-
-                                      <h5 class="card-title">Profile Details</h5>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label ">Full
-                                              Name</div>
-                                          <div class="col-lg-9 col-md-8">Kevin
-                                              Anderson</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Company</div>
-                                          <div class="col-lg-9 col-md-8">Lueilwitz,
-                                              Wisoky and Leuschke</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Job
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">Web Designer
-                                          </div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Country</div>
-                                          <div class="col-lg-9 col-md-8">USA</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Address</div>
-                                          <div class="col-lg-9 col-md-8">A108 Adam
-                                              Street, New York, NY 535022</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Phone
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">(436)
-                                              486-3538 x29071</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Email
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">
-                                              k.anderson@example.com</div>
-                                      </div>
-
-                                  </div>
-                              </div><!-- End Bordered Tabs -->
-
-                          </div>
-                      </div>
-
-                  </div>
-              </div>
-
-`;
+            const product = data[0]; // Access the first product in the array
+            document.querySelector("#updateid").value = product.id;
+            document.querySelector("#productName").innerText = product.name;
+            document.querySelector("#discount").innerText = product.discounted_price;
+            document.querySelector("#show_price").innerText = product.price;
+            document.querySelector("#show-quantity").value = product.stock_quantity;
+            document.querySelector("#discription").innerHTML = product.short_description;
         });
-});
+}); 
 //end of show record
 
 //update Record model
@@ -468,8 +326,8 @@ var update = document.getElementById("update");
 update.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
-    fetch(`/show_product/${id}`, {
-        method: "Get",
+    fetch(`/product/${id}`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
@@ -477,12 +335,46 @@ update.addEventListener("show.bs.modal", function (event) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
-            const user = data.user[0];
-            document.querySelector("#updateid").value = user.id;
-            document.querySelector("#updatename").value = user.name;
-            document.querySelector("#updateemail").value = user.email;
-            document.querySelector("#updateuser_type").value = user.user_type;
-            document.querySelector("#imageshow").src = `/uploads/${user.image}`;
+            const product = data[0]; // Access the first product in the array
+
+            // Populate form fields
+            document.querySelector("#updateid").value = product.id;
+            document.querySelector("#updatename").value = product.name;
+            document.querySelector("#sku").value = product.sku;
+            document.querySelector("#p_category").value = product.product_cat_id;
+            document.querySelector("#p_sub_cat").value = product.product_sub_category_id;
+            document.querySelector("#brand").value = product.product_brand_id;
+            document.querySelector("#price").value = product.price;
+            document.querySelector("#discount_price").value = product.discounted_price;
+            document.querySelector("#quantity").value = product.stock_quantity;
+            document.querySelector("#shortDescription").value = product.short_description;
+            document.querySelector("#shortDescriptionEditor").innerHTML = product.short_description;
+            document.querySelector("#description").value = product.description;
+            document.querySelector("#description-editor").innerHTML = product.description;
+            document.querySelector("#shippingInfo").value = product.shipping_info;
+            document.querySelector("#shippingInfoEditor").innerHTML = product.shipping_info;
+            document.querySelector("#weight").value = product.weight;
+            document.querySelector("#p_unit").value = product.unit_id;
+            document.querySelector("#dimensions").value = product.dimensions;
+            document.querySelector("#tags").value = JSON.parse(product.tags).map(tag => tag.value).join(", ");
+            document.querySelector("#colors").value = JSON.parse(product.color_options).join(", ");
+            document.querySelector("#imageshow").src = product.image;
+
+            // Handle image preview (if applicable)                     
+            const imagePreview = document.querySelector("#image-preview");
+            imagePreview.innerHTML = ""; // Clear previous images
+            JSON.parse(product.images).forEach(image => {
+                const img = document.createElement("img");
+                img.src = `/images/products/${image}`;
+                img.classList.add("img-thumbnail");
+                img.style.width = "100px";
+                img.style.height = "100px";
+                img.style.margin = "5px";
+                imagePreview.appendChild(img);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching product details:", error);
         });
 });
 //end update Record model
@@ -497,22 +389,22 @@ deleteModal.addEventListener("show.bs.modal", function (event) {
 // end of delete model
 
 //category and sub categorry  auto load code start
-$(document).ready(function() {
-    $('#p_category').on('change', function() {
+$(document).ready(function () {
+    $('#p_category').on('change', function () {
         var categoryId = $(this).val();
         if (categoryId) {
             $.ajax({
                 url: '/get-subcategories/' + categoryId,  // Ensure this URL matches your route definition
                 type: 'GET',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     $('#p_sub_cat').empty();  // Clear previous subcategories
                     $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Add a default option
-                    $.each(data, function(key, value) {
+                    $.each(data, function (key, value) {
                         $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
                     });
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log("Error: " + error);  // Add error logging
                     console.log(xhr.responseText);   // Debug response from the server
                 }
@@ -523,7 +415,6 @@ $(document).ready(function() {
         }
     });
 });
-//end of category and sub category  auto load endlet selectedProductId;
 function showStatusChangeModal(productId, currentStatus) {
     selectedProductId = productId;
     $('#newStatus').val(currentStatus);
@@ -536,40 +427,95 @@ function showSOFModal(productId, currentSOF) {
     $('#sofModal').modal('show');
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Handle the status form submission
-    $('#statusForm').on('submit', function(e) {
+    $('#statusForm').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
             url: `/product/${selectedProductId}/status`,
             type: "POST",
             data: $(this).serialize(),
-            success: function(response) {
+            success: function (response) {
                 $('#statusModal').modal('hide');
                 $("#gridContainer").dxDataGrid("instance").refresh();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.log("Error updating status:", xhr.responseText);
             }
         });
     });
 
     // Handle the SOF form submission
-    $('#sofForm').on('submit', function(e) {
+    $('#sofForm').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
             url: `/product/${selectedProductId}/sof`,
             type: "POST",
             data: $(this).serialize(),
-            success: function(response) {
+            success: function (response) {
                 $('#sofModal').modal('hide');
                 $("#gridContainer").dxDataGrid("instance").refresh();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.log("Error updating SOF:", xhr.responseText);
             }
         });
     });
 });
 
+$(document).ready(function() {
+    $('#p_category').on('change', function() {
+        var categoryId = $(this).val();  // Get the selected category ID
 
+        if (categoryId) {
+            $.ajax({
+                url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
+                type: 'GET',  // GET request
+                dataType: 'json',  // Expect JSON response
+                success: function(data) {
+                    $('#p_sub_cat').empty();
+                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+                    $.each(data.subcategories, function(key, value) {
+                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                    $('#brand').empty();
+                    $('#brand').append('<option value="">Select Brand</option>');
+                    $.each(data.brands, function(key, value) {
+                        $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error: " + error);
+                    console.log("Response: " + xhr.responseText);
+                }
+            });
+        } else {
+            $('#p_sub_cat').empty();
+            $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+
+            $('#brand').empty();
+            $('#brand').append('<option value="">No Brand Yet</option>');
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    var input = document.querySelector('#tags');
+    var tagify = new Tagify(input, {
+        whitelist: ["iPhone", "MacBook", "Samsung", "PlayStation"],
+        maxTags: 10,
+        dropdown: {
+            maxItems: 20,
+            classname: "tags-look",
+            enabled: 0,
+            closeOnSelect: false
+        }
+    });
+});
+
+toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "timeOut": "3000", // Duration of the toast in milliseconds
+};

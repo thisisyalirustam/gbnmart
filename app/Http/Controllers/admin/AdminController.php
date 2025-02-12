@@ -99,26 +99,25 @@ class AdminController extends Controller
     }
 
     public function updateShippingStatus(Request $request, $id, $coupon = null)
-{
-    $order = Order::findOrFail($id);
-    $order->shipping_status = $request->shipping_status;
-    $order->save();
-    $sub_total = $order->subtotal;
-    $bonnes = 0;
-
-    if ($request->shipping_status == 'Complete') {
-        if ($coupon) {
-            $vendor = Affiliate::where('coupon', $coupon)->first();
-            $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-            $vendor->sales = $vendor->sales + 1;
-            $vendor->amount = $vendor->amount+$bonnes;
-            $vendor->save();
+    {
+        $order = Order::findOrFail($id);
+        $order->shipping_status = $request->shipping_status;
+        $order->save();
+        $sub_total = $order->subtotal;
+        $bonnes = 0;
+        if ($request->shipping_status == 'Complete') {
+            if ($coupon) {
+                $vendor = Affiliate::where('coupon', $coupon)->first();
+                $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+                $vendor->sales = $vendor->sales + 1;
+                $vendor->amount = $vendor->amount + $bonnes;
+                $vendor->save();
+            }
         }
+
+
+        return redirect()->back()->with('success', 'Delivery date updated successfully!');
     }
-
-
-    return redirect()->back()->with('success', 'Delivery date updated successfully!');
-}
 
 
     public function sendInvoice($orderId)
@@ -191,66 +190,66 @@ class AdminController extends Controller
         return response()->json($cities);
     }
 
-   public function affiliateget(){
-    return view('admin.pages.affiliate.dashboard');
-   }
-   public function activeMarketers(){
-    $affiliate=Affiliate::with('user')->get();
-    return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
-   }
+    public function affiliateget()
+    {
+        return view('admin.pages.affiliate.dashboard');
+    }
+    public function activeMarketers()
+    {
+        $affiliate = Affiliate::with('user')->get();
+        return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
+    }
 
 
-   public function approveAffiliate(Request $request)
-   {
-       // Validate incoming data
-       $validated = $request->validate([
-           'affiliate_id' => 'required|exists:affiliates,id',
-           'coupon_code' => 'nullable|string', // Make it nullable if it's optional
-           'percentage' => 'required|numeric|min:0|max:100', // Validate percentage
-           'vendor_percentage' => 'required|numeric|min:0|max:100', // Validate percentage
-       ]);
+    public function approveAffiliate(Request $request)
+    {
+        // Validate incoming data
+        $validated = $request->validate([
+            'affiliate_id' => 'required|exists:affiliates,id',
+            'coupon_code' => 'nullable|string', // Make it nullable if it's optional
+            'percentage' => 'required|numeric|min:0|max:100', // Validate percentage
+            'vendor_percentage' => 'required|numeric|min:0|max:100', // Validate percentage
+        ]);
 
-       // Find the affiliate
-       $affiliate = Affiliate::find($validated['affiliate_id']);
-       if (!$affiliate) {
-           return response()->json(['success' => false, 'message' => 'Affiliate not found']);
-       }
+        // Find the affiliate
+        $affiliate = Affiliate::find($validated['affiliate_id']);
+        if (!$affiliate) {
+            return response()->json(['success' => false, 'message' => 'Affiliate not found']);
+        }
 
-       // Update the affiliate details
-       $affiliate->status = 1; // Set status to Active
-       $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
-       $affiliate->percentage = $validated['percentage']; // Assign percentage
-       $affiliate->vendor_percentage = $validated['vendor_percentage']; // Assign vendor percentage
-       $affiliate->save();
+        // Update the affiliate details
+        $affiliate->status = 1; // Set status to Active
+        $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
+        $affiliate->percentage = $validated['percentage']; // Assign percentage
+        $affiliate->vendor_percentage = $validated['vendor_percentage']; // Assign vendor percentage
+        $affiliate->save();
 
-       return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
-   }
-
-
+        return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
+    }
 
 
 
-// Controller Method for Sending Funds
-public function sendFunds(Request $request)
-{
-  $validated = $request->validate([
-    'affiliate_id' => 'required|exists:affiliates,id',
-    'send_amount' => 'required|numeric|min:1',
-  ]);
-
-  $affiliate = Affiliate::findOrFail($request->affiliate_id);
-
-  if ($affiliate->amount < $request->send_amount) {
-    return response()->json(['success' => false, 'message' => 'Insufficient funds.']);
-  }
-
-  // Subtract the send amount from the affiliate's total amount
-  $affiliate->amount -= $request->send_amount;
-  $affiliate->withdrawal += $request->send_amount;
-  $affiliate->save();
-
-  return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
-}
 
 
+    // Controller Method for Sending Funds
+    public function sendFunds(Request $request)
+    {
+        $validated = $request->validate([
+            'affiliate_id' => 'required|exists:affiliates,id',
+            'send_amount' => 'required|numeric|min:1',
+        ]);
+
+        $affiliate = Affiliate::findOrFail($request->affiliate_id);
+
+        if ($affiliate->amount < $request->send_amount) {
+            return response()->json(['success' => false, 'message' => 'Insufficient funds.']);
+        }
+
+        // Subtract the send amount from the affiliate's total amount
+        $affiliate->amount -= $request->send_amount;
+        $affiliate->withdrawal += $request->send_amount;
+        $affiliate->save();
+
+        return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
+    }
 }

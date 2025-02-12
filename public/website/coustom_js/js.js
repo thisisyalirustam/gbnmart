@@ -15,13 +15,11 @@ $(document).ready(function () {
 });
 document.querySelectorAll('.slider-left').forEach(button => {
     button.onclick = function () {
-        // Logic to slide to the previous image
     };
 });
 
 document.querySelectorAll('.slider-right').forEach(button => {
     button.onclick = function () {
-        // Logic to slide to the next image
     };
 });
 
@@ -31,9 +29,7 @@ $.ajaxSetup({
     }
 });
 document.addEventListener('DOMContentLoaded', function () {
-    // Select all Add to Cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent page refresh
@@ -63,14 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Select all Add to Cart buttons
     const addToCartButtons = document.querySelectorAll('.addToWishlistButton');
-
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Prevent page refresh
             const productId = this.getAttribute('data-product-id');
-            // Perform the AJAX request
             fetch('/wishlist-add', {
                 method: 'POST',
                 headers: {

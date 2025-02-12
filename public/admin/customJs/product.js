@@ -45,45 +45,7 @@ function addColor() {
 }
 
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     var quillDescription = new Quill('#description-editor', {
-//         theme: 'snow',
-//         placeholder: 'Enter product description...',
-//         modules: {
-//             toolbar: [
-//                 [{ header: [1, 2, 3, false] }],
-//                 ['bold', 'italic', 'underline'],
-//                 [{ list: 'ordered'}, { list: 'bullet' }],
-//                 ['link', 'image', 'video']
-//             ]
-//         }
-//     });
 
-//     var quillShortDescription = new Quill('#shortDescriptionEditor', {
-//         theme: 'snow',
-//         placeholder: 'Enter short product description...',
-//         modules: {
-//             toolbar: [
-//                 [{ header: [1, 2, 3, false] }],
-//                 ['bold', 'italic', 'underline'],
-//                 [{ list: 'ordered'}, { list: 'bullet' }],
-//                 ['link', 'image', 'video']
-//             ]
-//         }
-//     });
-
-//     var quillShippingInfo = new Quill('#shippingInfoEditor', {
-//         theme: 'snow',
-//         placeholder: 'Enter shipping information...',
-//         modules: {
-//             toolbar: [
-//                 [{ header: [1, 2, 3, false] }],
-//                 ['bold', 'italic', 'underline'],
-//                 [{ list: 'ordered'}, { list: 'bullet' }],
-//                 ['link', 'image', 'video']
-//             ]
-//         }
-//     });
 
     let quillDescription, quillShortDescription, quillShippingInfo;
 

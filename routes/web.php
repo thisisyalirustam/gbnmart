@@ -89,13 +89,8 @@ Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::clas
 Route::post('/customer-orders/{id}/{coupon}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
 
 });
-
 Route::middleware(['auth','verified'])->group(function () {
-    Route::get('/supplier-Dashboard', [SuplairController::class, 'index'])->name('supplier.auth');
-
-
-
-
+Route::get('/supplier-Dashboard', [SuplairController::class, 'index'])->name('supplier.auth');
 });
 
 require __DIR__.'/auth.php';

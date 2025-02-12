@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
+use App\Models\Unit;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -20,7 +22,11 @@ class ProductController extends Controller
     {
 
         $products = Product::all();
-        return view('admin.pages.products.product', compact('products'));
+        $categories= ProductCat::all();
+        $brands= ProductBrand::all();
+        $subcategories= ProductSubCategory::all();
+        $units = Unit::all();
+        return view('admin.pages.products.product', compact('products','categories','brands','subcategories','units'));
     }
 
     /**
@@ -28,6 +34,7 @@ class ProductController extends Controller
      */
     public function create()
     {
+        
         return view('admin.products.create');
     }
 
@@ -97,7 +104,20 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.products.show', compact('product'));
+        $products = Product::with('product_cat', 'product_sub_category', 'product_brand', 'user')
+            ->where('id', $id)
+            ->get()
+            ->map(function ($product) {
+                if ($product->images) {
+                    $images = json_decode($product->images, true);
+                    if (is_array($images) && count($images) > 0) {
+                        $product->image = url('images/products/' . basename($images[0]));
+                    }
+                }
+                return $product;
+            });
+    
+        return response()->json($products);
     }
 
     /**
@@ -106,7 +126,20 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.products.edit', compact('product'));
+        $products = Product::with('product_cat', 'product_sub_category', 'product_brand', 'user')
+            ->where('id', $id)
+            ->get()
+            ->map(function ($product) {
+                if ($product->images) {
+                    $images = json_decode($product->images, true);
+                    if (is_array($images) && count($images) > 0) {
+                        $product->image = url('images/products/' . basename($images[0]));
+                    }
+                }
+                return $product;
+            });
+    
+        return response()->json($products);
     }
 
     /**
@@ -114,39 +147,65 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'sku' => 'required|string|unique:products,sku,' . $id,
-            'price' => 'required|numeric',
-            'product_category' => 'required|integer',
-            'sub_category' => 'required|integer',
-            'quantity' => 'required|integer',
-            'description' => 'required|string',
-            'weight' => 'required|numeric',
-            'dimensions' => 'required|string',
-        ]);
-
-        $product = Product::findOrFail($id);
-
-        // Update the product
-        $product->update([
-            'name' => $request->name,
-            'sku' => $request->sku,
-            'price' => $request->price,
-            'discounted_price' => $request->discount_price,
-            'stock_quantity' => $request->quantity,
-            'product_cat_id' => $request->product_category,
-            'product_sub_category_id' => $request->sub_category,
-            'description' => $request->description,
-            'weight' => $request->weight,
-            'status' => $request->status,
-            'sof' => $request->sof,
-            'colors' => json_encode($request->input('colors')),
-            'images' => $this->uploadImages($request),
-        ]);
-
-        return redirect()->route('product.index')->with('success', 'Product updated successfully.');
-    }
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'sku' => 'required|string|unique:products',
+        //     'price' => 'required|numeric',
+        //     'product_category' => 'required|integer',
+        //     'sub_category' => 'required|integer',
+        //     'quantity' => 'required|integer',
+        //     'description' => 'required|string',
+        //     'weight' => 'required|numeric',
+        //     'dimensions' => 'required|string',
+        //     'images' => 'required', // Required images field
+        //     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Each image must follow this rule
+        //    ]);
+    
+        
+                // Find the product by ID
+                $product = Product::findOrFail($id);
+        
+                // Update product fields
+                $product->name = $request->input('name');
+                $product->sku = $request->input('sku');
+                $product->product_cat_id = $request->input('product_category');
+                $product->product_sub_category_id = $request->input('sub_category');
+                $product->product_brand_id = $request->input('brand_id');
+                $product->price = $request->input('price');
+                $product->discounted_price = $request->input('discount_price');
+                $product->stock_quantity = $request->input('stock_quantity');
+                $product->short_description = $request->input('short_description');
+                $product->description = $request->input('description');
+                $product->shipping_info = $request->input('shipping_info');
+                $product->weight = $request->input('weight');
+                $product->unit_id = $request->input('unit_id');
+                $product->dimensions = $request->input('dimensions');
+                $product->tags = $request->input('tags');
+                $product->color_options = $request->input('colors');
+        
+                // Handle image uploads (if new images are provided)
+                if ($request->hasFile('images')) {
+                    $images = [];
+                    foreach ($request->file('images') as $image) {
+                        $imageName = time() . '_' . $image->getClientOriginalName();
+                        $image->move(public_path('images/products'), $imageName);
+                        $images[] = $imageName;
+                    }
+                    $product->images = json_encode($images);
+                }
+        
+                // Save the updated product
+                $product->save();
+        
+                // Return success response
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Product updated successfully',
+                    'data' => $product,
+                ], 200);
+            }
+        
+    
 
     /**
      * Remove the specified product from storage.
