@@ -323,7 +323,7 @@
             <p><strong>Description:</strong> <span id="discription">Lorem ipsum dolor sit amet, consectetur adipiscing elit.<span></p>
             <p><strong>Price:</strong> <span class="text-decoration-line-through text-danger" id="discount">€100.00</span> <strong class="text-success" id="show_price">€80.00</strong></p>
             <p><strong>Quantity:</strong> 
-              <input type="number" id="quantity" value="1" min="1" max="10" class="form-control" style="width: 100px; display: inline-block;">
+              <input type="number" id="show-quantity" value="1" min="1" max="10" class="form-control" style="width: 100px; display: inline-block;">
             </p>
             <p><strong>Weight:</strong> 500g</p>
           </div>

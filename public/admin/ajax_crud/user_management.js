@@ -253,7 +253,6 @@ show.addEventListener("show.bs.modal", function (event) {
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             const user = data.user[0];
             const modelbody = document.querySelector("#show .modal-body");
             modelbody.innerHTML = "";
