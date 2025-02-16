@@ -9,6 +9,7 @@ use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
 use App\Models\Unit;
 use Dotenv\Validator;
+use Faker\Core\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -93,8 +94,8 @@ class ProductController extends Controller
     // Handle multiple image uploads and store as JSON in the database
     $product->images = $this->uploadImages($request); // JSON array of image names
     $product->save();
-
-    return redirect()->route('product.index')->with('success', 'Product added successfully.');
+    
+    return response()->json(['success'=>true, 'message'=>'Product Added Successfully']);
 }
 
 
@@ -198,11 +199,7 @@ class ProductController extends Controller
                 $product->save();
         
                 // Return success response
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Product updated successfully',
-                    'data' => $product,
-                ], 200);
+                return response()->json(['success' => true, 'message' => 'User updated successfully']);
             }
         
     
@@ -212,8 +209,27 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        Product::destroy($id);
-        return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
+        $product = Product::findOrFail($id);
+
+    // Get the associated images from the product (assuming they are stored as a JSON array in the 'images' column)
+    $images = json_decode($product->images, true);
+
+    // Check if images exist and delete them from the storage
+    if ($images && is_array($images)) {
+        foreach ($images as $image) {
+            $imagePath = public_path('images/products/' . $image); // Get the full path to the image file
+            
+            // Check if the image exists and delete it using PHP's unlink
+            if (file_exists($imagePath)) {
+                unlink($imagePath); // Delete the file
+            }
+        }
+    }
+
+    // Delete the product from the database
+    $product->delete();
+
+    return response()->json(['success'=>true ,'message'=>'Product Delete Successfully.']);
     }
 
     /**

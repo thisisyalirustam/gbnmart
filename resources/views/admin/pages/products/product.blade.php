@@ -18,7 +18,43 @@
 
 
         }
+        .image-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.image-preview {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
+}
+.image-preview img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.add-image-btn {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.add-image-btn:hover {
+    background-color: #45a049;
+}
+.add-image-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
     </style>
+    
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -40,78 +76,13 @@
     {{--    --}}
 
 <!-- Update Modal -->
-{{-- <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Update User</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-
-              <form id="updateform">
-
-                @csrf
-                <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
-                <input type="hidden" id="updateid" name="id" value="">
-                  <div class="row mb-3">
-                      <label for="inputText" class="col-sm-2 col-form-label">Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" name="name" id="updatename" class="form-control">
-                      </div>
-                  </div>
-                  <div class="row mb-3">
-                      <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                      <div class="col-sm-10">
-                          <input type="email" name="email" id="updateemail" class="form-control">
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="inputNumber" class="col-sm-2 col-form-label">User Type</label>
-                      <div class="col-sm-10">
-                          <select id="updateuser_type" name="user_type" class="form-select">
-                              <option value="buyer">buyer</option>
-                              <option value="supplier">Supplier</option>
-                              <option value="admin">Admin</option>
-                          </select>
-                      </div>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label for="inputNumber" class="col-sm-2 col-form-label">Profile Upload</label>
-                      <div class="col-sm-10">
-                          <input class="form-control" name="image" type="file" id="updateimage">
-                      </div>
-                  </div>
-                 <div class="row mb-3">
-                      <label for="inputNumber" class="col-sm-2 col-form-label">Profile</label>
-
-                      <label for="inputNumber" class="col-sm-3 col-form-label">
-                        <img src="" id="imageshow" height="200"  width="150" alt="" >
-                      </label>
-                  </div>
-
-                  <div class="row mb-3">
-                      <label class="col-sm-2 col-form-label">Submit Button</label>
-                      <div class="col-sm-10">
-                          <button type="submit" class="btn btn-primary">Submit Form</button>
-                      </div>
-                  </div>
-
-              </form>
-          </div>
-      </div>
-  </div>
-</div> --}}
-
 
  <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close update-model" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
             
@@ -357,7 +328,7 @@
                 <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
                 <input type="hidden" id="deleteid" name="id" value="">
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary delet-model" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger delete-btn">Delete</button>
                 </div>
             </form>

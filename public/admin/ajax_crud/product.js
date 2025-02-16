@@ -220,16 +220,49 @@ let collapsed = false;
 $(document).ready(function () {
    
     //update code
+    // $("#updateProductForm").on("submit", function (e) {
+    //     e.preventDefault();
+
+    //     const csrfToken = document
+    //         .querySelector('meta[name="csrf-token"]')
+    //         .getAttribute("content");
+    //     const id = document.querySelector("#updateid").value;
+    //     const formData = new FormData(this);
+    //     formData.append("_method", "PUT"); // Append the _method to override with PUT
+    //     $.ajax({
+    //         url: `/product/${id}`, // The resource controller update route
+    //         type: "POST", // Still use POST, but we include _method=PUT in the form data
+    //         data: formData,
+    //         contentType: false,
+    //         processData: false,
+    //         headers: {
+    //             "X-CSRF-TOKEN": csrfToken,
+    //         },
+    //         success: function (response) {
+    //             if (response.success) {
+    //                 // Refresh the DataGrid to reflect the updated record
+    //                 $("#gridContainer").dxDataGrid("instance").refresh();
+    //                 $("#update").modal("hide");
+    //                 $("#updateProductForm")[0].reset();
+    //             } else {
+    //                 alert("Error: " + response.message);
+    //             }
+    //         },
+    //         error: function (response) {
+    //             console.log("Error:", response);
+    //         },
+    //     });
+    // });
     $("#updateProductForm").on("submit", function (e) {
         e.preventDefault();
-
+    
         const csrfToken = document
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content");
         const id = document.querySelector("#updateid").value;
         const formData = new FormData(this);
         formData.append("_method", "PUT"); // Append the _method to override with PUT
-
+    
         $.ajax({
             url: `/product/${id}`, // The resource controller update route
             type: "POST", // Still use POST, but we include _method=PUT in the form data
@@ -240,13 +273,28 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success: function (response) {
-                    $("#gridContainer").dxDataGrid("instance").refresh();
-                    $("#update").modal("hide");
-                    $("#updateform")[0].reset();
+                
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                $(".btn-close").click();
+                $("#updateProductForm")[0].reset();
+                // Show success toast notification
+                toastr.success("Product updated successfully!", "Success", {
+                    closeButton: true,
+                    progressBar: true,
+                    positionClass: "toast-top-right",
+                    timeOut: 3000,
+                });
             },
             error: function (response) {
                 console.log("Error:", response);
-
+    
+                // Show error toast notification
+                toastr.error("An error occurred while updating the product.", "Error", {
+                    closeButton: true,
+                    progressBar: true,
+                    positionClass: "toast-top-right",
+                    timeOut: 3000,
+                });
             },
         });
     });
@@ -264,7 +312,7 @@ $(document).ready(function () {
         formData.append("_method", "DELETE"); // Method override for DELETE
 
         $.ajax({
-            url: `/show_product/${id}`,
+            url: `/product/${id}`,
             type: "POST",
             data: formData,
             contentType: false,
@@ -277,9 +325,10 @@ $(document).ready(function () {
                     // Refresh the DataGrid to reflect the deleted record
                     $("#gridContainer").dxDataGrid("instance").refresh();
                     // Hide the modal
-                    $("#delete").modal("hide");
+                    $(".delet-model").click();
                     // Reset the form
                     $("#deleteForm")[0].reset();
+                    toastr.success(response.message);
                 } else {
                     alert("Error: " + response.message);
                 }
@@ -389,32 +438,32 @@ deleteModal.addEventListener("show.bs.modal", function (event) {
 // end of delete model
 
 //category and sub categorry  auto load code start
-$(document).ready(function () {
-    $('#p_category').on('change', function () {
-        var categoryId = $(this).val();
-        if (categoryId) {
-            $.ajax({
-                url: '/get-subcategories/' + categoryId,  // Ensure this URL matches your route definition
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    $('#p_sub_cat').empty();  // Clear previous subcategories
-                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Add a default option
-                    $.each(data, function (key, value) {
-                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error: " + error);  // Add error logging
-                    console.log(xhr.responseText);   // Debug response from the server
-                }
-            });
-        } else {
-            $('#p_sub_cat').empty();
-            $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Reset if no category is selected
-        }
-    });
-});
+// $(document).ready(function () {
+//     $('#p_category').on('change', function () {
+//         var categoryId = $(this).val();
+//         if (categoryId) {
+//             $.ajax({
+//                 url: '/get-subcategories/' + categoryId,  // Ensure this URL matches your route definition
+//                 type: 'GET',
+//                 dataType: 'json',
+//                 success: function (data) {
+//                     $('#p_sub_cat').empty();  // Clear previous subcategories
+//                     $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Add a default option
+//                     $.each(data, function (key, value) {
+//                         $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+//                     });
+//                 },
+//                 error: function (xhr, status, error) {
+//                     console.log("Error: " + error);  // Add error logging
+//                     console.log(xhr.responseText);   // Debug response from the server
+//                 }
+//             });
+//         } else {
+//             $('#p_sub_cat').empty();
+//             $('#p_sub_cat').append('<option value="">Select Sub Category</option>'); // Reset if no category is selected
+//         }
+//     });
+// });
 function showStatusChangeModal(productId, currentStatus) {
     selectedProductId = productId;
     $('#newStatus').val(currentStatus);

@@ -219,7 +219,7 @@
                         contentType: false,
                         processData: false,
                         success: function(response) {
-                            alert('Product saved successfully!');
+                            toastr.success(response.message);
                             window.location.href =
                                 "{{ route('product.index') }}"; // Redirect to index
                         },
@@ -229,6 +229,40 @@
                         }
                     });
                 });
+
+                $('#p_category').on('change', function() {
+        var categoryId = $(this).val();  // Get the selected category ID
+
+        if (categoryId) {
+            $.ajax({
+                url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
+                type: 'GET',  // GET request
+                dataType: 'json',  // Expect JSON response
+                success: function(data) {
+                    $('#p_sub_cat').empty();
+                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+                    $.each(data.subcategories, function(key, value) {
+                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                    $('#brand').empty();
+                    $('#brand').append('<option value="">Select Brand</option>');
+                    $.each(data.brands, function(key, value) {
+                        $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error: " + error);
+                    console.log("Response: " + xhr.responseText);
+                }
+            });
+        } else {
+            $('#p_sub_cat').empty();
+            $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+
+            $('#brand').empty();
+            $('#brand').append('<option value="">No Brand Yet</option>');
+        }
+    });
 
             });
         </script>
