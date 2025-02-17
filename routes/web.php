@@ -56,6 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/show_product_brand',[AdminController::class,'product_brand'])->name('p_brand');
 
     Route::resource('/product',ProductController::class);
+    Route::post('/product/{id}/delete-image', [ProductController::class, 'deleteImage'])->name('product.deleteImage');
     Route::get('/show_product',[AdminController::class,'product'])->name('product');
     Route::get('/create_product',[AdminMainController::class,'product_add'])->name('product_create');
     Route::get('/get-subcategories-brands/{categoryId}', [AdminMainController::class, 'getSubcategoriesAndBrands'])->name('getSubcategoriesAndBrands');

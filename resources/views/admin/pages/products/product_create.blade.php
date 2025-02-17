@@ -172,7 +172,7 @@
                                     <input type="hidden" name="colors[]" id="colors">
                                 </div>
 
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="images" class="form-label">Product Images <span
                                             class="text-danger">*</span></label>
                                     <div id="image-upload-container" class="image-upload-container">
@@ -184,9 +184,111 @@
                                         <input type="file" id="images" name="images[]" class="form-control d-none"
                                             accept="image/*" multiple onchange="handleImageFiles(this.files);">
                                     </div>
-                                </div>
+                                </div> --}}
+                                <style>
+                                    .upload-area {
+                                        background-color: #f8f9fa;
+                                        border-radius: 8px;
+                                        cursor: pointer;
+                                        transition: background-color 0.3s ease;
+                                    }
+                                
+                                    .upload-area:hover {
+                                        background-color: #e9ecef;
+                                    }
+                                
+                                    .image-container {
+                                        position: relative;
+                                        display: inline-block;
+                                    }
+                                
+                                    .image-container img {
+                                        border: 1px solid #ddd;
+                                        padding: 5px;
+                                        background-color: #fff;
+                                    }
+                                
+                                    .image-container button {
+                                        opacity: 0.8;
+                                        transition: opacity 0.3s ease;
+                                    }
+                                
+                                    .image-container button:hover {
+                                        opacity: 1;
+                                    }
+                                </style>
+
+                                <div class="form-group">
+            <label for="images">Product Images (Max 7 images)</label>
+            <div class="upload-area border p-3 text-center">
+                <input type="file" name="images[]" id="images" class="d-none" multiple accept="image/*" max="7">
+                <label for="images" class="btn btn-outline-primary">
+                    <i class="fas fa-upload"></i> Choose Images
+                </label>
+                <small class="form-text text-muted">You can upload up to 7 images.</small>
+            </div>
+            <div id="image-preview" class="row mt-3"></div>
+        </div>
+                                
                             </div>
                         </div>
+                        <script>
+                            document.getElementById('images').addEventListener('change', function(event) {
+                                const previewContainer = document.getElementById('image-preview');
+                                previewContainer.innerHTML = ''; // Clear previous previews
+                        
+                                const files = event.target.files;
+                        
+                                if (files.length > 7) {
+                                    alert('You can only upload up to 7 images.');
+                                    this.value = ''; // Clear the selected files
+                                    return;
+                                }
+                        
+                                for (let i = 0; i < files.length; i++) {
+                                    const file = files[i];
+                                    const reader = new FileReader();
+                        
+                                    reader.onload = function(e) {
+                                        const col = document.createElement('div');
+                                        col.className = 'col-md-3 mb-3';
+                        
+                                        const imgContainer = document.createElement('div');
+                                        imgContainer.className = 'image-container position-relative';
+                        
+                                        const img = document.createElement('img');
+                                        img.src = e.target.result;
+                                        img.className = 'img-fluid rounded';
+                                        img.style.maxHeight = '150px';
+                        
+                                        const removeBtn = document.createElement('button');
+                                        removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
+                                        removeBtn.innerHTML = '&times;';
+                                        removeBtn.onclick = function() {
+                                            col.remove();
+                                            updateFileInput(files, file);
+                                        };
+                        
+                                        imgContainer.appendChild(img);
+                                        imgContainer.appendChild(removeBtn);
+                                        col.appendChild(imgContainer);
+                                        previewContainer.appendChild(col);
+                                    };
+                        
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        
+                            function updateFileInput(allFiles, fileToRemove) {
+                                const dataTransfer = new DataTransfer();
+                                for (let i = 0; i < allFiles.length; i++) {
+                                    if (allFiles[i] !== fileToRemove) {
+                                        dataTransfer.items.add(allFiles[i]);
+                                    }
+                                }
+                                document.getElementById('images').files = dataTransfer.files;
+                            }
+                        </script>
 
                         <!-- Submit Button -->
                         <div class="row">
@@ -229,40 +331,45 @@
                         }
                     });
                 });
+                
 
                 $('#p_category').on('change', function() {
-        var categoryId = $(this).val();  // Get the selected category ID
+                    var categoryId = $(this).val(); // Get the selected category ID
 
-        if (categoryId) {
-            $.ajax({
-                url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
-                type: 'GET',  // GET request
-                dataType: 'json',  // Expect JSON response
-                success: function(data) {
-                    $('#p_sub_cat').empty();
-                    $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
-                    $.each(data.subcategories, function(key, value) {
-                        $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    $('#brand').empty();
-                    $('#brand').append('<option value="">Select Brand</option>');
-                    $.each(data.brands, function(key, value) {
-                        $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log("Error: " + error);
-                    console.log("Response: " + xhr.responseText);
-                }
-            });
-        } else {
-            $('#p_sub_cat').empty();
-            $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
+                    if (categoryId) {
+                        $.ajax({
+                            url: '/get-subcategories-brands/' +
+                            categoryId, // URL to fetch subcategories and brands
+                            type: 'GET', // GET request
+                            dataType: 'json', // Expect JSON response
+                            success: function(data) {
+                                $('#p_sub_cat').empty();
+                                $('#p_sub_cat').append(
+                                    '<option value="">Select Sub Category</option>');
+                                $.each(data.subcategories, function(key, value) {
+                                    $('#p_sub_cat').append('<option value="' + value.id +
+                                        '">' + value.name + '</option>');
+                                });
+                                $('#brand').empty();
+                                $('#brand').append('<option value="">Select Brand</option>');
+                                $.each(data.brands, function(key, value) {
+                                    $('#brand').append('<option value="' + value.id + '">' +
+                                        value.name + '</option>');
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.log("Error: " + error);
+                                console.log("Response: " + xhr.responseText);
+                            }
+                        });
+                    } else {
+                        $('#p_sub_cat').empty();
+                        $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
 
-            $('#brand').empty();
-            $('#brand').append('<option value="">No Brand Yet</option>');
-        }
-    });
+                        $('#brand').empty();
+                        $('#brand').append('<option value="">No Brand Yet</option>');
+                    }
+                });
 
             });
         </script>

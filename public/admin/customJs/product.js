@@ -119,3 +119,30 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(tagify.value.map(item => item.value));  // Log or process the array of tags
     });
 });
+
+removeBtn.onclick = function () {
+    imgContainer.remove();
+
+    // Send AJAX request to delete the image from database and public folder
+    fetch(`/product/${id}/remove-image`, {  // Update with the custom route
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Ensure CSRF token is sent
+        },
+        body: JSON.stringify({
+            image: image // Image name to delete
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log("Image removed successfully");
+        } else {
+            console.error("Failed to remove image");
+        }
+    })
+    .catch(error => {
+        console.error("Error removing image:", error);
+    });
+};

@@ -218,7 +218,7 @@ let collapsed = false;
 
 //create record
 $(document).ready(function () {
-   
+
     //update code
     // $("#updateProductForm").on("submit", function (e) {
     //     e.preventDefault();
@@ -255,14 +255,14 @@ $(document).ready(function () {
     // });
     $("#updateProductForm").on("submit", function (e) {
         e.preventDefault();
-    
+
         const csrfToken = document
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content");
         const id = document.querySelector("#updateid").value;
         const formData = new FormData(this);
         formData.append("_method", "PUT"); // Append the _method to override with PUT
-    
+
         $.ajax({
             url: `/product/${id}`, // The resource controller update route
             type: "POST", // Still use POST, but we include _method=PUT in the form data
@@ -273,7 +273,7 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success: function (response) {
-                
+
                 $("#gridContainer").dxDataGrid("instance").refresh();
                 $(".btn-close").click();
                 $("#updateProductForm")[0].reset();
@@ -287,7 +287,7 @@ $(document).ready(function () {
             },
             error: function (response) {
                 console.log("Error:", response);
-    
+
                 // Show error toast notification
                 toastr.error("An error occurred while updating the product.", "Error", {
                     closeButton: true,
@@ -367,14 +367,17 @@ show.addEventListener("show.bs.modal", function (event) {
             document.querySelector("#show-quantity").value = product.stock_quantity;
             document.querySelector("#discription").innerHTML = product.short_description;
         });
-}); 
+});
 //end of show record
 
 //update Record model
-var update = document.getElementById("update");
+// var update = document.getElementById("update");
+
 update.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
+
+    // Fetch product details
     fetch(`/product/${id}`, {
         method: "GET",
         headers: {
@@ -384,6 +387,12 @@ update.addEventListener("show.bs.modal", function (event) {
         .then((response) => response.json())
         .then((data) => {
             console.log(data);
+
+            if (data.length === 0) {
+                console.error("No product data found.");
+                return;
+            }
+
             const product = data[0]; // Access the first product in the array
 
             // Populate form fields
@@ -405,22 +414,80 @@ update.addEventListener("show.bs.modal", function (event) {
             document.querySelector("#weight").value = product.weight;
             document.querySelector("#p_unit").value = product.unit_id;
             document.querySelector("#dimensions").value = product.dimensions;
-            document.querySelector("#tags").value = JSON.parse(product.tags).map(tag => tag.value).join(", ");
-            document.querySelector("#colors").value = JSON.parse(product.color_options).join(", ");
-            document.querySelector("#imageshow").src = product.image;
 
-            // Handle image preview (if applicable)                     
+            try {
+                const tags = JSON.parse(product.tags || "[]");
+                document.querySelector("#tags").value = tags.map(tag => tag.value).join(", ");
+            } catch (error) {
+                console.error("Error parsing tags:", error);
+                document.querySelector("#tags").value = "";
+            }
+
+            try {
+                const colors = JSON.parse(product.color_options || "[]");
+                document.querySelector("#colors").value = colors.join(", ");
+            } catch (error) {
+                console.error("Error parsing color options:", error);
+                document.querySelector("#colors").value = "";
+            }
+
             const imagePreview = document.querySelector("#image-preview");
             imagePreview.innerHTML = ""; // Clear previous images
-            JSON.parse(product.images).forEach(image => {
-                const img = document.createElement("img");
-                img.src = `/images/products/${image}`;
-                img.classList.add("img-thumbnail");
-                img.style.width = "100px";
-                img.style.height = "100px";
-                img.style.margin = "5px";
-                imagePreview.appendChild(img);
-            });
+
+            try {
+                const images = JSON.parse(product.images || "[]");
+                const imagePreview = document.querySelector("#image-preview");
+                imagePreview.innerHTML = ""; // Clear previous images
+
+                images.forEach(image => {
+                    const imgContainer = document.createElement("div");
+                    imgContainer.classList.add("image-container");
+
+                    const img = document.createElement("img");
+                    img.src = `/images/products/${image}`;
+                    img.classList.add("img-thumbnail");
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.type = "button"; // Ensure it's not a submit button
+                    removeBtn.classList.add("remove-btn");
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.onclick = function (event) {
+                        event.preventDefault(); // Prevent form submission
+
+                        // Send a request to delete the image
+                        fetch(`/product/${product.id}/delete-image`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: JSON.stringify({ image: image }),
+                        })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                if (data.success) {
+                                    imgContainer.remove(); // Remove the image from the UI
+
+                                    // Show a toast notification
+                                    const toast = new bootstrap.Toast(document.getElementById('toast'));
+                                    document.getElementById('toast-message').innerText = 'Image removed successfully.';
+                                    toast.show();
+                                } else {
+                                    console.error("Failed to delete image:", data.message);
+                                }
+                            })
+                            .catch((error) => {
+                                console.error("Error deleting image:", error);
+                            });
+                    };
+
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(removeBtn);
+                    imagePreview.appendChild(imgContainer);
+                });
+            } catch (error) {
+                console.error("Error parsing images:", error);
+            }
         })
         .catch((error) => {
             console.error("Error fetching product details:", error);
@@ -512,8 +579,8 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function() {
-    $('#p_category').on('change', function() {
+$(document).ready(function () {
+    $('#p_category').on('change', function () {
         var categoryId = $(this).val();  // Get the selected category ID
 
         if (categoryId) {
@@ -521,19 +588,19 @@ $(document).ready(function() {
                 url: '/get-subcategories-brands/' + categoryId,  // URL to fetch subcategories and brands
                 type: 'GET',  // GET request
                 dataType: 'json',  // Expect JSON response
-                success: function(data) {
+                success: function (data) {
                     $('#p_sub_cat').empty();
                     $('#p_sub_cat').append('<option value="">Select Sub Category</option>');
-                    $.each(data.subcategories, function(key, value) {
+                    $.each(data.subcategories, function (key, value) {
                         $('#p_sub_cat').append('<option value="' + value.id + '">' + value.name + '</option>');
                     });
                     $('#brand').empty();
                     $('#brand').append('<option value="">Select Brand</option>');
-                    $.each(data.brands, function(key, value) {
+                    $.each(data.brands, function (key, value) {
                         $('#brand').append('<option value="' + value.id + '">' + value.name + '</option>');
                     });
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log("Error: " + error);
                     console.log("Response: " + xhr.responseText);
                 }
@@ -548,7 +615,7 @@ $(document).ready(function() {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     var input = document.querySelector('#tags');
     var tagify = new Tagify(input, {
         whitelist: ["iPhone", "MacBook", "Samsung", "PlayStation"],
