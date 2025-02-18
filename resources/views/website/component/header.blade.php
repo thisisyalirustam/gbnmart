@@ -200,7 +200,7 @@
                 <!-- Logo Section -->
                 <div class="col-lg-2">
                     <div class="header__logo">
-                        <a href="{{ route('homepage')}}"><img src="{{ asset(settings()->logo) }}" alt="Logo"
+                        <a href="{{ route('homepage') }}"><img src="{{ asset(settings()->logo) }}" alt="Logo"
                                 class="img-fluid"></a>
                     </div>
                 </div>
@@ -209,10 +209,11 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul class="nav ">
-                            <li class="nav-item"><a class="nav-link active" href="{{ route('homepage') }}">Home</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="{{ route('homepage') }}">Home</a>
+                            </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link " href="{{ route('shoppage') }}" id="shopDropdown" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                                <a class="nav-link " href="{{ route('shoppage') }}" id="shopDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                                 <ul class="header__menu__dropdown">
                                     @php
                                         $categories = getCategories();
@@ -221,7 +222,8 @@
                                         <li><a href="javascript:void(0);">No categories available</a></li>
                                     @else
                                         @foreach ($categories as $category)
-                                            <li><a href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a>
+                                            <li><a
+                                                    href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a>
                                             </li>
                                         @endforeach
                                     @endif
@@ -256,7 +258,8 @@
                         <nav class="d-flex align-items-center">
                             @auth
                                 <div class="user-profile-dropdown me-2">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-link text-dark"><i
+                                            class="fa fa-user"></i>
                                         Profile</a>
                                 </div>
                                 <div class="user-profile-dropdown me-2">
@@ -265,7 +268,8 @@
                                 </div>
                             @else
                                 <div class="user-auth-buttons me-2">
-                                    <a href="{{ route('login') }}" class="btn btn-link text-dark"><i class="fa fa-user"></i>
+                                    <a href="{{ route('login') }}" class="btn btn-link text-dark"><i
+                                            class="fa fa-user"></i>
                                         Login</a>
                                 </div>
                                 @if (Route::has('register'))
@@ -313,8 +317,8 @@
                                     All Categories
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" name="search" value="{{ Request::get('search') }}" id="search"
-                                    placeholder="What do yo u need?">
+                                <input type="text" name="search" value="{{ Request::get('search') }}"
+                                    id="search" placeholder="What do yo u need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
                         </div>
@@ -334,7 +338,7 @@
     </section>
 
     <script>
-        window.onscroll = function () {
+        window.onscroll = function() {
             stickyHeader();
         };
 
@@ -350,5 +354,4 @@
                 document.body.classList.remove("sticky-header-active");
             }
         }
-
     </script>
