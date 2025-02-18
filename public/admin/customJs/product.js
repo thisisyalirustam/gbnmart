@@ -10,7 +10,7 @@ function handleImageFiles(files) {
     filesToAdd.forEach(file => {
         if (imageArray.length < 7) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 document.getElementById('image-preview').appendChild(img);
@@ -47,7 +47,7 @@ function addColor() {
 
 
 
-    let quillDescription, quillShortDescription, quillShippingInfo;
+let quillDescription, quillShortDescription, quillShippingInfo;
 
 document.addEventListener('DOMContentLoaded', function () {
     quillDescription = new Quill('#description-editor', {
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             toolbar: [
                 [{ header: [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline'],
-                [{ list: 'ordered'}, { list: 'bullet' }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
                 ['link', 'image', 'video']
             ]
         }
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             toolbar: [
                 [{ header: [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline'],
-                [{ list: 'ordered'}, { list: 'bullet' }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
                 ['link', 'image', 'video']
             ]
         }
@@ -83,12 +83,12 @@ document.addEventListener('DOMContentLoaded', function () {
             toolbar: [
                 [{ header: [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline'],
-                [{ list: 'ordered'}, { list: 'bullet' }],
+                [{ list: 'ordered' }, { list: 'bullet' }],
                 ['link', 'image', 'video']
             ]
         }
     });
-    document.getElementById('addform').onsubmit = function() {
+    document.getElementById('addform').onsubmit = function () {
         document.getElementById('description').value = quillDescription.root.innerHTML;
         document.getElementById('shortDescription').value = quillShortDescription.root.innerHTML;
         document.getElementById('shippingInfo').value = quillShippingInfo.root.innerHTML;
@@ -96,11 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 });
 
-    // On form submit, store the editor content in hidden inputs
+// On form submit, store the editor content in hidden inputs
 
 // });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     var input = document.querySelector('#tags'); // Get the input element
     var tagify = new Tagify(input, {
         whitelist: ["iPhone 13", "MacBook Pro", "Samsung Galaxy", "PlayStation 5", "Nintendo Switch", "Sony Headphones", "Dell XPS", "Canon Camera"],
@@ -120,29 +120,3 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-removeBtn.onclick = function () {
-    imgContainer.remove();
-
-    // Send AJAX request to delete the image from database and public folder
-    fetch(`/product/${id}/remove-image`, {  // Update with the custom route
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // Ensure CSRF token is sent
-        },
-        body: JSON.stringify({
-            image: image // Image name to delete
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log("Image removed successfully");
-        } else {
-            console.error("Failed to remove image");
-        }
-    })
-    .catch(error => {
-        console.error("Error removing image:", error);
-    });
-};

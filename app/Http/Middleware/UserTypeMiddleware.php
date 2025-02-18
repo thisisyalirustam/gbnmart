@@ -13,11 +13,13 @@ class UserTypeMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next ,$user_type): Response
-    {
-        if($request->user()->user_type!==$user_type){
-            return redirect('/');
-        }
-        return $next($request);
+    public function handle(Request $request, Closure $next, $user_type): Response
+{
+    if ($request->user()->user_type !== $user_type) {
+        return redirect('/'); // Redirect if the user is not the required type
     }
+
+    return $next($request);
+}
+
 }

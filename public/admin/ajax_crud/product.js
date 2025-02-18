@@ -432,7 +432,7 @@ update.addEventListener("show.bs.modal", function (event) {
             }
 
             const imagePreview = document.querySelector("#image-preview");
-            imagePreview.innerHTML = ""; // Clear previous images
+            imagePreview.innerHTML = ""; 
 
             try {
                 const images = JSON.parse(product.images || "[]");

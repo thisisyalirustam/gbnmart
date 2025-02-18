@@ -24,7 +24,7 @@ class AdminController extends Controller
     //
     public function index()
     {
-        return view('admin.pages.dashboard.index');
+        // return view('admin.pages.dashboard.index');
     }
     public function showuser()
     {
@@ -226,10 +226,6 @@ class AdminController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
     }
-
-
-
-
 
     // Controller Method for Sending Funds
     public function sendFunds(Request $request)
