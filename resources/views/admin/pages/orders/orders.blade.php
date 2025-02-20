@@ -296,13 +296,6 @@
     </div>
 </div>
 
-<!-- Bootstrap 5 JS and Popper -->
-
-
-<!-- Custom CSS for Styling -->
-<style>
-    
-</style>
 
 
     {{-- User Delete Modal --}}

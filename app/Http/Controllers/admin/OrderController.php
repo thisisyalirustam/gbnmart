@@ -176,26 +176,5 @@ class OrderController extends Controller
         ]);
     }
 
-    public function quickShow(string $id){
-     
-
-        $ordershow = Order::with(['user', 'country', 'items.product'])->find($id);
-
-        if (!$ordershow) {
-            return redirect()->route('orders.index')->with('error', 'Order not found.');
-        }
-
-        // Decode product images and set the first image
-        foreach ($ordershow->items as $item) {
-            $images = json_decode($item->product->images, true);
-            $item->product->images = $images[0] ?? 'default-image.jpg';
-        }
-        $coupon=$ordershow->coupon_code;
-        $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
-
-       return response()->json([
-        'success'=>true,
-        'data'=>$ordershow
-       ]);
-    }
+  
 }

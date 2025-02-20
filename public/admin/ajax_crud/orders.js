@@ -331,20 +331,17 @@ show.addEventListener("show.bs.modal", function (event) {
         }
 
         const order = data.data;
-
-        // Populate Order Details in the modal
         document.getElementById("order-id").textContent = `#${order.id}`;
         document.getElementById("customer-name").textContent = order.name;
         document.getElementById("order-total").textContent = `$${order.grand_total}`;
         document.getElementById("shipping-address").textContent = order.address;
         document.getElementById("order-status").textContent = order.shipping_status;
         document.getElementById("payment-method").textContent = order.payment_method;
-        // Populate Product Details in the table
         const productTableBody = document.querySelector("#product-table tbody");
-        productTableBody.innerHTML = ""; // Clear any existing rows
+        productTableBody.innerHTML = ""; 
 
         order.items.forEach(item => {
-            const firstImage = item.product.images; // Image URL already handled in backend
+            const firstImage = item.product.images;
             const row = document.createElement("tr");
             const imageUrl = `../images/products/${firstImage}`;
             row.innerHTML = `
