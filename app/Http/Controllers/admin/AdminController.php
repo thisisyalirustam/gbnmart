@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderInvoice;
 use App\Models\Affiliate;
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
@@ -199,6 +200,11 @@ class AdminController extends Controller
         $affiliate = Affiliate::with('user')->get();
         return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
     }
+    public function deleteAffliate($id){
+        $affiliate =Affiliate::find($id);
+        $affiliate->delete();
+        return redirect()->back()->with('success','delete marketer');
+    }
 
 
     public function approveAffiliate(Request $request)
@@ -248,4 +254,11 @@ class AdminController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
     }
+
+    public function updateOrder(string $id){
+        $orderShow = Order::with(['user', 'country', 'state', 'city'])->find($id);
+        $countries=Country::all();
+        return view('admin.pages.orders.orders_update', compact('orderShow','countries'));
+    }
+    
 }

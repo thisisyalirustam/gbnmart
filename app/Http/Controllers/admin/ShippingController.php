@@ -21,8 +21,8 @@ class ShippingController extends Controller
         $countries = Country::all();
         $states = State::all();
         $cities = City::all();
-        $units=Unit::all();
-        return view('admin.pages.shipping.index', compact('countries', 'states', 'cities','units'));
+        $units = Unit::all();
+        return view('admin.pages.shipping.index', compact('countries', 'states', 'cities', 'units'));
     }
 
     /**
@@ -48,7 +48,7 @@ class ShippingController extends Controller
             'description' => 'nullable',
         ]);
 
-       $shipping=ShippingCharge::create($request->all());
+        $shipping = ShippingCharge::create($request->all());
 
         return response()->json([
             'success' => true,
@@ -92,28 +92,36 @@ class ShippingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $request->validate([
             'country_id' => 'required|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
             'charge' => 'required|numeric|min:0',
+            'description' => 'nullable',
         ]);
 
-       $shipping=ShippingCharge::updat($request->all());
+        // Find the shipping record by ID
+        $shipping = ShippingCharge::findOrFail($id);
+
+        // Update the shipping record
+        $shipping->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'update successfully',
-            'product' => $shipping,
+            'message' => 'Updated successfully',
+            'shipping' => $shipping,
         ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        $shipping = ShippingCharge::findOrFail($id);  // Find the shipping record
+        $shipping->delete();  
+ 
+        return response()->json(['status'=>true,'message' => 'Shipping deleted successfully!']);
     }
 }

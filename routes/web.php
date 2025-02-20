@@ -81,7 +81,8 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
     Route::post('/orders-show/{id}', [AdminController::class, 'showorder'])->name('admin.ordersshow');
     Route::post('orders/{orderId}/send-invoice', [AdminController::class, 'sendInvoice'])->name('orders.sendInvoice');
-
+    Route::get('/update-order/{id}', [AdminController::class, 'updateOrder'])->name('orderUpdate');
+    Route::get('/quick-show/{id}',[AdminMainController::class,'quickShow'])->name('quickshow');
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.setting');
     Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');
     Route::resource('/settings/banners', BannerController::class);
@@ -91,7 +92,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::post('/affiliate/send-funds', [AdminController::class, 'sendFunds']);
     Route::post('/affiliate/approve', [AdminController::class, 'approveAffiliate']);
     Route::post('/affiliate/deactivate', [AdminController::class, 'deactivateAffiliate']);
-
+    Route::delete('/affiliate/delete/{id}',[AdminController::class,'deleteAffliate'])->name('affiliate.delete');
     Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
     Route::post('/customer-orders/{id}/{coupon}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
 });

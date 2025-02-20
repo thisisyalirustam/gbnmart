@@ -27,6 +27,4 @@ function getWishlistCount()
     return Auth::check()
         ? Wishlist::where('user_id', Auth::id())->count()  // Count the number of wishlist items for authenticated user
         : count(session('wishlist', [])); // Count the number of items in the session for unauthenticated user
-
-
 }

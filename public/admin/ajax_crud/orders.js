@@ -58,10 +58,10 @@ $(() => {
                     // Edit Button
                     $("<a>")
                         .addClass("btn btn-outline-secondary btn-sm mx-1")
-                        .attr("href", "#")
-                        .attr("data-bs-toggle", "modal")
-                        .attr("data-bs-userId", id)
-                        .attr("data-bs-target", "#update")
+                        .attr("href", `/update-order/${id}`)
+                        // .attr("data-bs-toggle", "modal")
+                        // .attr("data-bs-userId", id)
+                        // .attr("data-bs-target", "#update")
                         .html('<i class="bi bi-pencil-square" style="color: #007bff;"></i>')
                         .appendTo(container);
 
@@ -74,13 +74,14 @@ $(() => {
 
                     // Quick Show Button
                     $("<a>")
-                        .addClass("btn btn-outline-secondary btn-sm mx-1")
-                        .attr("href", "#")
-                        .attr("data-bs-toggle", "modal")
-                        .attr("data-bs-userId", id)
-                        .attr("data-bs-target", "#show")
-                        .html('<i class="bi bi-eye" style="color: #28a745;">Quick Show</i>')
-                        .appendTo(container);
+                    .addClass("btn btn-outline-secondary btn-sm mx-1")
+                    .attr("href", "#")
+                    .attr("data-bs-toggle", "modal")
+                    .attr("data-bs-userId", id) // Add the dynamic user ID to the button
+                    .attr("data-bs-target", "#show") // Link to the modal
+                    .html('<i class="bi bi-eye" style="color: #28a745;">Quick Show</i>')
+                    .appendTo(container); // Append the button to the container element
+                
 
                     // Delete Button
                     $("<a>")
@@ -269,7 +270,7 @@ $(document).ready(function () {
         formData.append("_method", "DELETE"); // Method override for DELETE
 
         $.ajax({
-            url: `/add-user/${id}`,
+            url: `/coustomer-orders/${id}`,
             type: "POST",
             data: formData,
             contentType: false,
@@ -282,9 +283,10 @@ $(document).ready(function () {
                     // Refresh the DataGrid to reflect the deleted record
                     $("#gridContainer").dxDataGrid("instance").refresh();
                     // Hide the modal
-                    $("#delete").modal("hide");
+                    $(".delet-model").click();
                     // Reset the form
                     $("#deleteForm")[0].reset();
+                    toastr.success(response.message);
                 } else {
                     alert("Error: " + response.message);
                 }
@@ -294,7 +296,12 @@ $(document).ready(function () {
             },
         });
     });
-
+    var deleteModal = document.getElementById("delete");
+    deleteModal.addEventListener("show.bs.modal", function (event) {
+        var button = event.relatedTarget;
+        var id = button.getAttribute("data-bs-userId");
+        document.querySelector("#deleteid").value = id;
+    });
     // Trigger form submission when the delete button is clicked
     $(document).on("click", ".delete-btn", function () {
         $("#deleteForm").submit();
@@ -304,129 +311,60 @@ $(document).ready(function () {
 
 //show record
 var show = document.getElementById("show");
+
 show.addEventListener("show.bs.modal", function (event) {
-    var button = event.relatedTarget;
-    var id = button.getAttribute("data-bs-userId");
-    fetch(`/coustomer-orders/${id}`, {
-        method: "Get",
+    var button = event.relatedTarget; // Button that triggered the modal
+    var id = button.getAttribute("data-bs-userId"); // Fetch the order ID from button
+
+    // Fetch order data from the backend
+    fetch(`/quick-show/${id}`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
     })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            const user = data.user[0];
-            const modelbody = document.querySelector("#show .modal-body");
-            modelbody.innerHTML = "";
-            modelbody.innerHTML = `
+    .then((response) => response.json())
+    .then((data) => {
+        if (!data.success || !data.data) {
+            console.error("No order data found.");
+            return;
+        }
 
-              <div class="row">
-                  <div class="col-xl-4">
+        const order = data.data;
 
-                      <div class="card">
-                          <div
-                              class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+        // Populate Order Details in the modal
+        document.getElementById("order-id").textContent = `#${order.id}`;
+        document.getElementById("customer-name").textContent = order.name;
+        document.getElementById("order-total").textContent = `$${order.grand_total}`;
+        document.getElementById("shipping-address").textContent = order.address;
+        document.getElementById("order-status").textContent = order.shipping_status;
+        document.getElementById("payment-method").textContent = order.payment_method;
+        // Populate Product Details in the table
+        const productTableBody = document.querySelector("#product-table tbody");
+        productTableBody.innerHTML = ""; // Clear any existing rows
 
-                              <img src="http://127.0.0.1:8000/uploads/${user.image}"
-                                  alt="Profile" class="rounded-circle"
-                                  style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
-                              <h2>${user.name}</h2>
-                              <h3>Web Designer</h3>
-                              <div class="social-links mt-2">
-                                  <a href="#" class="twitter"><i
-                                          class="bi bi-twitter"></i></a>
-                                  <a href="#" class="facebook"><i
-                                          class="bi bi-facebook"></i></a>
-                                  <a href="#" class="instagram"><i
-                                          class="bi bi-instagram"></i></a>
-                                  <a href="#" class="linkedin"><i
-                                          class="bi bi-linkedin"></i></a>
-                              </div>
-                          </div>
-                      </div>
+        order.items.forEach(item => {
+            const firstImage = item.product.images; // Image URL already handled in backend
+            const row = document.createElement("tr");
+            const imageUrl = `../images/products/${firstImage}`;
+            row.innerHTML = `
+            <td><img src="${imageUrl}" alt="${item.product.name}" width="50"></td>
+                <td>${item.product.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${item.price}</td>
+                <td>$${(item.quantity * parseFloat(item.price)).toFixed(2)}</td>
+            `;
 
-                  </div>
-
-                  <div class="col-xl-8">
-
-                      <div class="card">
-                          <div class="card-body pt-3">
-                              <div class="tab-content pt-2">
-
-                                  <div class="tab-pane fade show active profile-overview"
-                                      id="profile-overview" role="tabpanel">
-                                      <h5 class="card-title">About</h5>
-                                      <p class="small fst-italic">Sunt est soluta
-                                          temporibus accusantium neque nam
-                                          maiores cumque temporibus. Tempora libero
-                                          non est unde veniam est qui dolor.
-                                          Ut sunt iure rerum quae quisquam autem
-                                          eveniet perspiciatis odit. Fuga sequi
-                                          sed ea saepe at unde.</p>
-
-                                      <h5 class="card-title">Profile Details</h5>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label ">Full
-                                              Name</div>
-                                          <div class="col-lg-9 col-md-8">Kevin
-                                              Anderson</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Company</div>
-                                          <div class="col-lg-9 col-md-8">Lueilwitz,
-                                              Wisoky and Leuschke</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Job
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">Web Designer
-                                          </div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Country</div>
-                                          <div class="col-lg-9 col-md-8">USA</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">
-                                              Address</div>
-                                          <div class="col-lg-9 col-md-8">A108 Adam
-                                              Street, New York, NY 535022</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Phone
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">(436)
-                                              486-3538 x29071</div>
-                                      </div>
-
-                                      <div class="row">
-                                          <div class="col-lg-3 col-md-4 label">Email
-                                          </div>
-                                          <div class="col-lg-9 col-md-8">
-                                              k.anderson@example.com</div>
-                                      </div>
-
-                                  </div>
-                              </div><!-- End Bordered Tabs -->
-
-                          </div>
-                      </div>
-
-                  </div>
-              </div>
-
-`;
+            productTableBody.appendChild(row);
         });
+    })
+    .catch((error) => {
+        console.error("Error fetching order details:", error);
+    });
 });
+
+
+
 //end of show record
 
 //update Record model
@@ -454,10 +392,11 @@ update.addEventListener("show.bs.modal", function (event) {
 //end update Record model
 
 //Delete model
-var deleteModal = document.getElementById("delete");
-deleteModal.addEventListener("show.bs.modal", function (event) {
-    var button = event.relatedTarget;
-    var id = button.getAttribute("data-bs-userId");
-    document.querySelector("#deleteid").value = id;
-});
+
 // end of delete model
+toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "timeOut": "3000", 
+};

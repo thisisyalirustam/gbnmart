@@ -134,7 +134,6 @@
                           <label for="update_country_id" class="col-sm-3 col-form-label">Country</label>
                           <div class="col-sm-9">
                             <select id="update_country_id" name="country_id" class="form-select" required>
-                              <option value="" disabled selected>Select a Country</option>
                               @foreach ($countries as $country)
                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
                               @endforeach
@@ -202,6 +201,28 @@
         </div>
       </div>
 
+      {{-- user delete modal --}}
+<div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                <h5 class="card-title text-danger mt-3">Are You Sure?</h5>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <form id="deleteForm" class="delete-form">
+                @csrf
+                <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
+                <input type="hidden" id="deleteid" name="id" value="">
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary delete-model-disappear" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @section('tabledev')
     <script src="{{ asset('admin/ajax_crud/shipping.js') }}"></script>
@@ -238,6 +259,34 @@
                 });
             }
         });
+        $('#update_country_id').change(function () {
+            var countryId = $(this).val();
+
+            // Reset state and city dropdowns
+            $('#update_state_id').html('<option selected="">Select State</option>');
+            $('#update_city_id').html('<option selected="">Select City</option>');
+            $('#update_state_id').prop('disabled', true); // Disable state dropdown initially
+            $('#update_city_id').prop('disabled', true); // Disable city dropdown initially
+
+            if (countryId) {
+                $.ajax({
+                    url: '/get-states/' + countryId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#update_state_id').prop('disabled', false); // Enable state dropdown
+                            $.each(response, function (index, state) {
+                                $('#update_state_id').append('<option value="' + state.id + '">' + state.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching states.');
+                    }
+                });
+            }
+        });
 
         // When state is selected, fetch related cities
         $('#state_id').change(function () {
@@ -257,6 +306,32 @@
                             $('#city_id').prop('disabled', false); // Enable city dropdown
                             $.each(response, function (index, city) {
                                 $('#city_id').append('<option value="' + city.id + '">' + city.name + '</option>');
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('Error fetching cities.');
+                    }
+                });
+            }
+        });
+        $('#update_state_id').change(function () {
+            var stateId = $(this).val();
+
+            // Reset city dropdown
+            $('#update_city_id').html('<option selected="">Select City</option>');
+            $('#update_city_id').prop('disabled', true); // Disable city dropdown initially
+
+            if (stateId) {
+                $.ajax({
+                    url: '/get-cities/' + stateId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#update_city_id').prop('disabled', false); // Enable city dropdown
+                            $.each(response, function (index, city) {
+                                $('#update_city_id').append('<option value="' + city.id + '">' + city.name + '</option>');
                             });
                         }
                     },

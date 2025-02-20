@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
@@ -41,7 +42,8 @@ class WebController extends Controller
 
     public function admin()
     {
-        return view('admin.pages.dashboard.index');
+        $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(8);
+        return view('admin.pages.dashboard.index', compact('orders'));
     }
 
     public function shop(Request $request, $catslug = null, $subcatslug = null)

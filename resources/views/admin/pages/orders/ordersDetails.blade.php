@@ -169,36 +169,41 @@
                         </div>
 
                     </div>
-                    @if ($ordershow->coupon_code !=null)
-                    <div class="card mb-4">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0 text-center">Vendor Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <ul class="list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>Coupon:</span>
-                                    <span class="font-weight-bold">{{$vendor->coupon}}</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>Name:</span>
-                                        <span class="font-weight-bold">{{ $vendor->user->name}}</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>Discount:</span>
-                                        <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                        <span>Total Price:</span>
-                                        <span class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                    @endif
+                    @if ($ordershow->coupon_code != null)
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 text-center">Vendor Information</h5>
+        </div>
+        <div class="card-body">
+            @if ($vendor) <!-- Check if the vendor exists -->
+                <div class="d-flex align-items-center">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Coupon:</span>
+                            <span class="font-weight-bold">{{ $vendor->coupon }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Name:</span>
+                            <span class="font-weight-bold">{{ $vendor->user->name }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Discount:</span>
+                            <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                            <span>Total Price:</span>
+                            <span class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
+                        </li>
+                    </ul>
+                </div>
+            @else <!-- If the vendor does not exist -->
+                <div class="alert alert-warning" role="alert">
+                    This coupon is currently not available or the vendor is not available.
+                </div>
+            @endif
+        </div>
+    </div>
+@endif
 
 
                 </div>

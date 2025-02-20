@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Affiliate;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
@@ -58,6 +60,29 @@ class AdminMainController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function quickShow(string $id){
+     
+
+        $ordershow = Order::with(['user', 'country', 'items.product'])->find($id);
+
+        if (!$ordershow) {
+            return redirect()->route('orders.index')->with('error', 'Order not found.');
+        }
+
+        // Decode product images and set the first image
+        foreach ($ordershow->items as $item) {
+            $images = json_decode($item->product->images, true);
+            $item->product->images = $images[0] ?? 'default-image.jpg';
+        }
+        $coupon=$ordershow->coupon_code;
+        $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
+
+       return response()->json([
+        'success'=>true,
+        'data'=>$ordershow
+       ]);
     }
 
 }

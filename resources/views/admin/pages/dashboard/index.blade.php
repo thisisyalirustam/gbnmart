@@ -265,14 +265,49 @@
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Customer</th>
-                      <th scope="col">Product</th>
+                      <th scope="col">Address</th>
                       <th scope="col">Price</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Action</th>
                     </tr>
-                  </thead>
-                  <tbody id="product-tbody">
-                    <!-- Data will be inserted here -->
-                  </tbody>
+                    </thead>
+                    <tbody id="product-tbody">
+                      @foreach ($orders as $order)
+                      <tr>
+                        <th scope="row"><a href="#">Order#{{$order->id}}</a></th>
+                        <td>{{$order->name}}</td>
+                        <td><a href="#" class="text-primary">{{$order->address}}</a></td>
+                        <td>{{$order->grand_total}}</td>
+                        <td>
+                          <span class="badge" 
+                                style="padding: 5px 10px; border-radius: 5px; font-size: 14px; color: white; 
+                                       background-color: 
+                                       @switch($order->shipping_status)
+                                           @case('Pending') #ffc107 @break
+                                           @case('Process') #007bff @break
+                                           @case('Delivered') #28a745 @break
+                                           @case('Return') #dc3545 @break
+                                           @case('Complete') #17a2b8 @break
+                                           @default #6c757d @break
+                                       @endswitch;">
+                            {{$order->shipping_status}}
+                          </span>
+                        </td>
+                        
+                        <td>
+                          <a href="{{ route('coustomer-orders.show', $order->id) }}" class="btn btn-info btn-sm" style="text-decoration: none; display: inline-flex; justify-content: center; align-items: center; padding: 6px; border-radius: 50%; font-size: 18px; transition: background-color 0.3s; width: 36px; height: 36px;">
+                            <i class="bi bi-eye" style="color: white;"></i>
+                          </a>
+                        </td>
+                        
+                        
+                        
+
+                        
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  
                 </table>
 
               </div>
