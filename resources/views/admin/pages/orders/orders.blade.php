@@ -1,209 +1,227 @@
 @extends('admin.layout.content')
 @section('content')
     <div class="pagetitle">
-        <h1>Users</h1>
-        <nav>
+        <h1>Order Dashboard</h1>
+        <nav class="mt-2">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item">Product Category</li>
-                <li class="breadcrumb-item active">Data</li>
+                <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+                <li class="breadcrumb-item active">order</li>
             </ol>
         </nav>
     </div>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .dx-datagrid .dx-data-row > td.bullet {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-        .col-md-3:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s;
 
-}
-.custom-dashboard-card {
-            height: 100px; /* Adjusted height */
+        /* Card Section Styling */
+        .custom-dashboard-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
         }
+    
+        .custom-dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+    
         .custom-card-body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
         }
+    
         .custom-card-icon {
-            font-size: 2.5rem; /* Icon size */
-            margin-right: 15px; /* Space between icon and text */
+            font-size: 3rem;
         }
+    
         .custom-card-title {
-            font-size: 1.2rem; /* Title font size */
-            margin-bottom: 0; /* Remove bottom margin */
+            font-size: 1.25rem;
+            font-weight: bold;
         }
+    
         .custom-card-text {
-            font-size: 1.5rem; /* Value font size */
-            margin-bottom: 0; /* Remove bottom margin */
+            font-size: 1.5rem;
+            color: #333;
         }
-
-        .modal-header {
-        background-color: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
-    }
-
-    .modal-title {
-        font-size: 1.5rem;
-        font-weight: 500;
-    }
-
-    .modal-footer {
-        border-top: 2px solid #dee2e6;
-    }
-
-    /* Product Image in the table */
-    .product-img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 5px;
-    }
-
-    /* Custom table styles */
-    .table {
-        font-size: 1rem;
-        text-align: center;
-        border: 1px solid #dee2e6;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    /* Responsive adjustments for small screens */
-    @media (max-width: 767px) {
-        .table th, .table td {
-            font-size: 0.9rem;
+    
+        .text-primary {
+            color: #007bff !important;
         }
-
-        .product-img {
-            width: 40px;
-            height: 40px;
+    
+        .text-success {
+            color: #28a745 !important;
         }
+    
+        .text-warning {
+            color: #ffc107 !important;
+        }
+    
+        .text-danger {
+            color: #dc3545 !important;
+        }
+    
+        .font-weight-bold {
+            font-weight: 600;
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .custom-dashboard-card {
+                margin-bottom: 1rem;
+            }
+        }
+        .navbar {
+        background-color: #f8f9fa; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-
-    /* Button Style for Modal */
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+    .navbar-nav .nav-item .nav-link {
+        font-size: 1.1rem;
+        color: #333;
+        transition: all 0.3s ease;
     }
-
-    .btn-info {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #007bff;
+        background-color: rgba(0, 123, 255, 0.1);
+        transform: translateY(-2px);
     }
-
+    .navbar-nav .nav-item .nav-link i {
+        font-size: 1.3rem;
+    }
+        
     </style>
-
+    
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
+                <!-- Navbar -->
+          
+           
+                
+                <!-- Card Section -->
                 <div class="card">
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#add">
-                            <i class="bi bi-plus-lg"></i> Add New
-                        </button>
+                       
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container-fluid justify-content-center">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 mx-2 rounded-pill" href="#">
+                        <i class="fas fa-list-alt me-2"></i>All Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 mx-2 rounded-pill" href="#">
+                        <i class="fas fa-clock me-2"></i>Active Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 mx-2 rounded-pill" href="#">
+                        <i class="fas fa-undo me-2"></i>Return Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 mx-2 rounded-pill" href="#">
+                        <i class="fas fa-check-circle me-2"></i>Complete Orders
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2 mx-2 rounded-pill" href="#">
+                        <i class="fas fa-user-cog me-2"></i>Admin Orders
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
                         <hr>
                         <div class="container my-4">
-                            <a href="">
+                            <!-- Row for main cards -->
                             <div class="row text-center">
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #007bff;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-shopping-cart custom-card-icon text-primary"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-primary">Today's Orders</h5>
-                                                <p id="todaysSales" class="custom-card-text">{{ $todayorders }}</p>
-                                            </div>
+                                            <h5 class="custom-card-title text-primary mt-3">Today's Orders</h5>
+                                            <p id="todaysSales" class="custom-card-text font-weight-bold">{{ $todayorders }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #28a745;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-dollar-sign custom-card-icon text-success"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-success">Total Sales</h5>
-                                                <p id="totalSales" class="custom-card-text">{{ $totalSalesCount }}</p>
-                                            </div>
+                                            <h5 class="custom-card-title text-success mt-3">Total Sales</h5>
+                                            <p id="totalSales" class="custom-card-text font-weight-bold">{{ $totalSalesCount }}</p>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #ffc107;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-money-bill-wave custom-card-icon text-warning"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-warning">Total Income</h5>
-                                                <p id="totalIncome" class="custom-card-text">{{ number_format($totalIncomeAmount, 2) }}</p>
-                                            </div>
+                                            <h5 class="custom-card-title text-warning mt-3">Total Income</h5>
+                                            <p id="totalIncome" class="custom-card-text font-weight-bold">{{ number_format($totalIncomeAmount, 2) }}</p>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #dc3545;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-clock custom-card-icon text-danger"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-danger">Pending Orders</h5>
-                                                <p id="pendingOrders" class="custom-card-text">{{ $pendingOrdersCount }}</p>
-                                            </div>
+                                            <h5 class="custom-card-title text-danger mt-3">Pending Orders</h5>
+                                            <p id="pendingOrders" class="custom-card-text font-weight-bold">{{ $pendingOrdersCount }}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        
+                            <!-- Row for additional cards -->
                             <div class="row text-center">
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #007bff;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-calendar-alt custom-card-icon text-primary"></i>
-                                            <div>
-                                               <a href="#table"><h5 class="custom-card-title text-primary">Monthly Sales</h5></a>
-                                                <p id="monthlySales" class="custom-card-text">{{ $monthlySalesCount }}</p>
-                                            </div>
+                                            <a href="#table">
+                                                <h5 class="custom-card-title text-primary mt-3">Monthly Sales</h5>
+                                            </a>
+                                            <p id="monthlySales" class="custom-card-text font-weight-bold">{{ $monthlySalesCount }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #28a745;">
-                                        <div class="custom-card-body">
-                                            <i class="fas fa-calendar-dollar custom-card-icon text-success"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-success">Monthly Income</h5>
-                                                <p id="monthlyIncome" class="custom-card-text">{{ number_format($monthlyIncomeAmount, 2) }}</p>
-                                            </div>
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
+                                            <i class="fas fa-calendar-day custom-card-icon text-success"></i>
+                                            <h5 class="custom-card-title text-success mt-3">Monthly Income</h5>
+                                            <p id="monthlyIncome" class="custom-card-text font-weight-bold">{{ number_format($monthlyIncomeAmount, 2) }}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 mb-4">
-                                    <div class="card shadow-sm custom-dashboard-card" style="border-left: 5px solid #ffc107;">
-                                        <div class="custom-card-body">
+                                    <div class="card custom-dashboard-card shadow-lg rounded">
+                                        <div class="custom-card-body p-4">
                                             <i class="fas fa-calendar-check custom-card-icon text-warning"></i>
-                                            <div>
-                                                <h5 class="custom-card-title text-warning">Today's Sales</h5>
-                                                <p id="todaysIncome" class="custom-card-text">{{ $todaysSalesCount }}</p>
-                                            </div>
+                                            <h5 class="custom-card-title text-warning mt-3">Today's Sales</h5>
+                                            <p id="todaysIncome" class="custom-card-text font-weight-bold">{{ $todaysSalesCount }}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        
                         <section id="table">
-                        <div id="gridContainer" class=""></div>
-                    </section>
+                            <div id="gridContainer" class=""></div>
+                        </section>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
+    
     <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -255,8 +273,8 @@
                         <table class="table table-bordered" id="product-table">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
                                     <th>Image</th>
+                                    <th>Product</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
                                     <th>Total</th>

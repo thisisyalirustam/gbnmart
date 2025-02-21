@@ -4,8 +4,8 @@
         <h1>Dashboard</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item active">Dashboard</li>
+                <li class="breadcrumb-item"><a href="{{route('affiliate.index')}}">Back</a></li>
+                <li class="breadcrumb-item active"><a href="{{route('dashboard')}}">Dashboard</a></li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -20,12 +20,6 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card recent-sales overflow-auto">
-                            <button type="button" class="btn btn-success btn-sm d-flex align-items-center"
-                                data-bs-toggle="modal" data-bs-target="#disablebackdrop">
-                                <i class="bi bi-plus-lg me-2"></i>
-                                Add New Vendor
-                            </button>
-
                             <div class="filter">
                                 <a class="icon" href="#" data-bs-toggle="dropdown"><i
                                         class="bi bi-three-dots"></i></a>

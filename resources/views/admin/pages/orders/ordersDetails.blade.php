@@ -5,7 +5,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('admin.orders') }}">Orders</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('coustomer-orders.index') }}">Orders</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Order #{{ $ordershow->id }}</li>
             </ol>
         </nav>
