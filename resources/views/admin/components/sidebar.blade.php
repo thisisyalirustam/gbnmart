@@ -116,6 +116,12 @@
         <span>Settings</span>
       </a>
     </li><!-- End Login Page Nav -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{route('admin.settings.dashboard')}}">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Settings</span>
+      </a>
+    </li><!-- End Login Page Nav -->
 
   </ul>
 
