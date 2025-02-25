@@ -14,7 +14,7 @@ class Product extends Model
         'name', 'name_slug', 'slug', 'description', 'description_slug', 'product_cat_id', 'product_sub_category_id',
         'sku', 'price', 'discounted_price', 'stock_quantity', 'product_brand_id', 'user_id', 'supplier_id', 'weight', 'dimensions',  'color_options',
         'size_options', 'material', 'images', 'rating','reviews', 'shipping_info','return_policy', 'tags',
-        'featured', 'created_at', 'updated_at', 'deleted_at','sof','status','short_description', 'related_product','unit_id'
+        'featured', 'created_at', 'updated_at', 'deleted_at','sof','status','short_description', 'related_product','unit_id','review_token', 'review_completed',
     ];
 
     protected static function boot()
@@ -68,5 +68,9 @@ class Product extends Model
     }
     public function unit(){
         return $this->belongsTo(Unit::class);
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

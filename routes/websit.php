@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\orders\OrderMainContrller;
+use App\Http\Controllers\admin\orders\OrderMainController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\website\BuyerDashboadController;
 use App\Http\Controllers\website\CartController;
@@ -30,7 +33,8 @@ Route::get('/wishlist-count', [CartController::class, 'wishlistShow'])->name('wi
 Route::get('/wishlist/count', [CartController::class, 'getWishlistCount'])->name('wishlist.count');
 // In routes/web.php
 Route::post('/get-shipping-charge', [CheckoutController::class, 'getShippingCharge'])->name('get.shipping.charges');
-
+Route::get('/review/{token}', [OrderMainContrller::class, 'show'])->name('review.show');
+Route::post('/review/{token}', [OrderMainContrller::class, 'store'])->name('review.store');
 
 
 

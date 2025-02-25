@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderCompeleteMail;
 use App\Mail\OrderInvoice;
 use App\Models\Affiliate;
 use App\Models\City;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -100,26 +102,97 @@ class AdminController extends Controller
     }
 
     public function updateShippingStatus(Request $request, $id, $coupon = null)
-    {
+{
+    try {
         $order = Order::findOrFail($id);
         $order->shipping_status = $request->shipping_status;
-        $order->save();
-        $sub_total = $order->subtotal;
-        $bonnes = 0;
+
         if ($request->shipping_status == 'Complete') {
+            // Generate a unique review token
+            $order->review_token = Str::random(60);
+            $order->save();
+
+            // Handle coupon logic
+            $sub_total = $order->subtotal;
+            $bonnes = 0;
             if ($coupon) {
                 $vendor = Affiliate::where('coupon', $coupon)->first();
-                $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-                $vendor->sales = $vendor->sales + 1;
-                $vendor->amount = $vendor->amount + $bonnes;
-                $vendor->save();
+                if ($vendor) {
+                    $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+                    $vendor->sales = $vendor->sales + 1;
+                    $vendor->amount = $vendor->amount + $bonnes;
+                    $vendor->save();
+                }
             }
+
+            // Send email with review link
+            $reviewLink = route('review.show', ['token' => $order->review_token]);
+            Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
         }
 
-
+        $order->save();
         return redirect()->back()->with('success', 'Delivery date updated successfully!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
     }
+}
+    // public function updateShippingStatus(Request $request, $id, $coupon = null)
+    // {
+    //     $order = Order::findOrFail($id);
+    //     $order->shipping_status = $request->shipping_status;
+    //     $order->save();
+    //     $sub_total = $order->subtotal;
+    //     $bonnes = 0;
+    //     if ($request->shipping_status == 'Complete') {
+    //         $order->review_token = Str::random(60);
+    //         $order->save();
+    //         if ($coupon) {
+    //             $vendor = Affiliate::where('coupon', $coupon)->first();
+    //             $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+    //             $vendor->sales = $vendor->sales + 1;
+    //             $vendor->amount = $vendor->amount + $bonnes;
+    //             $vendor->save();
+    //         }
+    //         $reviewLink = route('review.show', ['token' => $order->review_token]);
+    //         Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
+    //     }
 
+    //     return redirect()->back()->with('success', 'Delivery date updated successfully!');
+    // }
+
+
+//     public function updateShippingStatus(Request $request, $id, $coupon = null)
+//     {
+//     $order = Order::findOrFail($id);
+//     $order->shipping_status = $request->shipping_status;
+
+//     // Generate review token and send email if order is marked as "Complete"
+//     if ($request->shipping_status == 'Complete') {
+//         // Generate a unique review token
+//         $order->review_token = Str::random(60);
+//         $order->save();
+
+//         // Handle coupon logic
+//         $sub_total = $order->subtotal;
+//         $bonnes = 0;
+//         if ($coupon) {
+//             if ($coupon) {
+//              $vendor = Affiliate::where('coupon', $coupon)->first();
+//              $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+//              $vendor->sales = $vendor->sales + 1;
+//              $vendor->amount = $vendor->amount + $bonnes;
+//              $vendor->save();
+//             }
+//         }
+
+//         // Send email with review link
+//         $reviewLink = route('review.show', ['token' => $order->review_token]);
+//         Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
+//     }
+
+//     $order->save();
+//     return redirect()->back()->with('success', 'Delivery date updated successfully!');
+// }
 
     public function sendInvoice($orderId)
     {

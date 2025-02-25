@@ -55,4 +55,14 @@ class Order extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+      // Define the relationship to ratings and reviews
+      public function ratingsAndReviews()
+      {
+          return $this->hasMany(RattingAndReview::class);
+      }
 }
