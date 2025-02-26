@@ -117,7 +117,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                aria-selected="false">Reviews <span>5</span></a>
+                                aria-selected="false">Reviews <span>{{$ratingandreviewcount}}</span></a>
                         </li>
                     </ul>
 
@@ -137,8 +137,42 @@
                         <div class="tab-pane" id="tabs-3" role="tabpanel">
                             <div class="product__details__tab__desc">
                                 <h6>Customer Reviews</h6>
-                                <p>{!! $product->reviews !!}</p>
-                            </div>
+                                
+                                @foreach($ratingandreview as $review)
+                                  <div class="review-item">
+                                    <div class="d-flex justify-content-between">
+                                      <div class="reviewer-name">
+                                        <strong>{{ $review->reviewer_name}}</strong>
+                                      </div>
+                                      <div class="review-rating">
+                                        <!-- Display star rating -->
+                                        @for($i = 1; $i <= 5; $i++)
+                                          <span class="fa fa-star {{ $i <= $review->rating ? 'checked' : '' }}"></span>
+                                        @endfor
+                                      </div>
+                                    </div>
+                                    <p class="review-content">
+                                      {{ $review->review}}
+                                    </p>
+                                  </div>
+                                @endforeach
+                              </div>
+                              
+                              <!-- Add the styles for the stars -->
+                              <style>
+                                .fa-star {
+                                  color: #ddd; /* Default color for empty stars */
+                                }
+                                .fa-star.checked {
+                                  color: yellow; /* Color for filled stars */
+                                }
+                              </style>
+                              
+                              <!-- Add FontAwesome for star icons -->
+                              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+                              
+                              
+                              
                         </div>
                     </div>
                 </div>

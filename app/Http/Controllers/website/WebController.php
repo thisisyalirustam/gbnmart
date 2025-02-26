@@ -4,10 +4,12 @@ namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
+use App\Models\RattingAndReview;
 use Illuminate\Http\Request;
 
 class WebController extends Controller
@@ -22,27 +24,53 @@ class WebController extends Controller
 
     public function productDetail($slug)
     {
+        // Fetch the product by slug
         $product = Product::where('slug', $slug)->with('product_cat')->firstOrFail();
+        
+        // Get related products based on the product's sub-category
         $relatedProducts = Product::where('product_sub_category_id', $product->product_sub_category_id)->get();
+        
+        // Decode product images and color options
         $images = json_decode($product->images);
         $colors = json_decode($product->color_options);
-
+        
+        // Fetch the ratings and reviews for the current product
+        $ratingandreview = RattingAndReview::with(['orderItem.product', 'orderItem.order'])
+            ->whereHas('orderItem.product', function($query) use ($slug) {
+                $query->where('slug', $slug);  // Filter reviews by product slug
+            })
+            ->orderBy('created_at', 'desc')->where('status',1)
+            ->get();
+        // Fetch the ratings and reviews for the current product
+        $ratingandreviewcount = RattingAndReview::with(['orderItem.product', 'orderItem.order'])
+            ->whereHas('orderItem.product', function($query) use ($slug) {
+                $query->where('slug', $slug);  // Filter reviews by product slug
+            })
+            ->orderBy('created_at', 'desc')->where('status',1)
+            ->count();
+    
+        // Prepare the data to pass to the view
         $data = [
             'product' => $product,
             'images' => $images,
             'colors' => $colors,
-            'related' => $relatedProducts
+            'related' => $relatedProducts,
+            'ratingandreview' => $ratingandreview, 
+            'ratingandreviewcount'=>$ratingandreviewcount // Pass the ratings/reviews data to the view
         ];
-
+    
+        // Return the view with the product data and ratings
         return view('website.product', $data);
     }
+    
 
 
 
 
     public function admin()
     {
-        $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(8);
+        $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(12);
+       
         return view('admin.pages.dashboard.index', compact('orders'));
     }
 

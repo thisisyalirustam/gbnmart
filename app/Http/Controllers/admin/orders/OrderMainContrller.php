@@ -56,8 +56,6 @@ class OrderMainContrller extends Controller
                       ->where('review_completed', false)
                       ->with('orderItems.product') // Eager load orderItems and their associated products
                       ->firstOrFail();
-    
-        // Pass order items to the view
         $orderItems = $order->orderItems;
         return view('website.rating_and_review', compact('order', 'orderItems'));
     }
@@ -89,5 +87,55 @@ class OrderMainContrller extends Controller
     
         return redirect()->route('homepage')->with('success', 'Thank you for your review!');
     }
+
+    public function getRatingAndReview(){
+        $rating = RattingAndReview::with(['orderItem.product', 'orderItem.order'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+    
+    // Return the response with the data
+    return response()->json([
+        'status' => true,
+        'data' => $rating
+    ]);
+    }
    
+    public function showRatingAndReview(){
+
+        return view('admin.pages.orders.rating_review');
+    }
+
+    public function updateStatus($id, Request $request)
+{
+    // Find the order by ID
+    $order = RattingAndReview::find($id);
+
+    if (!$order) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Order not found'
+        ]);
+    }
+
+    // Toggle the status
+    $order->status = $request->status;  // 0 for Pending, 1 for Active
+    $order->save();
+
+    // Prepare the response based on the new status
+    $newStatusText = $order->status == 0 ? "Pending" : "Active";
+    $newButtonClass = $order->status == 0 ? "btn-warning" : "btn-success";
+
+    return response()->json([
+        'status' => true,
+        'newStatusText' => $newStatusText,
+        'newButtonClass' => $newButtonClass
+    ]);
+}
+
+public function deleteOrder($id){
+    $rating = RattingAndReview::find($id);
+    $rating->delete();
+    return response()->json(['success'=>true,'message'=>'product Delete successfully']);
+}
+
 }

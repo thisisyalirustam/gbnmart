@@ -20,4 +20,14 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    // Define the relationship to the RatingAndReview model
+    public function ratingAndReview()
+    {
+        return $this->hasMany(RattingAndReview::class, 'order_item_id');
+    }
 }

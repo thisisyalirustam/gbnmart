@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Portal - Bootstrap 5 Admin Dashboard Template For Developers</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Meta -->
     <meta charset="utf-8">

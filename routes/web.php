@@ -75,10 +75,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
 
     //shipping Routes
     Route::resource('/shipping', ShippingController::class);
-    Route::get('/shiping-show', [AdminController::class, 'shippin
-    
-    
-    `g'])->name('admin.shipingshow');
+    Route::get('/shiping-show', [AdminController::class, 'shipping'])->name('admin.shipingshow');
     Route::get('/get-states/{country_id}', [AdminController::class, 'getStates'])->name('shipping.getStates');
     Route::get('/get-cities/{state_id}', [AdminController::class, 'getCities'])->name('shipping.getCities');
 
@@ -99,6 +96,10 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/quick-show/{id}', [AdminMainController::class, 'quickShow'])->name('quickshow');
     Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
     Route::post('/customer-orders/{id}/{coupon}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
+    Route::get('/orders/rating/',[OrderMainContrller::class, 'getRatingAndReview']);
+    Route::get('/orders/rating-review/',[OrderMainContrller::class, 'showRatingAndReview'])->name('admin.rating_review');
+    Route::patch('/update-status/{id}', [OrderMainContrller::class, 'updateStatus']);
+    Route::delete('delete-order/{id}', [OrderMainContrller::class, 'deleteOrder'])->name('delete-order');
     //settings Routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.setting');
     Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');

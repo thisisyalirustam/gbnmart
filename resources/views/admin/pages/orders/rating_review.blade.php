@@ -1,12 +1,12 @@
 @extends('admin.layout.content')
 @section('content')
     <div class="pagetitle">
-        <h1>Compelete Orders</h1>
+        <h1>Active Orders</h1>
         <nav class="mt-2">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('admin')}}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{route('coustomer-orders.index')}}">Order Dashboard</a></li>
-                <li class="breadcrumb-item active">Compelete Order</li>
+                <li class="breadcrumb-item active">Active Order</li>
             </ol>
         </nav>
     </div>
@@ -74,7 +74,7 @@
                     <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
                     <input type="hidden" id="deleteid" name="id" value="">
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary delet-model" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary delet-model delete-model-disappear" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-danger delete-btn">Delete</button>
                     </div>
                 </form>
@@ -158,5 +158,5 @@
 
 @section('tabledev')
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="{{ asset('admin/ajax_crud/ordercompelete.js') }}"></script>
+    <script src="{{ asset('admin/ajax_crud/rating.js') }}"></script>
 @endsection
