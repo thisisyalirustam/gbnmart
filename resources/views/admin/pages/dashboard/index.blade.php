@@ -334,57 +334,43 @@
 
               <div class="card-body pb-0">
                 <h5 class="card-title">Top Selling <span>| Today</span></h5>
-
+            
                 <table class="table table-borderless">
-                  <thead>
-                    <tr>
-                      <th scope="col">Preview</th>
-                      <th scope="col">Product</th>
-                      <th scope="col">Price</th>
-                      <th scope="col">Sold</th>
-                      <th scope="col">Revenue</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                      <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
-                      <td>$64</td>
-                      <td class="fw-bold">124</td>
-                      <td>$5,828</td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                      <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
-                      <td>$46</td>
-                      <td class="fw-bold">98</td>
-                      <td>$4,508</td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                      <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
-                      <td>$59</td>
-                      <td class="fw-bold">74</td>
-                      <td>$4,366</td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
-                      <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                      <td>$32</td>
-                      <td class="fw-bold">63</td>
-                      <td>$2,016</td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
-                      <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                      <td>$79</td>
-                      <td class="fw-bold">41</td>
-                      <td>$3,239</td>
-                    </tr>
-                  </tbody>
+                    <thead>
+                        <tr>
+                            <th scope="col">Preview</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Sold</th>
+                            <th scope="col">Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($topRatedProduct as $product)
+                            @php
+                                // Get the first image from the JSON array of images
+                                $productImages = json_decode($product->product_images, true); 
+                                $firstImage = isset($productImages[0]) ? $productImages[0] : 'default-image.jpg'; // Default image if none available
+                            @endphp
+                            <tr>
+                                <th scope="row">
+                                    <a href="#">
+                                        <img src="{{ asset('images/products/'.$firstImage) }}" alt="Product Image">
+                                    </a>
+                                </th>
+                                <td>
+                                    <a href="#" class="text-primary fw-bold">{{ $product->product_name }}</a>
+                                </td>
+                                <td>${{ number_format($product->product_price * 10, 2) }}</td> <!-- Assuming rating can be translated to price -->
+                                <td class="fw-bold">{{ $product->sold_quantity }}</td> <!-- Display sold quantity -->
+                                <td>${{ number_format($product->revenue, 2) }}</td> <!-- Display revenue -->
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
-
-              </div>
+            </div>
+            
+            
 
             </div>
           </div><!-- End Top Selling -->

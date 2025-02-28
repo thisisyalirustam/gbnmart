@@ -122,9 +122,6 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    /**
-     * Show the form for editing the specified product.
-     */
     public function edit($id)
     {
         $product = Product::findOrFail($id);
@@ -144,98 +141,83 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    /**
-     * Update the specified product in storage.
-     */
-    /**
- * Update the specified product in storage.
- */
-public function update(Request $request, $id)
-{
-    // Find the product by ID
-    $product = Product::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'required|string|unique:products,sku,' . $id,
+            'price' => 'required|numeric',
+            'product_category' => 'required|integer',
+            'sub_category' => 'required|integer',
+            'quantity' => 'integer',
+            'description' => 'required|string',
+            'weight' => 'required|numeric',
+            'dimensions' => 'required|string',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate new images
+        ]);
+        $product->name = $request->input('name');
+        $product->sku = $request->input('sku');
+        $product->product_cat_id = $request->input('product_category');
+        $product->product_sub_category_id = $request->input('sub_category');
+        $product->product_brand_id = $request->input('brand_id');
+        $product->price = $request->input('price');
+        $product->discounted_price = $request->input('discount_price');
+        $product->stock_quantity = $request->input('stock_quantity');
+        $product->short_description = $request->input('short_description');
+        $product->description = $request->input('description');
+        $product->shipping_info = $request->input('shipping_info');
+        $product->weight = $request->input('weight');
+        $product->unit_id = $request->input('unit_id');
+        $product->dimensions = $request->input('dimensions');
+        $product->tags = json_encode($request->input('tags'));
+        $product->color_options = json_encode($request->input('colors'));
+        $existingImages = json_decode($product->images, true) ?? [];
 
-    // Validate the request
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'sku' => 'required|string|unique:products,sku,' . $id,
-        'price' => 'required|numeric',
-        'product_category' => 'required|integer',
-        'sub_category' => 'required|integer',
-        'quantity' => 'integer',
-        'description' => 'required|string',
-        'weight' => 'required|numeric',
-        'dimensions' => 'required|string',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate new images
-    ]);
+        if ($request->has('deleted_images')) {
+            foreach ($request->deleted_images as $deletedImage) {
+                // Define the path to the image in the public folder
+                $imagePath = public_path('images/products/' . $deletedImage);
 
-    // Update product fields
-    $product->name = $request->input('name');
-    $product->sku = $request->input('sku');
-    $product->product_cat_id = $request->input('product_category');
-    $product->product_sub_category_id = $request->input('sub_category');
-    $product->product_brand_id = $request->input('brand_id');
-    $product->price = $request->input('price');
-    $product->discounted_price = $request->input('discount_price');
-    $product->stock_quantity = $request->input('stock_quantity');
-    $product->short_description = $request->input('short_description');
-    $product->description = $request->input('description');
-    $product->shipping_info = $request->input('shipping_info');
-    $product->weight = $request->input('weight');
-    $product->unit_id = $request->input('unit_id');
-    $product->dimensions = $request->input('dimensions');
-    $product->tags = json_encode($request->input('tags'));
-    $product->color_options = json_encode($request->input('colors'));
 
-    // Handle existing images
-    $existingImages = json_decode($product->images, true) ?? [];
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);  // Delete the image
+                }
 
-    // Handle deleted images
-   // Handle deleted images
-if ($request->has('deleted_images')) {
-    foreach ($request->deleted_images as $deletedImage) {
-        // Define the path to the image in the public folder
-        $imagePath = public_path('images/products/' . $deletedImage);
-
-        // Remove the image from the public folder if it exists
-        if (file_exists($imagePath)) {
-            unlink($imagePath);  // Delete the image
+                // Remove the image from the database array
+                $existingImages = array_diff($existingImages, [$deletedImage]);
+            }
         }
 
-        // Remove the image from the database array
-        $existingImages = array_diff($existingImages, [$deletedImage]);
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            $uploadedImages = [];
+            foreach ($request->file('images') as $image) {
+                // Define the path to store the image in the public folder
+                $imageName = $image->getClientOriginalName();  // Get the original file name
+                $destinationPath = public_path('images/products');  // Folder in public directory
+
+                // Move the image to the public/images/products/ directory
+                $image->move($destinationPath, $imageName);
+
+                // Add the image name to the array
+                $uploadedImages[] = $imageName;
+            }
+
+            // Merge the new images with the existing ones
+            $existingImages = array_merge($existingImages, $uploadedImages);
+        }
+
+
+        // Update the product's images
+        $product->images = json_encode(array_values($existingImages));
+
+        // Save the updated product
+        $product->save();
+
+        // Return success response
+        return response()->json(['success' => true, 'message' => 'Product updated successfully']);
     }
-}
-
-// Handle new image uploads
-if ($request->hasFile('images')) {
-    $uploadedImages = [];
-    foreach ($request->file('images') as $image) {
-        // Define the path to store the image in the public folder
-        $imageName = $image->getClientOriginalName();  // Get the original file name
-        $destinationPath = public_path('images/products');  // Folder in public directory
-
-        // Move the image to the public/images/products/ directory
-        $image->move($destinationPath, $imageName);
-
-        // Add the image name to the array
-        $uploadedImages[] = $imageName;
-    }
-
-    // Merge the new images with the existing ones
-    $existingImages = array_merge($existingImages, $uploadedImages);
-}
-
-
-    // Update the product's images
-    $product->images = json_encode(array_values($existingImages));
-
-    // Save the updated product
-    $product->save();
-
-    // Return success response
-    return response()->json(['success' => true, 'message' => 'Product updated successfully']);
-}
 
 
 
@@ -308,30 +290,30 @@ if ($request->hasFile('images')) {
     }
 
     public function deleteImage(Request $request, $id)
-     {
-    // Find the product by ID
-    $product = Product::findOrFail($id);
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($id);
 
-    // Get the image name from the request
-    $imageName = $request->input('image');
+        // Get the image name from the request
+        $imageName = $request->input('image');
 
-    // Define the path to the image in the public folder
-    $imagePath = public_path('images/products/' . $imageName);
+        // Define the path to the image in the public folder
+        $imagePath = public_path('images/products/' . $imageName);
 
-    // Remove the image from the public folder if it exists
-    if (file_exists($imagePath)) {
-        unlink($imagePath);  // Delete the image
+        // Remove the image from the public folder if it exists
+        if (file_exists($imagePath)) {
+            unlink($imagePath);  // Delete the image
+        }
+
+        // Remove the image from the database
+        $existingImages = json_decode($product->images, true) ?? [];
+        $existingImages = array_diff($existingImages, [$imageName]);
+
+        // Update the product's images
+        $product->images = json_encode(array_values($existingImages));
+        $product->save();
+
+        // Return success response
+        return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
     }
-
-    // Remove the image from the database
-    $existingImages = json_decode($product->images, true) ?? [];
-    $existingImages = array_diff($existingImages, [$imageName]);
-
-    // Update the product's images
-    $product->images = json_encode(array_values($existingImages));
-    $product->save();
-
-    // Return success response
-    return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
-}
 }

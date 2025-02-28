@@ -40,7 +40,8 @@
                                 @foreach ($ordershow->items as $item)
                                     <li class="list-group-item d-flex align-items-start border-bottom">
                                         <img src="{{ asset('images/products/' . $item->product->images) }}" alt="Product"
-                                             class="img-thumbnail mr-3" style="width: 80px; height: 80px; border-radius: 8px;">
+                                            class="img-thumbnail mr-3"
+                                            style="width: 80px; height: 80px; border-radius: 8px;">
 
                                         <div class="d-flex flex-column flex-grow-1">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -60,10 +61,15 @@
                                             </div>
 
                                             <div class="progress mt-2" style="height: 5px;">
-                                                @if($ordershow->total_items > 0)
-                                                    <div class="progress-bar" role="progressbar" style="width: {{ ($item->quantity / $ordershow->total_items) * 100 }}%;" aria-valuenow="{{ $item->quantity }}" aria-valuemin="0" aria-valuemax="{{ $ordershow->total_items }}"></div>
+                                                @if ($ordershow->total_items > 0)
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="width: {{ ($item->quantity / $ordershow->total_items) * 100 }}%;"
+                                                        aria-valuenow="{{ $item->quantity }}" aria-valuemin="0"
+                                                        aria-valuemax="{{ $ordershow->total_items }}"></div>
                                                 @else
-                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="1"></div>
+                                                    <div class="progress-bar bg-danger" role="progressbar"
+                                                        style="width: 100%;" aria-valuenow="0" aria-valuemin="0"
+                                                        aria-valuemax="1"></div>
                                                 @endif
                                             </div>
                                         </div>
@@ -84,7 +90,8 @@
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>Subtotal:</span>
-                                    <span class="font-weight-bold">${{ number_format($ordershow->items->sum(fn($item) => $item->quantity * $item->product->price), 2) }}</span>
+                                    <span
+                                        class="font-weight-bold">${{ number_format($ordershow->items->sum(fn($item) => $item->quantity * $item->product->price), 2) }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span>Shipping:</span>
@@ -94,7 +101,8 @@
                                     <span>Discount:</span>
                                     <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                                <li
+                                    class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                     <span>Total Price:</span>
                                     <span class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
                                 </li>
@@ -108,9 +116,11 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                @if($ordershow->user)
-                                    <img src="{{ asset('uploads/' . $ordershow->user->image) }}" alt="Profile Image" class="img-fluid rounded-circle me-3" style="width: 80px; height: 80px;">
-                                    <div class="tab-pane fade show active profile-overview" id="profile-overview" role="tabpanel">
+                                @if ($ordershow->user)
+                                    <img src="{{ asset('uploads/' . $ordershow->user->image) }}" alt="Profile Image"
+                                        class="img-fluid rounded-circle me-3" style="width: 80px; height: 80px;">
+                                    <div class="tab-pane fade show active profile-overview" id="profile-overview"
+                                        role="tabpanel">
                                         <h5 class="card-title">About</h5>
                                         <p class="small fst-italic">
                                             This contract outlines the terms and conditions between the parties involved.
@@ -145,7 +155,8 @@
 
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Phone</div>
-                                            <div class="col-lg-9 col-md-8">({{ $ordershow->country->phonecode ?? 'N/A' }}) {{ $ordershow->phone ?? 'N/A' }}</div>
+                                            <div class="col-lg-9 col-md-8">({{ $ordershow->country->phonecode ?? 'N/A' }})
+                                                {{ $ordershow->phone ?? 'N/A' }}</div>
                                         </div>
 
                                         <div class="row">
@@ -154,9 +165,9 @@
                                         </div>
 
                                     </div>
-
                                 @else
-                                    <img src="{{ asset('images/images (9).jpeg') }}" alt="Profile Image" class="img-fluid rounded-circle me-3" style="width: 80px; height: 80px;">
+                                    <img src="{{ asset('images/images (9).jpeg') }}" alt="Profile Image"
+                                        class="img-fluid rounded-circle me-3" style="width: 80px; height: 80px;">
                                     <div>
                                         <h6 class="mb-1 fw-bold">User Information Unavailable</h6>
                                         <p class="mb-0 text-muted">State: {{ $ordershow->state->name ?? 'N/A' }}</p>
@@ -170,40 +181,45 @@
 
                     </div>
                     @if ($ordershow->coupon_code != null)
-    <div class="card mb-4">
-        <div class="card-header bg-light">
-            <h5 class="mb-0 text-center">Vendor Information</h5>
-        </div>
-        <div class="card-body">
-            @if ($vendor) <!-- Check if the vendor exists -->
-                <div class="d-flex align-items-center">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>Coupon:</span>
-                            <span class="font-weight-bold">{{ $vendor->coupon }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>Name:</span>
-                            <span class="font-weight-bold">{{ $vendor->user->name }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>Discount:</span>
-                            <span class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                            <span>Total Price:</span>
-                            <span class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
-                        </li>
-                    </ul>
-                </div>
-            @else <!-- If the vendor does not exist -->
-                <div class="alert alert-warning" role="alert">
-                    This coupon is currently not available or the vendor is not available.
-                </div>
-            @endif
-        </div>
-    </div>
-@endif
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0 text-center">Vendor Information</h5>
+                            </div>
+                            <div class="card-body">
+                                @if ($vendor)
+                                    <!-- Check if the vendor exists -->
+                                    <div class="d-flex align-items-center">
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>Coupon:</span>
+                                                <span class="font-weight-bold">{{ $vendor->coupon }}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>Name:</span>
+                                                <span class="font-weight-bold">{{ $vendor->user->name }}</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>Discount:</span>
+                                                <span
+                                                    class="font-weight-bold">${{ number_format($ordershow->discount, 2) }}</span>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
+                                                <span>Total Price:</span>
+                                                <span
+                                                    class="text-danger">${{ number_format($ordershow->grand_total, 2) }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                @else
+                                    <!-- If the vendor does not exist -->
+                                    <div class="alert alert-warning" role="alert">
+                                        This coupon is currently not available or the vendor is not available.
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
 
 
                 </div>
@@ -218,7 +234,8 @@
                         <div class="card-body">
                             <p><strong>Order ID:</strong> #{{ $ordershow->id }}</p>
                             <p><strong>Date:</strong> {{ $ordershow->created_at->format('d M Y') }}</p>
-                            <p><strong>Total:</strong> <span class="text-success">${{ number_format($ordershow->grand_total, 2) }}</span></p>
+                            <p><strong>Total:</strong> <span
+                                    class="text-success">${{ number_format($ordershow->grand_total, 2) }}</span></p>
                         </div>
                     </div>
 
@@ -237,8 +254,10 @@
                         </div>
                         <div class="card-body">
                             <div class="input-group">
-                                <input type="email" value="{{$ordershow->email}}" readonly class="form-control" name="invoice" required>
-                                <button class="btn btn-sm btn-primary" id="send-invoice-btn" type="submit">Send Invoice</button>
+                                <input type="email" value="{{ $ordershow->email }}" readonly class="form-control"
+                                    name="invoice" required>
+                                <button class="btn btn-sm btn-primary" id="send-invoice-btn" type="submit">Send
+                                    Invoice</button>
                                 <div id="invoice-message" class="alert d-none mt-3"></div>
                             </div>
                         </div>
@@ -250,18 +269,15 @@
                             <h5>Payment Method</h5>
                         </div>
                         <div class="card-body">
-                            @if($ordershow->payment_method === 'cash')
+                            @if ($ordershow->payment_method === 'cash')
                                 <p>Payment Method: Cash on Delivery</p>
                             @elseif($ordershow->payment_method === 'bank')
                                 <p>Payment Method: Bank</p>
-                                @if($ordershow->bank_invoice)
+                                @if ($ordershow->bank_invoice)
                                     <div>
-                                        <img
-                                            src="{{ asset($ordershow->bank_invoice) }}"
-                                            alt="Bank Invoice"
+                                        <img src="{{ asset($ordershow->bank_invoice) }}" alt="Bank Invoice"
                                             style="width: 100%; max-height: 300px; cursor: pointer;"
-                                            onclick="showFullScreen('{{ asset($ordershow->bank_invoice) }}')"
-                                        >
+                                            onclick="showFullScreen('{{ asset($ordershow->bank_invoice) }}')">
                                     </div>
                                 @else
                                     <p>No invoice available.</p>
@@ -285,9 +301,12 @@
                     </div>
 
                     <!-- Full-Screen Image Modal -->
-                    <div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.8); z-index:1000;">
-                        <span style="position:absolute; top:20px; right:30px; color:white; font-size:30px; cursor:pointer;" onclick="closeFullScreen()">×</span>
-                        <img id="modalImage" src="" style="margin:auto; display:block; max-width:90%; max-height:90%;">
+                    <div id="imageModal"
+                        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.8); z-index:1000;">
+                        <span style="position:absolute; top:20px; right:30px; color:white; font-size:30px; cursor:pointer;"
+                            onclick="closeFullScreen()">×</span>
+                        <img id="modalImage" src=""
+                            style="margin:auto; display:block; max-width:90%; max-height:90%;">
                     </div>
 
 
@@ -300,12 +319,14 @@
                             <div id="message" class="alert d-none"></div> <!-- Message area -->
 
                             @if ($ordershow->delivered_date)
-                                <h5 class="text-primary" id="delivered-date">{{ $ordershow->delivered_date->format('d M Y') }}</h5>
+                                <h5 class="text-primary" id="delivered-date">
+                                    {{ $ordershow->delivered_date->format('d M Y') }}</h5>
                             @else
                                 <h5 class="text-danger" id="delivered-date">No delivery date set</h5>
                             @endif
 
-                            <h5 class="mt-3 font-weight-bold">Shipping Status: <span id="shipping-status">{{ $ordershow->shipping_status }}</span></h5>
+                            <h5 class="mt-3 font-weight-bold">Shipping Status: <span
+                                    id="shipping-status">{{ $ordershow->shipping_status }}</span></h5>
 
                             @if (is_null($ordershow->delivered_date))
                                 <form id="delivery-date-form" class="mt-4">
@@ -346,85 +367,96 @@
                                     data: formData,
                                     success: function(response) {
                                         // Update the message and delivery date
-                                        $('#message').removeClass('d-none alert-danger').addClass('alert-success')
-                                                     .text('Delivery date updated successfully!').fadeIn();
-                                        $('#delivered-date').text(new Date(response.delivered_date).toLocaleDateString());
+                                        $('#message').removeClass('d-none alert-danger').addClass(
+                                                'alert-success')
+                                            .text('Delivery date updated successfully!').fadeIn();
+                                        $('#delivered-date').text(new Date(response.delivered_date)
+                                            .toLocaleDateString());
 
                                         // Update the header for delivery date
-                                        $('.card-header h5').text('Expected Date Of Delivery: ' + new Date(response.delivered_date).toLocaleDateString());
+                                        $('.card-header h5').text('Expected Date Of Delivery: ' + new Date(
+                                            response.delivered_date).toLocaleDateString());
 
                                         setTimeout(function() {
                                             $('#message').fadeOut();
                                         }, 3000);
                                     },
                                     error: function(xhr) {
-                                        $('#message').removeClass('d-none alert-success').addClass('alert-danger')
-                                                     .text('Error updating delivery date: ' + xhr.responseJSON.message).fadeIn();
+                                        $('#message').removeClass('d-none alert-success').addClass(
+                                                'alert-danger')
+                                            .text('Error updating delivery date: ' + xhr.responseJSON.message)
+                                            .fadeIn();
                                     }
                                 });
                             });
 
                             // Handle shipping status form submission
                             $('#shipping-status-form').on('submit', function(event) {
-    event.preventDefault(); // Prevent default form submission
-    let formData = $(this).serialize(); // Serialize form data
+                                event.preventDefault(); // Prevent default form submission
+                                let formData = $(this).serialize(); // Serialize form data
 
-    // Check if $vendor is null and provide a default coupon value
-    let coupon = "{{ $vendor ? ($vendor->coupon ?? 'null123') : 'null123' }}";
+                                // Check if $vendor is null and provide a default coupon value
+                                let coupon = "{{ $vendor ? $vendor->coupon ?? 'null123' : 'null123' }}";
 
-    $.ajax({
-        type: 'POST',
-        url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' => $vendor ? ($vendor->coupon ?? 'null123') : 'null123']) }}", // Correct URL
-        data: formData,
-        success: function(response) {
-            // Update the message and shipping status
-            $('#message').removeClass('d-none alert-danger').addClass('alert-success')
-                         .text('Shipping status updated successfully!').fadeIn();
-            $('#shipping-status').text(response.shipping_status);
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' => $vendor ? $vendor->coupon ?? 'null123' : 'null123']) }}", // Correct URL
+                                    data: formData,
+                                    success: function(response) {
+                                        // Update the message and shipping status
+                                        $('#message').removeClass('d-none alert-danger').addClass(
+                                                'alert-success')
+                                            .text('Shipping status updated successfully!').fadeIn();
+                                        $('#shipping-status').text(response.shipping_status);
 
-            // Update the header for shipping status
-            $('.card-header h5').text('Shipping Status: ' + response.shipping_status);
+                                        // Update the header for shipping status
+                                        $('.card-header h5').text('Shipping Status: ' + response
+                                            .shipping_status);
 
-            setTimeout(function() {
-                $('#message').fadeOut();
-            }, 3000); // Hide the message after 3 seconds
-        },
-        error: function(xhr) {
-            // Handle errors
-            $('#message').removeClass('d-none alert-success').addClass('alert-danger')
-                         .text('An error occurred while updating the shipping status.').fadeIn();
-            setTimeout(function() {
-                $('#message').fadeOut();
-            }, 3000); // Hide the message after 3 seconds
-        }
-    });
-});
+                                        setTimeout(function() {
+                                            $('#message').fadeOut();
+                                        }, 3000); // Hide the message after 3 seconds
+                                    },
+                                    error: function(xhr) {
+                                        // Handle errors
+                                        $('#message').removeClass('d-none alert-success').addClass(
+                                                'alert-danger')
+                                            .text('An error occurred while updating the shipping status.')
+                                            .fadeIn();
+                                        setTimeout(function() {
+                                            $('#message').fadeOut();
+                                        }, 3000); // Hide the message after 3 seconds
+                                    }
+                                });
+                            });
 
 
                             $('#send-invoice-btn').on('click', function() {
-                // Display loading message
-                $('#invoice-message').removeClass('d-none alert-danger alert-success').addClass('alert-info')
-                    .text('Sending email...').fadeIn();
+                                // Display loading message
+                                $('#invoice-message').removeClass('d-none alert-danger alert-success').addClass(
+                                        'alert-info')
+                                    .text('Sending email...').fadeIn();
 
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('orders.sendInvoice', $ordershow->id) }}", // Adjust route to your controller method
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(response) {
-                        $('#invoice-message').removeClass('alert-info').addClass('alert-success')
-                            .text('Invoice sent successfully!').fadeIn();
-                        setTimeout(function() {
-                            $('#invoice-message').fadeOut();
-                        }, 3000);
-                    },
-                    error: function(xhr) {
-                        $('#invoice-message').removeClass('alert-info').addClass('alert-danger')
-                            .text('Error sending email: ' + xhr.responseJSON.message).fadeIn();
-                    }
-                });
-            });
+                                $.ajax({
+                                    type: 'POST',
+                                    url: "{{ route('orders.sendInvoice', $ordershow->id) }}", // Adjust route to your controller method
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                    },
+                                    success: function(response) {
+                                        $('#invoice-message').removeClass('alert-info').addClass(
+                                                'alert-success')
+                                            .text('Invoice sent successfully!').fadeIn();
+                                        setTimeout(function() {
+                                            $('#invoice-message').fadeOut();
+                                        }, 3000);
+                                    },
+                                    error: function(xhr) {
+                                        $('#invoice-message').removeClass('alert-info').addClass('alert-danger')
+                                            .text('Error sending email: ' + xhr.responseJSON.message).fadeIn();
+                                    }
+                                });
+                            });
                         });
                     </script>
 
@@ -446,12 +478,10 @@
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
         }
-
-
     </script>
 
 @endsection
 
 @section('tabledev')
-<script src="{{ asset('admin/ajax_crud/orders.js') }}"></script>
+    <script src="{{ asset('admin/ajax_crud/orders.js') }}"></script>
 @endsection

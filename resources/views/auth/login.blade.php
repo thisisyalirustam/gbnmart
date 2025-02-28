@@ -1,4 +1,4 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -44,4 +44,126 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+</x-guest-layout> --}}
+@extends('website.layout.content')
+@section('webcontent')
+<style>
+   .demo{ background: #F2F2F2; }
+.form-container{
+    background: #ecf0f3;
+    font-family: 'Nunito', sans-serif;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
+}
+.form-container .form-icon{
+    color: #33cc0d;
+    font-size: 55px;
+    text-align: center;
+    line-height: 100px;
+    width: 100px;
+    height:100px;
+    margin: 0 auto 15px;
+    border-radius: 50px;
+    box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px #fff;
+}
+.form-container .title{
+    color: #33cc0d;
+    font-size: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 0 0 20px;
+}
+.form-container .form-horizontal .form-group{ margin: 0 0 25px 0; }
+.form-container .form-horizontal .form-group label{
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.form-container .form-horizontal .form-control{
+    color: #333;
+    background: #ecf0f3;
+    font-size: 15px;
+    height: 50px;
+    padding: 20px;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px #fff;
+    display: inline-block;
+    transition: all 0.3s ease 0s;
+}
+.form-container .form-horizontal .form-control:focus{
+    box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px #fff;
+    outline: none;
+}
+.form-container .form-horizontal .form-control::placeholder{
+    color: #808080;
+    font-size: 14px;
+}
+.form-container .form-horizontal .btn{
+    color: #000;
+    background-color: #33cc0d;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+    padding: 12px 15px 11px;
+    border-radius: 20px;
+    box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px #fff;
+    border: none;
+    transition: all 0.5s ease 0s;
+}
+.form-container .form-horizontal .btn:hover,
+.form-container .form-horizontal .btn:focus{
+    color: #fff;
+    letter-spacing: 3px;
+    box-shadow: none;
+    outline: none;
+}
+</style>
+
+<div class="form-bg mt-4" style="height: 100vh;">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 mx-auto col-md-offset-4">
+                <div class="form-container">
+                    <div class="form-icon"><i class="fa fa-user"></i></div>
+                    <h3 class="title">Login</h3>
+                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label>email</label>
+                            <input class="form-control" id="email" type="email" placeholder="email address" name="email" :value="old('email') " required autofocus autocomplete="username">
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                        </div>
+                        <div class="form-group">
+                            <label>password</label>
+                            <input class="form-control" type="password" id="password" name="password" placeholder="password" required autocomplete="current-password">
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                        </div>
+                        <div class="block mt-4">
+                            <label for="remember_me" class="inline-flex items-center">
+                                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-end mt-4 mb-2">
+                            @if (Route::has('password.request'))
+                            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                                {{ __('Forgot your password?') }}
+                            </a>
+                              @endif
+                        </div>
+                      
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection

@@ -70,9 +70,31 @@ class WebController extends Controller
     public function admin()
     {
         $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(12);
-       
-        return view('admin.pages.dashboard.index', compact('orders'));
+    
+        // Get the top-rated products with the additional sold count and revenue calculations
+        $topRatedProduct = RattingAndReview::with('orderItem.product')
+            ->selectRaw('
+                products.id as product_id, 
+                products.name as product_name, 
+                products.price as product_price,
+                COUNT(ratings_and_reviews.rating) as review_count, 
+                AVG(ratings_and_reviews.rating) as average_rating, 
+                products.images as product_images,
+                SUM(order_items.quantity) as sold_quantity, 
+                SUM(order_items.quantity * order_items.price) as revenue
+            ')
+            ->join('order_items', 'order_items.id', '=', 'ratings_and_reviews.order_item_id')
+            ->join('products', 'products.id', '=', 'order_items.product_id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
+            ->where('orders.shipping_status', 'Complete') // Only count completed orders
+            ->groupBy('products.id', 'products.name','products.price', 'products.images') // Group by all non-aggregated columns
+            ->orderByDesc('average_rating')
+            ->get();
+    
+        return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct'));
     }
+    
+
 
     public function shop(Request $request, $catslug = null, $subcatslug = null)
     {
