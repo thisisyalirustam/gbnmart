@@ -8,6 +8,7 @@ use App\Mail\OrderInvoice;
 use App\Models\Affiliate;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductBrand;
@@ -18,9 +19,11 @@ use App\Models\State;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -102,40 +105,40 @@ class AdminController extends Controller
     }
 
     public function updateShippingStatus(Request $request, $id, $coupon = null)
-{
-    try {
-        $order = Order::findOrFail($id);
-        $order->shipping_status = $request->shipping_status;
+    {
+        try {
+            $order = Order::findOrFail($id);
+            $order->shipping_status = $request->shipping_status;
 
-        if ($request->shipping_status == 'Complete') {
-            // Generate a unique review token
-            $order->review_token = Str::random(60);
-            $order->save();
+            if ($request->shipping_status == 'Complete') {
+                // Generate a unique review token
+                $order->review_token = Str::random(60);
+                $order->save();
 
-            // Handle coupon logic
-            $sub_total = $order->subtotal;
-            $bonnes = 0;
-            if ($coupon) {
-                $vendor = Affiliate::where('coupon', $coupon)->first();
-                if ($vendor) {
-                    $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-                    $vendor->sales = $vendor->sales + 1;
-                    $vendor->amount = $vendor->amount + $bonnes;
-                    $vendor->save();
+                // Handle coupon logic
+                $sub_total = $order->subtotal;
+                $bonnes = 0;
+                if ($coupon) {
+                    $vendor = Affiliate::where('coupon', $coupon)->first();
+                    if ($vendor) {
+                        $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
+                        $vendor->sales = $vendor->sales + 1;
+                        $vendor->amount = $vendor->amount + $bonnes;
+                        $vendor->save();
+                    }
                 }
+
+                // Send email with review link
+                $reviewLink = route('review.show', ['token' => $order->review_token]);
+                Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
             }
 
-            // Send email with review link
-            $reviewLink = route('review.show', ['token' => $order->review_token]);
-            Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
+            $order->save();
+            return redirect()->back()->with('success', 'Delivery date updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
-
-        $order->save();
-        return redirect()->back()->with('success', 'Delivery date updated successfully!');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
     }
-}
     // public function updateShippingStatus(Request $request, $id, $coupon = null)
     // {
     //     $order = Order::findOrFail($id);
@@ -161,18 +164,18 @@ class AdminController extends Controller
     // }
 
 
-//     public function updateShippingStatus(Request $request, $id, $coupon = null)
+    //     public function updateShippingStatus(Request $request, $id, $coupon = null)
 //     {
 //     $order = Order::findOrFail($id);
 //     $order->shipping_status = $request->shipping_status;
 
-//     // Generate review token and send email if order is marked as "Complete"
+    //     // Generate review token and send email if order is marked as "Complete"
 //     if ($request->shipping_status == 'Complete') {
 //         // Generate a unique review token
 //         $order->review_token = Str::random(60);
 //         $order->save();
 
-//         // Handle coupon logic
+    //         // Handle coupon logic
 //         $sub_total = $order->subtotal;
 //         $bonnes = 0;
 //         if ($coupon) {
@@ -185,12 +188,12 @@ class AdminController extends Controller
 //             }
 //         }
 
-//         // Send email with review link
+    //         // Send email with review link
 //         $reviewLink = route('review.show', ['token' => $order->review_token]);
 //         Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
 //     }
 
-//     $order->save();
+    //     $order->save();
 //     return redirect()->back()->with('success', 'Delivery date updated successfully!');
 // }
 
@@ -273,10 +276,11 @@ class AdminController extends Controller
         $affiliate = Affiliate::with('user')->get();
         return view('admin.pages.affiliate.pages.active-marketers', compact('affiliate'));
     }
-    public function deleteAffliate($id){
-        $affiliate =Affiliate::find($id);
+    public function deleteAffliate($id)
+    {
+        $affiliate = Affiliate::find($id);
         $affiliate->delete();
-        return redirect()->back()->with('success','delete marketer');
+        return redirect()->back()->with('success', 'delete marketer');
     }
 
 
@@ -328,10 +332,17 @@ class AdminController extends Controller
         return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
     }
 
-    public function updateOrder(string $id){
+    public function updateOrder(string $id)
+    {
         $orderShow = Order::with(['user', 'country', 'state', 'city'])->find($id);
-        $countries=Country::all();
-        return view('admin.pages.orders.orders_update', compact('orderShow','countries'));
+        $countries = Country::all();
+        return view('admin.pages.orders.orders_update', compact('orderShow', 'countries'));
     }
-    
+
+    public function getNotifications()
+      {
+        $notifications = Auth::user()->notifications; // Fetch notifications for the authenticated user
+        return response()->json($notifications);
+      }
+
 }

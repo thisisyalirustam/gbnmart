@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -90,8 +91,10 @@ class WebController extends Controller
             ->groupBy('products.id', 'products.name','products.price', 'products.images') // Group by all non-aggregated columns
             ->orderByDesc('average_rating')
             ->get();
+
+            $notifications = Notification::latest()->take(8)->get();
     
-        return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct'));
+        return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct','notifications'));
     }
     
 

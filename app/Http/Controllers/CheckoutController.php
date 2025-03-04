@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderPlaced;
 use App\Mail\OrderConformation;
 use App\Models\Cart;
 use App\Models\City;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Affiliate;
+use App\Models\User;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Support\Str;
 class CheckoutController extends Controller
 {
@@ -361,6 +364,11 @@ class CheckoutController extends Controller
             'address' => $order->address,
             'grand_total' => $grandTotal,            
         ];
+        $admins = User::where('user_type', 'admin')->get();
+        foreach ($admins as $admin) {
+         $admin->notify(new NewOrderNotification($order));
+        }
+        // event(new OrderPlaced($order));
         return response()->json([
             'message' => 'Order placed successfully',
             'status' => true,

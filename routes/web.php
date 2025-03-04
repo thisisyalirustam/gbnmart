@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductMainController;
+use App\Http\Controllers\admin\settings\NotificationController;
 use App\Http\Controllers\admin\settings\SettingsMainController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
@@ -112,8 +113,14 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::post('/affiliate/approve', [AdminController::class, 'approveAffiliate']);
     Route::post('/affiliate/deactivate', [AdminController::class, 'deactivateAffiliate']);
     Route::delete('/affiliate/delete/{id}', [AdminController::class, 'deleteAffliate'])->name('affiliate.delete');
+    //notification
+    // Route::post('/notifications/mark-as-read', [AdminController::class, 'markAsRead'])->name('notifications.markAsRead');
+    // Route::get('/notifications/fatch', [AdminController::class, 'getNotifications'])->name('notifications.get');
 
-});
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    });
 
 //vendor Routs
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -41,6 +41,7 @@ class User extends Authenticatable
 
     protected $guarded = [];
 
+    use Notifiable;
 
     /**
      * Get the attributes that should be cast.

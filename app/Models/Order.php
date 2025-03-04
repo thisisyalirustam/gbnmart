@@ -35,11 +35,13 @@ class Order extends Model
         'delivered_date',
     ];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function country(){
+    public function country()
+    {
         return $this->belongsTo(Country::class);
     }
     public function items()
@@ -60,10 +62,15 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-      // Define the relationship to ratings and reviews
-      public function ratingsAndReviews()
-      {
-          return $this->hasMany(RattingAndReview::class);
-      }
-    
+    // Define the relationship to ratings and reviews
+    public function ratingsAndReviews()
+    {
+        return $this->hasMany(RattingAndReview::class);
+    }
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+
 }

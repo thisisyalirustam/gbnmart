@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Http\Middleware\CartCountMiddleware;
+use App\Models\Order;
+use App\Observers\OrderObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         app('router')->pushMiddlewareToGroup('web', CartCountMiddleware::class);
+       
     }
 }
