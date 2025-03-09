@@ -10,7 +10,11 @@ use App\Models\ProductBrand;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminMainController extends Controller
 {
@@ -20,8 +24,8 @@ class AdminMainController extends Controller
         $category = ProductCat::all();
         $subcategory = ProductSubCategory::all();
         $brand = ProductBrand::all();
-        $units=Unit::all();
-        return view('admin.pages.products.product_create', compact('category', 'subcategory', 'brand','units'));
+        $units = Unit::all();
+        return view('admin.pages.products.product_create', compact('category', 'subcategory', 'brand', 'units'));
     }
 
     public function getSubcategoriesAndBrands($categoryId)
@@ -62,8 +66,9 @@ class AdminMainController extends Controller
         }
     }
 
-    public function quickShow(string $id){
-     
+    public function quickShow(string $id)
+    {
+
 
         $ordershow = Order::with(['user', 'country', 'items.product'])->find($id);
 
@@ -76,13 +81,67 @@ class AdminMainController extends Controller
             $images = json_decode($item->product->images, true);
             $item->product->images = $images[0] ?? 'default-image.jpg';
         }
-        $coupon=$ordershow->coupon_code;
-        $vendor=Affiliate::with(['user'])->where('coupon',$coupon)->first();
+        $coupon = $ordershow->coupon_code;
+        $vendor = Affiliate::with(['user'])->where('coupon', $coupon)->first();
 
-       return response()->json([
-        'success'=>true,
-        'data'=>$ordershow
-       ]);
+        return response()->json([
+            'success' => true,
+            'data' => $ordershow
+        ]);
     }
+
+    public function getProfile()
+    {
+
+        return view('admin.pages.dashboard.profile');
+    }
+
+    public function update(Request $request)
+    {
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+        $user = User::find($request->input('userid'));
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
+        $user->save();
+        return response()->json(['success' => 'Profile updated successfully!']);
+    }
+
+    public function changePassword(Request $request)
+    {
+    $validator = Validator::make($request->all(), [
+        'current_password' => 'required|string',
+        'new_password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = User::find($request->input('userid'));
+
+    if (!$user) {
+        return response()->json(['error' => 'User not found.'], 404);
+    }
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return response()->json(['error' => 'The current password is incorrect.'], 422);
+    }
+
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    return response()->json(['success' => 'Password changed successfully!']);
+}
+
+    
+
+
 
 }

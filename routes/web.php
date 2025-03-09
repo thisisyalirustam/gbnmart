@@ -120,6 +120,11 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+    Route::get('/admin/profile',[AdminMainController::class, 'getProfile'])->name('admin.profile');
+    Route::post('/profile/update', [AdminMainController::class, 'update'])->name('profile.update');
+    Route::post('/change-password', [AdminMainController::class, 'changePassword'])->name('change.admin.password');
+
     });
 
 //vendor Routs
