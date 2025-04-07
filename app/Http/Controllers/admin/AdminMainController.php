@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class AdminMainController extends Controller
 {
@@ -114,34 +115,47 @@ class AdminMainController extends Controller
         $user->phone = $request->input('phone');
         $user->address = $request->input('address');
         $user->save();
-        return response()->json(['success' => 'Profile updated successfully!']);
+        return redirect()->back()->with('success', 'Profile Update Successfully!');
+
     }
 
     public function changePassword(Request $request)
     {
-    $validator = Validator::make($request->all(), [
-        'current_password' => 'required|string',
-        'new_password' => 'required|string|min:8|confirmed',
-    ]);
-
-    $user = User::find($request->input('userid'));
-
-    if (!$user) {
-        return response()->json(['error' => 'User not found.'], 404);
+        // Log the incoming request data
+        Log::info('Change Password Request:', $request->all());
+    
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+    
+        if ($validator->fails()) {
+            // Log validation errors
+            Log::error('Validation Errors:', $validator->errors()->toArray());
+            return response()->json(['error' => $validator->errors()->first()], 422);
+        }
+    
+        $user = User::find($request->input('userid'));
+    
+        if (!$user) {
+            // Log user not found error
+            Log::error('User not found:', ['userid' => $request->input('userid')]);
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+    
+        if (!Hash::check($request->current_password, $user->password)) {
+            // Log current password mismatch
+            Log::error('Current password mismatch:', ['userid' => $user->id]);
+            return response()->json(['error' => 'The current password is incorrect.'], 422);
+        }
+    
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+    
+        // Log successful password change
+        Log::info('Password changed successfully:', ['userid' => $user->id]);
+        return redirect()->back()->with('success', 'Password Update Successfully!');
     }
-
-    if (!Hash::check($request->current_password, $user->password)) {
-        return response()->json(['error' => 'The current password is incorrect.'], 422);
-    }
-
-    $user->password = Hash::make($request->new_password);
-    $user->save();
-
-    return response()->json(['success' => 'Password changed successfully!']);
-}
 
     
-
-
-
 }

@@ -301,10 +301,10 @@ class AdminController extends Controller
         }
 
         // Update the affiliate details
-        $affiliate->status = 1; // Set status to Active
-        $affiliate->coupon = $validated['coupon_code']; // Assign the coupon code directly
-        $affiliate->percentage = $validated['percentage']; // Assign percentage
-        $affiliate->vendor_percentage = $validated['vendor_percentage']; // Assign vendor percentage
+        $affiliate->status = 1; 
+        $affiliate->coupon = $validated['coupon_code']; 
+        $affiliate->percentage = $validated['percentage'];
+        $affiliate->vendor_percentage = $validated['vendor_percentage'];
         $affiliate->save();
 
         return response()->json(['success' => true, 'message' => 'Affiliate Approved']);

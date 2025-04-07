@@ -116,99 +116,116 @@
 
     <!-- Modal for Edit Profile -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
-
-                </div>
-                <div class="modal-body">
-                    <!-- Edit Profile Form -->
-                    <form id="profileUpdate">
-                        @csrf <!-- Add CSRF Token -->
-                        <input type="number" class="form-control" name="userid" id="userid" value="{{ Auth::id() }}"
-                            hidden>
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                value="{{ Auth::user()->name }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                value="{{ Auth::user()->email }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" id="phone" name="phone"
-                                value="{{ Auth::user()->phone }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address</label>
-                            <input type="text" class="form-control" id="address" name="address"
-                                value="{{ Auth::user()->address }}">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-                </form>
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <!-- Modal Header -->
+            <form action="{{ route('profile.update') }}"  method="POST">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+           
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Edit Profile Form -->
+                    @csrf <!-- Add CSRF Token -->
+                    <input type="number" class="form-control" name="userid" id="userid" value="{{ Auth::id() }}" hidden>
+
+                    <!-- Full Name Field -->
+                    <div class="form-group">
+                        <label for="name" class="font-weight-bold">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                               value="{{ Auth::user()->name }}" placeholder="Enter your full name">
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="font-weight-bold">Email</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               value="{{ Auth::user()->email }}" placeholder="Enter your email">
+                    </div>
+
+                    <!-- Phone Field -->
+                    <div class="form-group">
+                        <label for="phone" class="font-weight-bold">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone"
+                               value="{{ Auth::user()->phone }}" placeholder="Enter your phone number">
+                    </div>
+
+                    <!-- Address Field -->
+                    <div class="form-group">
+                        <label for="address" class="font-weight-bold">Address</label>
+                        <input type="text" class="form-control" id="address" name="address"
+                               value="{{ Auth::user()->address }}" placeholder="Enter your address">
+                    </div>
+               
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" form="profileUpdate" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
         </div>
     </div>
+</div>
 
 
     <!-- Modal for Change Password -->
     <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog"
-        aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="changePasswordForm">
-                    <div class="modal-body">
-                        <!-- Change Password Form -->
+    aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content">
+           <!-- Modal Header -->
+           <div class="modal-header bg-primary text-white">
+               <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+               <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+               </button>
+           </div>
 
+           <!-- Modal Body -->
+           <form  action="{{ route('change.admin.password') }}" method="POST">
+               @csrf
+               <input type="number" class="form-control" name="userid" id="userid" value="{{ Auth::id() }}" hidden>
+               <div class="modal-body">
+                   <!-- Current Password Field -->
+                   <div class="form-group">
+                       <label for="currentPassword" class="font-weight-bold">Current Password</label>
+                       <input type="password" class="form-control" id="currentPassword" name="current_password"
+                              placeholder="Enter your current password" required>
+                   </div>
 
-                        @csrf <!-- Add CSRF Token -->
-                        <input type="number" class="form-control" name="userid" id="userid"
-                            value="{{ Auth::id() }}" hidden>
-                        <div class="form-group">
-                            <label for="currentPassword">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword" name="current_password"
-                                placeholder="Enter your current password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="newPassword">New Password</label>
-                            <input type="password" class="form-control" id="newPassword" name="new_password"
-                                placeholder="Enter new password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword"
-                                name="new_password_confirmation" placeholder="Confirm your new password" required>
-                        </div>
+                   <!-- New Password Field -->
+                   <div class="form-group">
+                       <label for="newPassword" class="font-weight-bold">New Password</label>
+                       <input type="password" class="form-control" id="newPassword" name="new_password"
+                              placeholder="Enter new password" required>
+                   </div>
 
+                   <!-- Confirm New Password Field -->
+                   <div class="form-group">
+                       <label for="confirmPassword" class="font-weight-bold">Confirm New Password</label>
+                       <input type="password" class="form-control" id="confirmPassword" name="new_password_confirmation"
+                              placeholder="Confirm your new password" required>
+                   </div>
+               </div>
 
+               <!-- Modal Footer -->
+               <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   <button type="submit" class="btn btn-primary">Change Password</button>
+               </div>
+           </form>
+       </div>
+   </div>
+</div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="changepasswordcloss" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary changePassword">Change Password</button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
@@ -250,47 +267,49 @@
 
         });
 
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $(".changePassword").submit(function(event) {
-                event.preventDefault();
-
-                $.ajax({
-                    url: '{{ route('change.admin.password') }}',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    dataType: 'JSON',
-                    success: function(response) {
-                        if (response.success) {
-                            toastr.success(response.success);
-                            $('#changepasswordcloss').modal('hide');
-                            setTimeout(function() {
-                                location.reload();
-                            }, 2000);
-                        } else {
-                            toastr.error(
-                                "There was an error updating your profile. Please try again."
-                            );
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            toastr.error(xhr.responseJSON
-                                .error); // Show backend validation error
-                        } else {
-                            toastr.error("An unexpected error occurred. Please try again.");
-                        }
-                    }
-                });
-            });
-
-        });
     </script>
+
+
+<script>
+    // Your custom script here
+    $(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $("#changePasswordForm").submit(function(event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: '{{ route('change.admin.password') }}',
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'JSON',
+            success: function(response) {
+                if (response.success) {
+                    toastr.success(response.success);
+                    $('#changePasswordModal').modal('hide');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    toastr.error("There was an error updating your profile. Please try again.");
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    toastr.error(xhr.responseJSON.error); // Show backend validation error
+                } else {
+                    toastr.error("An unexpected error occurred. Please try again.");
+                }
+            }
+        });
+    });
+});
+</script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
 {{--   --}}

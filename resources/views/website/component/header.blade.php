@@ -56,7 +56,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background-color: rgba(212, 211, 208, 0.925);
+            background-color: rgba(247, 220, 139, 0.925);
             box-shadow: 0 4px 2px -2px rgb(73, 73, 73);
             transition: all 0.3s ease-in-out;
         }
@@ -65,6 +65,22 @@
             padding-top: 100px;
         }
 
+        @media (max-width: 768px){
+            .header_meddle.sticky{
+                display: none;
+            }
+            .header_meddle.sticky{
+                display: none;
+
+            }
+            .sticky_logo{
+                display: none;
+            }
+            .sticky_signup_login{
+                display: none;
+            }
+
+        }
         /* .user-details{
             background-color: rgb(247, 243, 233);
         } */
@@ -73,16 +89,16 @@
     <!-- Humberger Begin -->
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
-        <div class="humberger__menu__logo">
+        {{-- <div class="humberger__menu__logo">
             <a href="{{ route('homepage') }}"><img src="{{ asset(settings()->logo) }}" alt="Logo"></a>
-        </div>
+        </div> --}}
 
         <div class="humberger__menu__cart">
             <ul>
                 <li>
                     <a href="{{ route('wishlist.show') }}">
                         <i class="fa fa-heart"></i>
-                        <span id="wishlist-count">{{ $wishlistCount ?? 0 }}</span>
+                        <span id="wishlist-count">{{ $wishlistCount ?? 0 }} wishlist</span>
                     </a>
                 </li>
                 <li>
@@ -195,11 +211,12 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid header_meddle">
+
+        <div class="container-fluid header_meddle ">
             <div class="row align-items-center">
                 <!-- Logo Section -->
                 <div class="col-lg-2">
-                    <div class="header__logo">
+                    <div class="header__logo  sticky_logo">
                         <a href="{{ route('homepage') }}"><img src="{{ asset(settings()->logo) }}" alt="Logo"
                                 class="img-fluid"></a>
                     </div>
@@ -237,7 +254,7 @@
                     </nav>
                 </div>
                 <!-- Cart and Wishlist Section -->
-                <div class="col-lg-3 d-flex justify-content-end">
+                <div class="col-lg-3 d-flex justify-content-end sticky_signup_login">
                     <div class="header__cart d-flex align-items-center">
                         <ul class="list-inline mb-0">
                             <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i
@@ -253,7 +270,7 @@
                 </div>
 
                 <!-- User Profile Section -->
-                <div class="col-lg-2 d-flex  user-details">
+                <div class="col-lg-2 d-flex  user-details sticky_signup_login">
                     @if (Route::has('login'))
                         <nav class="d-flex align-items-center">
                             @auth
@@ -268,13 +285,13 @@
                                 </div>
                             @else
                                 <div class="user-auth-buttons me-2">
-                                    <a href="{{ route('login') }}" class="btn btn-link text-dark"><i
+                                    <a href="{{ route('login') }}" class="btn btn-link text-dark sticky_signup_login"><i
                                             class="fa fa-user"></i>
                                         Login</a>
                                 </div>
                                 @if (Route::has('register'))
                                     <div class="user-auth-buttons">
-                                        <a href="{{ route('register') }}" class="btn btn-link text-dark"><i
+                                        <a href="{{ route('register') }}" class="btn btn-link text-dark sticky_signup_login"><i
                                                 class="fa fa-user-secret"></i> Register</a>
                                     </div>
                                 @endif
@@ -290,6 +307,7 @@
         </div>
 
     </header>
+
     <section class="hero hero-normal">
         <div class="container">
             <div class="row">
