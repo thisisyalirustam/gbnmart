@@ -3,6 +3,7 @@
 use App\Models\AppManagement;
 use App\Models\Banner;
 use App\Models\ProductCat;
+use App\Models\ProductSubCategory;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,9 @@ function getCategories()
 {
 
     return ProductCat::where('status', '1')->where('sof', 'yes')->get();
+}
+function getSubCategories(){
+    return ProductSubCategory::all();
 }
 function getbanners()
 {

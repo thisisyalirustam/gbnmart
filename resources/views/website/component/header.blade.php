@@ -1,375 +1,355 @@
+ 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Ogani Template">
-    <meta name="keywords" content="Ogani, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - FashionStore Bootstrap Template</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+  <!-- Favicons -->
+  <link href="{{ asset('website/assets/img/favicon.png') }}" rel="icon">
+  <link href="{{asset('website/assets/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('website/css/font-awesome.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('website/css/elegant-icons.css') }}" type="text/css">
-    {{--
-    <link rel="stylesheet" href="{{asset('website/css/nice-select.css')}}" type="text/css"> --}}
-    <link rel="stylesheet" href=" {{ asset('website/css/jquery-ui.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('website/css/owl.carousel.min.css') }}" type="text/css">
-    <link rel="stylesheet" href=" {{ asset('website/css/slicknav.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('website/css/style.css ') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('website/coustom_css/css.css') }}" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <!-- Vendor CSS Files -->
+  <link href="{{ asset('website/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('website/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('website/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('website/assets/vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ asset('website/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('website/assets/vendor/drift-zoom/drift-basic.css') }}" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Toastr JS -->
+  <!-- Main CSS File -->
+  <link href="{{ asset('website/assets/css/main.css') }}" rel="stylesheet">
 
+  <!-- =======================================================
+  * Template Name: FashionStore
+  * Template URL: https://bootstrapmade.com/fashion-store-bootstrap-template/
+  * Updated: Apr 26 2025 with Bootstrap v5.3.5
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
 
-<body>
-    <!-- Page Preloder -->
+<body class="index-page">
 
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-    </script>
-    <style>
-        .header_meddle {
-            position: relative;
-            z-index: 1000;
-        }
-
-        .header_meddle.sticky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(247, 220, 139, 0.925);
-            box-shadow: 0 4px 2px -2px rgb(73, 73, 73);
-            transition: all 0.3s ease-in-out;
-        }
-
-        body.sticky-header-active {
-            padding-top: 100px;
-        }
-
-        @media (max-width: 768px){
-            .header_meddle.sticky{
-                display: none;
-            }
-            .header_meddle.sticky{
-                display: none;
-
-            }
-            .sticky_logo{
-                display: none;
-            }
-            .sticky_signup_login{
-                display: none;
-            }
-
-        }
-        /* .user-details{
-            background-color: rgb(247, 243, 233);
-        } */
-    </style>
-
-    <!-- Humberger Begin -->
-    <div class="humberger__menu__overlay"></div>
-    <div class="humberger__menu__wrapper">
-        {{-- <div class="humberger__menu__logo">
-            <a href="{{ route('homepage') }}"><img src="{{ asset(settings()->logo) }}" alt="Logo"></a>
-        </div> --}}
-
-        <div class="humberger__menu__cart">
-            <ul>
-                <li>
-                    <a href="{{ route('wishlist.show') }}">
-                        <i class="fa fa-heart"></i>
-                        <span id="wishlist-count">{{ $wishlistCount ?? 0 }} wishlist</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('cart.show') }}">
-                        <i class="fa fa-shopping-bag"></i>
-                        <span id="cart-count">{{ $cartCount ?? 0 }}</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="header__cart__price">
-                Items: <span>${{ $totalCartPrice ?? 0 }}</span> <!-- Optional: Total price of the cart -->
+  <header id="header" class="header position-relative">
+    <!-- Top Bar -->
+    <div class="top-bar py-2 d-none d-lg-block">
+      <div class="container-fluid container-xl">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="d-flex align-items-center">
+              <div class="top-bar-item me-4">
+                <i class="bi bi-telephone-fill me-2"></i>
+                <span>Customer Support: </span>
+                <a href="tel:{{ settings()->phone }}">{{ settings()->phone }}</a>
+              </div>
+              <div class="top-bar-item">
+                <i class="bi bi-envelope-fill me-2"></i>
+                <a href="mailto:{{ settings()->email }}">{{ settings()->email }}</a>
+              </div>
             </div>
-        </div>
+          </div>
 
-        <div class="humberger__menu__widget">
-            <div class="header__top__right__language">
-                <img src="img/language.png" alt="">
-                <div>English</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">Spanish</a></li>
-                    <li><a href="#">English</a></li>
+          <div class="col-lg-6">
+            <div class="d-flex justify-content-end">
+              <div class="top-bar-item me-4">
+                <a href="track-order.html">
+                  <i class="bi bi-truck me-2"></i>Track Order
+                </a>
+              </div>
+              <div class="top-bar-item dropdown me-4">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                  <i class="bi bi-translate me-2"></i>English
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>English</a></li>
+                  <li><a class="dropdown-item" href="#">Español</a></li>
+                  <li><a class="dropdown-item" href="#">Français</a></li>
+                  <li><a class="dropdown-item" href="#">Deutsch</a></li>
                 </ul>
+              </div>
+              <div class="top-bar-item dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown">
+                  <i class="bi bi-currency-dollar me-2"></i>USD
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
+                  <li><a class="dropdown-item" href="#">EUR</a></li>
+                  <li><a class="dropdown-item" href="#">GBP</a></li>
+                </ul>
+              </div>
             </div>
-
-            <div class="header__top__right__auth">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ route('dashboard') }}"><i class="fa fa-user"></i> Profile</a>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                class="fa fa-sign-out"></i> Logout</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}"><i class="fa fa-user"></i> Login</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"><i class="fa fa-user-secret"></i> Register</a>
-                        @endif
-                    @endauth
-                @endif
-            </div>
+          </div>
         </div>
-
-        <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li class="active"><a href="{{ route('homepage') }}">Home</a></li>
-                <li class="dropdown">
-                    <a href="{{ route('shoppage') }}">Shop</a>
-                    <ul class="header__menu__dropdown">
-                        @foreach (getCategories() as $category)
-                            <li><a href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a></li>
-                        @endforeach
-                    </ul>
-                </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
-            </ul>
-        </nav>
-
-        <div id="mobile-menu-wrap"></div>
-
-        <div class="header__top__right__social">
-            <a href="{{ settings()->facebook }}"><i class="fa fa-facebook"></i></a>
-            <a href="{{ settings()->twitter }}"><i class="fa fa-twitter"></i></a>
-            <a href="{{ settings()->linkedin }}"><i class="fa fa-linkedin"></i></a>
-            <a href="{{ settings()->pinterest }}"><i class="fa fa-pinterest-p"></i></a>
-        </div>
-
-        <div class="humberger__menu__contact">
-            <ul>
-                <li><i class="fa fa-envelope"></i> {{ settings()->email }}</li>
-                <li>Free Shipping for all Orders over $99</li>
-            </ul>
-        </div>
+      </div>
     </div>
 
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <li><i class="fa fa-envelope"></i> {{ settings()->email }}</li>
-                                <li>Free Shipping for all Order of $99</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__social">
-                                <a href="{{ settings()->facebook }}"><i class="fa fa-facebook"></i></a>
-                                <a href="{{ settings()->twitter }}"><i class="fa fa-twitter"></i></a>
-                                <a href="{{ settings()->linkedin }}"><i class="fa fa-linkedin"></i></a>
-                            </div>
-                            <div class="header__top__right__language">
-                                <img src="img/language.png" alt="">
-                                <div>English</div>
-                                <span class="arrow_carrot-down"></span>
-                                <ul>
-                                    <li><a href="#">Spanis</a></li>
-                                    <li><a href="#">English</a></li>
-                                </ul>
-                            </div>
+    <!-- Main Header -->
+    <div class="main-header">
+      <div class="container-fluid container-xl">
+        <div class="d-flex py-3 align-items-center justify-content-between">
 
-                        </div>
-                    </div>
-                </div>
+          <a href="{{ route('homepage') }}"  class="logo d-flex align-items-center"><img src="{{ asset(settings()->logo) }}" alt="Logo"></a>
+
+          <!-- Search -->
+          <form class="search-form desktop-search-form">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search for products...">
+              <button class="btn search-btn" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
             </div>
-        </div>
+          </form>
 
-        <div class="container-fluid header_meddle ">
-            <div class="row align-items-center">
-                <!-- Logo Section -->
-                <div class="col-lg-2">
-                    <div class="header__logo  sticky_logo">
-                        <a href="{{ route('homepage') }}"><img src="{{ asset(settings()->logo) }}" alt="Logo"
-                                class="img-fluid"></a>
-                    </div>
+          <!-- Actions -->
+          <div class="header-actions d-flex align-items-center justify-content-end">
+
+            <!-- Mobile Search Toggle -->
+            <button class="header-action-btn mobile-search-toggle d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileSearch" aria-expanded="false" aria-controls="mobileSearch">
+              <i class="bi bi-search"></i>
+            </button>
+
+            <!-- Account -->
+            <div class="dropdown account-dropdown">
+    <button class="header-action-btn" data-bs-toggle="dropdown">
+    @auth
+        @if (Auth::user()->image)
+            <img src="{{ asset('uploads/' . Auth::user()->image) }}"
+                 alt="User" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+        @else
+            <i class="bi bi-person"></i>
+        @endif
+    @else
+        <i class="bi bi-person"></i>
+    @endauth
+    <span class="action-text d-none d-md-inline-block">Account</span>
+</button>
+
+    <div class="dropdown-menu">
+        @if (Route::has('login'))
+            @auth
+                {{-- User is Logged In --}}
+                <div class="dropdown-header">
+                    <h6>Welcome, {{ Auth::user()->name }}</h6>
+                    <p class="mb-0">Access account & manage orders</p>
                 </div>
-
-                <!-- Navigation Menu Section -->
-                <div class="col-lg-5">
-                    <nav class="header__menu">
-                        <ul class="nav ">
-                            <li class="nav-item"><a class="nav-link active" href="{{ route('homepage') }}">Home</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link " href="{{ route('shoppage') }}" id="shopDropdown"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                                <ul class="header__menu__dropdown">
-                                    @php
-                                        $categories = getCategories();
-                                    @endphp
-                                    @if ($categories->isEmpty())
-                                        <li><a href="javascript:void(0);">No categories available</a></li>
-                                    @else
-                                        @foreach ($categories as $category)
-                                            <li><a
-                                                    href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            </li>
-                            <li><a class="nav-link" href="./blog.html">Blog</a></li>
-                            <li><a class="nav-link" href="./contact.html">Contact</a></li>
-                            <li><a class="nav-link" href="./blog.html">Blog</a></li>
-
-                        </ul>
-                    </nav>
+                <div class="dropdown-body">
+                    <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard') }}">
+                        <i class="bi bi-person-circle me-2"></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href="">
+                        <i class="bi bi-bag-check me-2"></i>
+                        <span>My Orders</span>
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href="">
+                        <i class="bi bi-heart me-2"></i>
+                        <span>My Wishlist</span>
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href="">
+                        <i class="bi bi-arrow-return-left me-2"></i>
+                        <span>Returns & Refunds</span>
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href="">
+                        <i class="bi bi-gear me-2"></i>
+                        <span>Settings</span>
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item d-flex align-items-center text-danger">
+                            <i class="bi bi-box-arrow-right me-2"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                 </div>
-                <!-- Cart and Wishlist Section -->
-                <div class="col-lg-3 d-flex justify-content-end sticky_signup_login">
-                    <div class="header__cart d-flex align-items-center">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item"><a href="{{ route('wishlist.show') }}"><i
-                                        class="fa fa-heart"></i> <span
-                                        id="wishlist-count">{{ getWishlistCount() }}</span></a></li>
-                            <li class="list-inline-item"><a href="{{ route('cart.show') }}"><i
-                                        class="fa fa-shopping-bag"></i> <span
-                                        id="cart-count">{{ $cartCount ?? 0 }}</span>
-                                </a></li>
-                        </ul>
-                        {{-- <div class="header__cart__price ms-3">Items: <span>$150.00</span></div> --}}
-                    </div>
+            @else
+                {{-- Guest View (Not Logged In) --}}
+                <div class="dropdown-header">
+                    <h6>Welcome to <span class="sitename">FashionStore</span></h6>
+                    <p class="mb-0">Access account & manage orders</p>
                 </div>
-
-                <!-- User Profile Section -->
-                <div class="col-lg-2 d-flex  user-details sticky_signup_login">
-                    @if (Route::has('login'))
-                        <nav class="d-flex align-items-center">
-                            @auth
-                                <div class="user-profile-dropdown me-2">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-link text-dark"><i
-                                            class="fa fa-user"></i>
-                                        Profile</a>
-                                </div>
-                                <div class="user-profile-dropdown me-2">
-                                    <a href="javascript:void(0);" class="btn btn-link text-dark"><i
-                                            class="fa fa-user-secret"></i> {{ Auth::user()->name }}</a>
-                                </div>
-                            @else
-                                <div class="user-auth-buttons me-2">
-                                    <a href="{{ route('login') }}" class="btn btn-link text-dark sticky_signup_login"><i
-                                            class="fa fa-user"></i>
-                                        Login</a>
-                                </div>
-                                @if (Route::has('register'))
-                                    <div class="user-auth-buttons">
-                                        <a href="{{ route('register') }}" class="btn btn-link text-dark sticky_signup_login"><i
-                                                class="fa fa-user-secret"></i> Register</a>
-                                    </div>
-                                @endif
-                            @endauth
-                        </nav>
+                <div class="dropdown-footer">
+                    <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">Sign In</a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">Register</a>
                     @endif
                 </div>
-            </div>
-            <!-- Hamburger Menu -->
-            <div class="humberger__open d-lg-none">
-                <i class="fa fa-bars"></i>
-            </div>
-        </div>
+            @endauth
+        @endif
+    </div>
+</div>
 
-    </header>
 
-    <section class="hero hero-normal">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="hero__categories">
-                        <div class="hero__categories__all">
-                            <i class="fa fa-bars"></i>
-                            <span>All departments</span>
-                        </div>
-                        <ul>
-                            @if (getCategories()->isNotEmpty())
-                                @foreach (getCategories() as $category)
-                                    <li><a href="{{ route('shoppage', $category->slug) }}">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
+            <!-- Wishlist -->
+            <a href="wishlist.html" class="header-action-btn d-none d-md-flex">
+              <i class="bi bi-heart"></i>
+              <span class="action-text d-none d-md-inline-block">Wishlist</span>
+              <span class="badge">0</span>
+            </a>
+
+            <!-- Cart -->
+            <div class="dropdown cart-dropdown">
+              <button class="header-action-btn" data-bs-toggle="dropdown">
+                <i class="bi bi-cart3"></i>
+                <span class="action-text d-none d-md-inline-block">Cart</span>
+                <span class="badge">3</span>
+              </button>
+              <div class="dropdown-menu cart-dropdown-menu">
+                <div class="dropdown-header">
+                  <h6>Shopping Cart (3)</h6>
                 </div>
-                <div class="col-lg-9">
-                    <div class="hero__search">
-                        <div class="hero__search__form">
-                            <form action="{{ route('shoppage') }}" method="GET">
-                                <div class="hero__search__categories">
-                                    All Categories
-                                    <span class="arrow_carrot-down"></span>
-                                </div>
-                                <input type="text" name="search" value="{{ Request::get('search') }}"
-                                    id="search" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
-                            </form>
-                        </div>
-                        <div class="hero__search__phone">
-                            <div class="hero__search__phone__icon">
-                                <i class="fa fa-phone"></i>
-                            </div>
-                            <div class="hero__search__phone__text">
-                                <h5>{{ settings()->phone }}</h5>
-                                <span>support 24/7 time</span>
-                            </div>
-                        </div>
+                <div class="dropdown-body">
+                  <div class="cart-items">
+                    <!-- Cart Item 1 -->
+                    <div class="cart-item">
+                      <div class="cart-item-image">
+                        <img src="assets/img/product/product-1.webp" alt="Product" class="img-fluid">
+                      </div>
+                      <div class="cart-item-content">
+                        <h6 class="cart-item-title">Wireless Headphones</h6>
+                        <div class="cart-item-meta">1 × $89.99</div>
+                      </div>
+                      <button class="cart-item-remove">
+                        <i class="bi bi-x"></i>
+                      </button>
                     </div>
+
+                    <!-- Cart Item 2 -->
+                    <div class="cart-item">
+                      <div class="cart-item-image">
+                        <img src="assets/img/product/product-2.webp" alt="Product" class="img-fluid">
+                      </div>
+                      <div class="cart-item-content">
+                        <h6 class="cart-item-title">Smart Watch</h6>
+                        <div class="cart-item-meta">1 × $129.99</div>
+                      </div>
+                      <button class="cart-item-remove">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+
+                    <!-- Cart Item 3 -->
+                    <div class="cart-item">
+                      <div class="cart-item-image">
+                        <img src="assets/img/product/product-3.webp" alt="Product" class="img-fluid">
+                      </div>
+                      <div class="cart-item-content">
+                        <h6 class="cart-item-title">Bluetooth Speaker</h6>
+                        <div class="cart-item-meta">1 × $59.99</div>
+                      </div>
+                      <button class="cart-item-remove">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
+                <div class="dropdown-footer">
+                  <div class="cart-total">
+                    <span>Total:</span>
+                    <span class="cart-total-price">$279.97</span>
+                  </div>
+                  <div class="cart-actions">
+                    <a href="cart.html" class="btn btn-outline-primary">View Cart</a>
+                    <a href="checkout.html" class="btn btn-primary">Checkout</a>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <!-- Mobile Navigation Toggle -->
+            <i class="mobile-nav-toggle d-xl-none bi bi-list me-0"></i>
+
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <script>
-        window.onscroll = function() {
-            stickyHeader();
-        };
+    <!-- Navigation -->
+    <div class="header-nav">
+      <div class="container-fluid container-xl position-relative">
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="category.html">Category</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="checkout.html">Checkout</a></li>
+ @php
+    $categories = getCategories();
+    $subcategories = getSubCategories();
+@endphp
 
-        var header = document.querySelector('.header_meddle');
-        var sticky = header.offsetTop;
+@foreach ($categories as $category)
+    @php
+        $children = $subcategories->where('product_cat_id', $category->id);
+    @endphp
+     <li class="dropdown"><a href="{{ route('shoppage', $category->slug) }}"><span>{{ $category->name }}</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+      @if ($children->isNotEmpty())
+              <ul>
+                @foreach ($children as $child)
+                <li><a href="{{ route('shoppage', $child->slug) }}">{{ $child->name }}</a></li>
+                @endforeach
+              </ul>
+            </li>
+       @endif
+@endforeach
 
-        function stickyHeader() {
-            if (window.pageYOffset > sticky) {
-                header.classList.add("sticky");
-                document.body.classList.add("sticky-header-active");
-            } else {
-                header.classList.remove("sticky");
-                document.body.classList.remove("sticky-header-active");
+
+            <li><a href="contact.html">Contact</a></li>
+
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar py-2">
+      <div class="container-fluid container-xl">
+        <div class="announcement-slider swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": 1,
+              "effect": "slide",
+              "direction": "vertical"
             }
-        }
-    </script>
+          </script>
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">🚚 Free shipping on orders over $50</div>
+            <div class="swiper-slide">💰 30 days money back guarantee</div>
+            <div class="swiper-slide">🎁 20% off on your first order - Use code: FIRST20</div>
+            <div class="swiper-slide">⚡ Flash Sale! Up to 70% off on selected items</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Search Form -->
+    <div class="collapse" id="mobileSearch">
+      <div class="container">
+        <form class="search-form">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for products...">
+            <button class="btn search-btn" type="submit">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </header>
