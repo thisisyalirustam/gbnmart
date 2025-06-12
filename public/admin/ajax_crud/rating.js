@@ -72,16 +72,11 @@ $(() => {
                         statusText = "Active";
                         buttonClass = "btn-success";  // Green button for active
                     }
-
-                    // Create the button
                     const button = $("<button>")
                         .addClass(`btn ${buttonClass} btn-sm`)
                         .text(statusText)
                         .on("click", function () {
-                            // Toggle the status before sending it
                             const newStatus = status === 0 ? 1 : 0;  // Toggle between 0 and 1
-
-                            // AJAX request to update the status
                             $.ajax({
                                 url: `/update-status/${options.data.id}`,  // Assuming you pass the ID for the order
                                 method: "PATCH",  // Use PATCH for partial update

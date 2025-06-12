@@ -98,10 +98,7 @@
               <p>© <span>Copyright</span> <strong class="sitename">MyWebsite</strong>. All Rights Reserved.</p>
             </div>
             <div class="credits mt-1">
-              <!-- All the links in the footer should remain intact. -->
-              <!-- You can delete the links only if you've purchased the pro version. -->
-              <!-- Licensing information: https://bootstrapmade.com/license/ -->
-              <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+             
               Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
             </div>
           </div>
@@ -138,8 +135,10 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 <!-- Bootstrap Bundle includes Popper -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
   <!-- Vendor JS Files -->
   <script src="{{asset('website/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
   <script src="{{asset('website/assets/vendor/php-email-form/validate.js')}}"></script>
@@ -150,7 +149,8 @@
   <script src="{{asset('website/assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
   <script src="{{asset('website/assets/vendor/drift-zoom/Drift.min.js')}}"></script>
   <script src="{{asset('website/assets/vendor/purecounter/purecounter_vanilla.js')}}"></script>
-
+  <script src="{{asset('website/assets/vendor/aos/aos.js')}}"></script>
+  <script src="{{asset('website/coustom_js/js.js')}}"></script>
   <!-- Main JS File -->
   <script src="{{asset('website/assets/js/main.js')}}"></script>
 

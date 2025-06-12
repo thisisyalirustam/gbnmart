@@ -154,7 +154,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'weight' => 'required|numeric',
             'dimensions' => 'required|string',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate new images
+            // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate new images
         ]);
         $product->name = $request->input('name');
         $product->sku = $request->input('sku');
@@ -176,46 +176,25 @@ class ProductController extends Controller
 
         if ($request->has('deleted_images')) {
             foreach ($request->deleted_images as $deletedImage) {
-                // Define the path to the image in the public folder
                 $imagePath = public_path('images/products/' . $deletedImage);
-
-
                 if (file_exists($imagePath)) {
                     unlink($imagePath);  // Delete the image
                 }
-
-                // Remove the image from the database array
                 $existingImages = array_diff($existingImages, [$deletedImage]);
             }
         }
-
-        // Handle new image uploads
         if ($request->hasFile('images')) {
             $uploadedImages = [];
             foreach ($request->file('images') as $image) {
-                // Define the path to store the image in the public folder
                 $imageName = $image->getClientOriginalName();  // Get the original file name
                 $destinationPath = public_path('images/products');  // Folder in public directory
-
-                // Move the image to the public/images/products/ directory
                 $image->move($destinationPath, $imageName);
-
-                // Add the image name to the array
                 $uploadedImages[] = $imageName;
             }
-
-            // Merge the new images with the existing ones
             $existingImages = array_merge($existingImages, $uploadedImages);
         }
-
-
-        // Update the product's images
         $product->images = json_encode(array_values($existingImages));
-
-        // Save the updated product
         $product->save();
-
-        // Return success response
         return response()->json(['success' => true, 'message' => 'Product updated successfully']);
     }
 

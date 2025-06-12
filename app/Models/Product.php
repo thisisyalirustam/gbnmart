@@ -77,4 +77,15 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class, 'product_id');
     }
+    public function rattingAndReviews()
+    {
+        return $this->hasManyThrough(
+            RattingAndReview::class,
+            OrderItem::class,
+            'product_id',       // Foreign key on OrderItem table referencing Product
+            'order_item_id',    // Foreign key on RattingAndReview table referencing OrderItem
+            'id',               // Local key on Product table
+            'id'                // Local key on OrderItem table
+        )->where('status', 1);
+    }
 }

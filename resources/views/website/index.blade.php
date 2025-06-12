@@ -168,7 +168,7 @@
 
     <main class="main">
         <!-- Promo Cards Section -->
-        < section id="promo-cards" class="promo-cards section">
+        <section id="promo-cards" class="promo-cards section">
 
             <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
 
