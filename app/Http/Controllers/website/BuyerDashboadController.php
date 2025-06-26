@@ -25,7 +25,21 @@ class BuyerDashboadController extends Controller
         $orderprocess = Order::where("user_id", $userId)->where("shipping_status", "Process")->get();
         $orderpending = Order::where("user_id", $userId)->where("shipping_status", "Pending")->get();
         $ordercompelte = Order::where("user_id", $userId)->where("shipping_status", "Complete")->get();
-        return view('dashboard', compact('order', 'ordercount', 'orderprocess', 'orderpending', 'ordercompelte', 'cartcount', 'returnCount', 'processCount'));
+        $ordershow = Order::with(['user', 'country', 'items.product'])
+            ->where('user_id', $userId)
+            ->get();
+
+        if (!$ordershow) {
+            return redirect()->route('orders.index')->with('error', 'Order not found.');
+        }
+        foreach ($ordershow as $orderItem) {
+            foreach ($orderItem->items as $item) {
+                $images = json_decode($item->product->images, true);
+                $item->product->images = $images[0] ?? 'default-image.jpg';
+            }
+        }
+
+        return view('dashboard', compact('order', 'ordercount', 'orderprocess', 'orderpending', 'ordercompelte', 'cartcount', 'returnCount', 'processCount', 'ordershow'));
     }
 
     public function orderproduct($id)

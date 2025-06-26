@@ -100,6 +100,27 @@ $(document).ready(function () {
         method: 'GET',
         success: function (response) {
             $('#cart-count').text(response.count);
+            $('#count').text(response.count);
+             let cartHtml = '';
+                    response.cartitem.forEach(item => {
+                        cartHtml += `
+                            <div class="cart-item">
+                                <div class="cart-item-image">
+                                    <img src="/storage/${item.first_image}" alt="${item.name}" class="img-fluid">
+                                </div>
+                                <div class="cart-item-content">
+                                    <h6 class="cart-item-title">${item.name}</h6>
+                                    <div class="cart-item-meta">${item.quantity} × $${item.price}</div>
+                                </div>
+                                <button class="cart-item-remove">
+                                    <i class="bi bi-x"></i>
+                                </button>
+                            </div>`;
+                    });
+
+                    // Update the cart items and total
+                    $('.cart-items').html(cartHtml);
+                    $('.cart-total-price').text(`$${response.subtotal.toFixed(2)}`);
         }
     });
 });
@@ -112,6 +133,7 @@ $(document).ready(function () {
         }
     });
 });
+
 
 
 let timeout = null;
@@ -127,6 +149,7 @@ document.querySelectorAll('.card-link').forEach(link => {
         event.preventDefault(); // Prevent immediate redirection
     });
 });
+
 
 
 

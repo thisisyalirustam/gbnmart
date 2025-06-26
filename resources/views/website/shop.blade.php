@@ -38,7 +38,6 @@
 
                         <div class="product-categories-widget widget-item">
                             <h3 class="widget-title">Categories</h3>
-
                             <ul class="category-tree list-unstyled mb-0">
                                 @if ($categories->isNotEmpty())
                                     @foreach ($categories as $category)
@@ -88,10 +87,7 @@
                                 @endif
                             </ul>
                         </div>
-
-                        <!--/Product Categories Widget -->
-
-                        <!-- Pricing Range Widget -->
+                        
                         <div class="pricing-range-widget widget-item">
 
                             <h3 class="widget-title">Price Range</h3>

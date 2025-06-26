@@ -16,10 +16,43 @@ class CartController extends Controller
     // MainController or BaseController
     public function index()
     {
+          $cartItems = [];
+        $subtotal = 0;
         $cartCount = Auth::check() ? Cart::where('user_id', Auth::id())->sum('quantity') : array_sum(array_column(session('cart', []), 'quantity'));
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cartItems = Cart::where('carts.user_id', Auth::id()) // Specify the table for user_id
+                ->join('products', 'carts.product_id', '=', 'products.id')
+                ->get(['products.id as product_id', 'products.name', 'products.price', 'carts.quantity', 'products.description', 'products.images']);
+        } else {
+            $sessionCart = session('cart', []);
+            foreach ($sessionCart as $productId => $item) {
+                $product = Product::find($productId);
+                if ($product) {
+                    $cartItems[] = (object)[
+                        'product_id' => $product->id,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'quantity' => $item['quantity'],
+                        'description' => $product->description,
+                        'images' => $product->images
+                    ];
+                }
+            }
+        }
+
+        // Calculate subtotal
+        foreach ($cartItems as $item) {
+            $subtotal += $item->price * $item->quantity;
+            // Decode images JSON and set first image as a property
+            $images = json_decode($item->images, true);
+            $item->first_image = $images[0] ?? null;
+        }
         return response()->json([
             'success' => true,
-            'count' => $cartCount
+            'count' => $cartCount,
+            'cartitem'=>$cartItems,
+            'subtotal'=> $subtotal
         ]);
     }
 
@@ -266,4 +299,5 @@ class CartController extends Controller
 
         return response()->json(['count' => $count]);
     }
+    
 }

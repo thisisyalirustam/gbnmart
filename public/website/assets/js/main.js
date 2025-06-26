@@ -232,11 +232,11 @@
     });
 
     // Remove item buttons
-    removeButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        btn.closest('.cart-item').remove();
-      });
-    });
+    // removeButtons.forEach(btn => {
+    //   btn.addEventListener('click', function() {
+    //     btn.closest('.cart-item').remove();
+    //   });
+    // });
   }
 
   ecommerceCartTools();
@@ -842,26 +842,28 @@
     }
 
     // Phone number input mask
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-      phoneInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 10) value = value.slice(0, 10);
+const phoneInput = document.getElementById('phone');
 
-        // Format as (XXX) XXX-XXXX
-        if (value.length > 0) {
-          if (value.length <= 3) {
-            value = '(' + value;
-          } else if (value.length <= 6) {
-            value = '(' + value.slice(0, 3) + ') ' + value.slice(3);
-          } else {
-            value = '(' + value.slice(0, 3) + ') ' + value.slice(3, 6) + '-' + value.slice(6);
-          }
-        }
+if (phoneInput) {
+  phoneInput.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
 
-        e.target.value = value;
-      });
+    // Limit to 11 digits (e.g., 03XXXXXXXXX)
+    if (value.length > 11) value = value.slice(0, 11);
+
+    // Format as 03XX-XXXXXXX
+    if (value.length > 0) {
+      if (value.length <= 4) {
+        value = value;
+      } else {
+        value = value.slice(0, 4) + '-' + value.slice(4);
+      }
     }
+
+    e.target.value = value;
+  });
+}
+
 
     // ZIP code input mask (5 digits)
     const zipInput = document.getElementById('zip');

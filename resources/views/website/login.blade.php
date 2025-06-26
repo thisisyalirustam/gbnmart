@@ -1,87 +1,70 @@
+
 @extends('website.layout.content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<style>
-    .divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-.h-custom {
-height: calc(100% - 73px);
-}
-@media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
-}
-</style>
 @section('webcontent')
-<section class="vh-100">
-    <div class="container-fluid h-custom">
-      <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-md-9 col-lg-6 col-xl-5">
-          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-            class="img-fluid" alt="Sample image">
-        </div>
-        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-          <form>
-            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-              <p class="lead fw-normal mb-0 me-3">Sign in with</p>
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
-                <i class="fab fa-facebook-f"></i>
-              </button>
-  
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
-                <i class="fab fa-twitter"></i>
-              </button>
-  
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-floating mx-1">
-                <i class="fab fa-linkedin-in"></i>
-              </button>
-            </div>
-  
-            <div class="divider d-flex align-items-center my-4">
-              <p class="text-center fw-bold mx-3 mb-0">Or</p>
-            </div>
-  
-            <!-- Email input -->
-            <div data-mdb-input-init class="form-outline mb-4">
-              <input type="email" id="form3Example3" class="form-control form-control-lg"
-                placeholder="Enter a valid email address" />
-              <label class="form-label" for="form3Example3">Email address</label>
-            </div>
-  
-            <!-- Password input -->
-            <div data-mdb-input-init class="form-outline mb-3">
-              <input type="password" id="form3Example4" class="form-control form-control-lg"
-                placeholder="Enter password" />
-              <label class="form-label" for="form3Example4">Password</label>
-            </div>
-  
-            <div class="d-flex justify-content-between align-items-center">
-              <!-- Checkbox -->
-              <div class="form-check mb-0">
-                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                <label class="form-check-label" for="form2Example3">
-                  Remember me
-                </label>
+abc    <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background position-relative">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Login</li>
+          </ol>
+        </nav>
+        <h1>Login</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Login Section -->
+    <section id="login" class="login section">
+      <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-8 aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+            <div class="login-form-wrapper">
+              <div class="login-header text-center">
+                <h2>Login</h2>
+                <p>Welcome back! Please enter your details</p>
               </div>
-              <a href="#!" class="text-body">Forgot password?</a>
+
+              <form>
+                <div class="mb-4">
+                  <label for="form3Example3" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="form3Example3" placeholder="Enter your email" required="" autocomplete="email">
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between">
+                    <label for="form3Example4" class="form-label">Password</label>
+                    <a href="#!" class="forgot-link">Forgot password?</a>
+                  </div>
+                  <input type="password" class="form-control" id="form3Example4" placeholder="Enter your password" required="" autocomplete="current-password">
+                </div>
+
+                <div class="mb-4 form-check">
+                  <input type="checkbox" class="form-check-input" id="form2Example3">
+                  <label class="form-check-label" for="form2Example3">Remember for 30 days</label>
+                </div>
+
+                <div class="d-grid gap-2 mb-4">
+                  <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary">Sign in</button>
+                  <button type="button" class="btn btn-outline">
+                    <i class="bi bi-google me-2"></i>Sign in with Google
+                  </button>
+                </div>
+
+                <div class="signup-link text-center">
+                  <span>Don't have an account?</span>
+                  <a href="{{ route('signup') }}">Sign up</a>
+                </div>
+              </form>
             </div>
-  
-            <div class="text-center text-lg-start mt-4 pt-2">
-              <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-              <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="{{ route('signup') }}"
-                  class="link-danger">Register</a></p>
-            </div>
-  
-          </form>
+          </div>
         </div>
       </div>
-    </div>
-    
-  </section>
+    </section><!-- /Login Section -->
+
+  </main>
+  {{-- </section> --}}
+
 @endsection

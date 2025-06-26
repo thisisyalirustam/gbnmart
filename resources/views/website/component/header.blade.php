@@ -7,6 +7,8 @@
      <title>Index - FashionStore Bootstrap Template</title>
      <meta name="description" content="">
      <meta name="keywords" content="">
+     <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
      <!-- Favicons -->
      <link href="{{ asset('website/assets/img/favicon.png') }}" rel="icon">
@@ -27,6 +29,8 @@
      <link href="{{ asset('website/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
      <link href="{{ asset('website/assets/vendor/drift-zoom/drift-basic.css') }}" rel="stylesheet">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Toastr CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
      <!-- Main CSS File -->
      <link href="{{ asset('website/assets/css/main.css') }}" rel="stylesheet">
@@ -196,7 +200,7 @@
                          <a href="wishlist.html" class="header-action-btn d-none d-md-flex">
                              <i class="bi bi-heart"></i>
                              <span class="action-text d-none d-md-inline-block">Wishlist</span>
-                             <span class="badge">0</span>
+                             <span class="badge" id="wishlist-count">{{ $wishlistCount ?? 0 }}</span>
                          </a>
 
                          <!-- Cart -->
@@ -204,12 +208,12 @@
                              <button class="header-action-btn" data-bs-toggle="dropdown">
                               <i class="bi bi-cart3"></i>
                              <span class="action-text d-none d-md-inline-block">Cart</span>
-                             <span class="badge" id="cart-count">0</span> <!-- Corrected ID -->
+                             <span class="badge" id="cart-count">{{ $cartCount ?? 0 }}</span> <!-- Corrected ID -->
                             </button>
 
                              <div class="dropdown-menu cart-dropdown-menu">
-                                 <div class="dropdown-header" id="wishlist-count">
-                                     <h6>Shopping Cart (3)</h6>
+                                 <div class="dropdown-header" >
+                                     <h6>Shopping Cart (<span id="count">{{ $cartCount ?? 0 }}</span>)</h6>
                                  </div>
                                  <div class="dropdown-body">
                                      <div class="cart-items">
@@ -265,8 +269,8 @@
                                          <span class="cart-total-price">$279.97</span>
                                      </div>
                                      <div class="cart-actions">
-                                         <a href="cart.html" class="btn btn-outline-primary">View Cart</a>
-                                         <a href="checkout.html" class="btn btn-primary">Checkout</a>
+                                         <a href="{{route('cart.show')}}" class="btn btn-outline-primary">View Cart</a>
+                                         <a href="{{ Auth::check() ? route('checkout.index') : route('option.show') }}" class="btn btn-primary">Checkout</a>
                                      </div>
                                  </div>
                              </div>
@@ -363,3 +367,4 @@
          </div>
 
      </header>
+

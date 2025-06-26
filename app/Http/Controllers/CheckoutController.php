@@ -378,7 +378,17 @@ class CheckoutController extends Controller
     }
     public function thankYouPage($orderId)
     {
-        $order = Order::findOrFail($orderId);
+        $order =  Order::with(['user', 'country', 'items.product'])->find($orderId);
+
+            if (!$order) {
+                return redirect()->route('orders.index')->with('error', 'Order not found.');
+            }
+
+            // Decode product images and set the first image
+            foreach ($order->items as $item) {
+                $images = json_decode($item->product->images, true);
+                $item->product->images = $images[0] ?? 'default-image.jpg';
+            }
         return view('website.thankyou', compact('order'));
     }
 
