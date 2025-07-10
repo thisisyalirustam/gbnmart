@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Affiliate;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\RattingAndReview;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
@@ -15,32 +17,56 @@ class BuyerDashboadController extends Controller
 {
     //
     public function dash()
-    {
-        $userId = Auth::check() ? Auth::id() : null;
-        $order = Order::where("user_id", $userId)->get();
-        $ordercount = Order::where("user_id", $userId)->count();
-        $cartcount = Cart::where("user_id", $userId)->count();
-        $returnCount = Order::where("user_id", $userId)->where("shipping_status", "Return")->count();
-        $processCount = Order::where("user_id", $userId)->where("shipping_status", "Process")->count();
-        $orderprocess = Order::where("user_id", $userId)->where("shipping_status", "Process")->get();
-        $orderpending = Order::where("user_id", $userId)->where("shipping_status", "Pending")->get();
-        $ordercompelte = Order::where("user_id", $userId)->where("shipping_status", "Complete")->get();
-        $ordershow = Order::with(['user', 'country', 'items.product'])
-            ->where('user_id', $userId)
-            ->get();
+{
+    $userId = Auth::check() ? Auth::id() : null;
 
-        if (!$ordershow) {
-            return redirect()->route('orders.index')->with('error', 'Order not found.');
-        }
-        foreach ($ordershow as $orderItem) {
-            foreach ($orderItem->items as $item) {
-                $images = json_decode($item->product->images, true);
-                $item->product->images = $images[0] ?? 'default-image.jpg';
-            }
-        }
+    // User's orders and related info
+    $order = Order::where("user_id", $userId)->get();
+    $ordercount = $order->count();
+    $cartcount = Cart::where("user_id", $userId)->count();
+    $returnCount = Order::where("user_id", $userId)->where("shipping_status", "Return")->count();
+    $processCount = Order::where("user_id", $userId)->where("shipping_status", "Process")->count();
+    $orderprocess = Order::where("user_id", $userId)->where("shipping_status", "Process")->get();
+    $orderpending = Order::where("user_id", $userId)->where("shipping_status", "Pending")->get();
+    $ordercompelte = Order::where("user_id", $userId)->where("shipping_status", "Complete")->get();
+    
+    // Wishlist
+    $wishlist = Wishlist::with('product')->where('user_id', $userId)->get();
 
-        return view('dashboard', compact('order', 'ordercount', 'orderprocess', 'orderpending', 'ordercompelte', 'cartcount', 'returnCount', 'processCount', 'ordershow'));
+    // Orders with related info for display
+    $ordershow = Order::with(['user', 'country', 'items.product'])
+        ->where('user_id', $userId)
+        ->get();
+
+    // Safeguard for empty orders
+    if ($ordershow->isEmpty()) {
+        return redirect()->route('orders.index')->with('error', 'Order not found.');
     }
+
+    // Format product images
+  
+
+    // ✅ Fetch reviews written BY this user
+   $ratingandreview = RattingAndReview::with(['orderItem.product', 'orderItem.order'])
+    ->whereHas('orderItem.order', function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+    })
+    ->orderBy('created_at', 'desc')
+    ->where('status', 1)
+    ->get();
+
+  foreach ($ordershow as $orderItem) {
+        foreach ($orderItem->items as $item) {
+            $images = json_decode($item->product->images, true);
+            $item->product->images = $images[0] ?? 'default-image.jpg';
+        }
+    }
+    return view('dashboard', compact(
+        'order', 'ordercount', 'orderprocess', 'orderpending', 'ordercompelte',
+        'cartcount', 'returnCount', 'processCount', 'ordershow', 'wishlist', 'ratingandreview'
+    ));
+}
+
 
     public function orderproduct($id)
     {

@@ -38,7 +38,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::get('/dashboard', [BuyerDashboadController::class, 'dash'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/dashboard/orderproduct/{id}', [BuyerDashboadController::class, 'orderproduct'])->name('website.orderproduct');
     Route::get('/buyer/account', [BuyerDashboadController::class, 'account'])->name('website.account');

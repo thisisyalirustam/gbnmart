@@ -29,12 +29,17 @@ Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon']
 
 Route::post('/wishlist-add', [CartController::class, 'addWishlist'])->name('wishlist.add');
 Route::get('/wishlist-count', [CartController::class, 'wishlistShow'])->name('wishlist.count');
+Route::post('/wishlist/remove', [CartController::class, 'remove'])->name('wishlist.remove');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+
 // routes/web.php
 Route::get('/wishlist/count', [CartController::class, 'getWishlistCount'])->name('wishlist.count');
 // In routes/web.php
 Route::post('/get-shipping-charge', [CheckoutController::class, 'getShippingCharge'])->name('get.shipping.charges');
 Route::get('/review/{token}', [OrderMainContrller::class, 'show'])->name('review.show');
 Route::post('/review/{token}', [OrderMainContrller::class, 'store'])->name('review.store');
+
+Route::get('profile/update-user-password',[WebController::class,'showPassword'])->name('profile.user.password');
 
 
 

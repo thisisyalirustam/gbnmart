@@ -1,6 +1,6 @@
-@extends('layouts.main')
+@extends('website.layout.content')
 
-@section('user-content')
+@section('webcontent')
 <div class="container mt-3">
     <div class="row justify-content-center">
         <div class="col-md-11">

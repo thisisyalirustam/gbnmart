@@ -57,12 +57,14 @@
                                      </button>
                                  </li>
                                  <li class="nav-item" role="presentation">
-                                     <button class="nav-link" id="wishlist-tab" data-bs-toggle="tab"
-                                         data-bs-target="#wishlist" type="button" role="tab" aria-controls="wishlist"
-                                         aria-selected="false" tabindex="-1">
-                                         <i class="bi bi-heart"></i>
-                                         <span>Wishlist</span>
-                                     </button>
+                                     <a href="{{ route('wishlist.show') }}" class="">
+                                         <button class="nav-link" id="wishlist-tab" data-bs-toggle="tab"
+                                             data-bs-target="#wishlist" type="button" role="tab"
+                                             aria-controls="wishlist" aria-selected="false" tabindex="-1">
+                                             <i class="bi bi-heart"></i>
+                                             <span>Wishlist</span>
+                                         </button>
+                                     </a>
                                  </li>
                                  <li class="nav-item" role="presentation">
                                      <button class="nav-link" id="payment-tab" data-bs-toggle="tab"
@@ -104,6 +106,12 @@
                                          <span>Notifications</span>
                                      </button>
                                  </li>
+                                 <li class="nav-item" role="presentation">
+                                     <a class="nav-link" href="{{route('website.affliate')}}" aria-selected="false" tabindex="-1">
+                                         <i class="bi bi-bell"></i>
+                                         <span>Affliate Marketing</span>
+                                     </a>
+                                 </li>
                              </ul>
 
                              <h6 class="nav-section-title">Customer service</h6>
@@ -118,6 +126,12 @@
                                      <a href="#" class="nav-link">
                                          <i class="bi bi-file-text"></i>
                                          <span>Terms and conditions</span>
+                                     </a>
+                                 </li>
+                                 <li class="nav-item">
+                                     <a href="{{route('profile.user.password')}}" class="nav-link">
+                                         <i class="bi bi-file-text"></i>
+                                         <span>Update Password</span>
                                      </a>
                                  </li>
                                  <li class="nav-item">
@@ -324,7 +338,6 @@
                                                      </div>
                                                  </div>
                                              </div>
-                                    
                                          @endforeach
                                      </div>
 
@@ -348,65 +361,41 @@
                                  <div class="tab-header">
                                      <h2>Wishlist</h2>
                                  </div>
+
                                  <div class="wishlist-items">
-                                     <div class="row">
-                                         <!-- Wishlist Item 1 -->
-                                         <div class="col-md-6 col-lg-4 mb-4 aos-init aos-animate" data-aos="fade-up"
-                                             data-aos-delay="100">
-                                             <div class="wishlist-item">
-                                                 <div class="wishlist-image">
-                                                     <img src="assets/img/product/product-1.webp" alt="Product"
-                                                         loading="lazy">
-                                                     <button class="remove-wishlist" type="button">
-                                                         <i class="bi bi-x-lg"></i>
-                                                     </button>
-                                                 </div>
-                                                 <div class="wishlist-content">
-                                                     <h5>Lorem ipsum dolor sit amet</h5>
-                                                     <div class="product-price">$129.99</div>
-                                                     <button class="btn btn-add-cart">Add to cart</button>
-                                                 </div>
-                                             </div>
-                                         </div><!-- End Wishlist Item -->
+                                     @if ($wishlist->isEmpty())
+                                         <div class="row">
+                                             @foreach ($wishlist as $listitem)
+                                                 <!-- Wishlist Item 2 -->
+                                                 <div class="col-md-6 col-lg-4 mb-4 aos-init aos-animate"
+                                                     data-aos="fade-up" data-aos-delay="200">
+                                                     <div class="wishlist-item">
+                                                         <div class="wishlist-image">
+                                                             <img src="assets/img/product/product-2.webp" alt="Product"
+                                                                 loading="lazy">
+                                                             <button class="remove-wishlist" type="button">
+                                                                 <i class="bi bi-x-lg"></i>
+                                                             </button>
+                                                         </div>
+                                                         <div class="wishlist-content">
+                                                             <h5>{{ $listitem->product->name }}</h5>
+                                                             <div class="product-price">{{ $listitem->product->name }}
+                                                             </div>
+                                                             <button class="btn btn-add-cart">Add to cart</button>
+                                                         </div>
+                                                     </div>
+                                                 </div><!-- End Wishlist Item -->
+                                             @endforeach
 
-                                         <!-- Wishlist Item 2 -->
-                                         <div class="col-md-6 col-lg-4 mb-4 aos-init aos-animate" data-aos="fade-up"
-                                             data-aos-delay="200">
-                                             <div class="wishlist-item">
-                                                 <div class="wishlist-image">
-                                                     <img src="assets/img/product/product-2.webp" alt="Product"
-                                                         loading="lazy">
-                                                     <button class="remove-wishlist" type="button">
-                                                         <i class="bi bi-x-lg"></i>
-                                                     </button>
-                                                 </div>
-                                                 <div class="wishlist-content">
-                                                     <h5>Consectetur adipiscing elit</h5>
-                                                     <div class="product-price">$89.50</div>
-                                                     <button class="btn btn-add-cart">Add to cart</button>
-                                                 </div>
-                                             </div>
-                                         </div><!-- End Wishlist Item -->
 
-                                         <!-- Wishlist Item 3 -->
-                                         <div class="col-md-6 col-lg-4 mb-4 aos-init aos-animate" data-aos="fade-up"
-                                             data-aos-delay="300">
-                                             <div class="wishlist-item">
-                                                 <div class="wishlist-image">
-                                                     <img src="assets/img/product/product-3.webp" alt="Product"
-                                                         loading="lazy">
-                                                     <button class="remove-wishlist" type="button">
-                                                         <i class="bi bi-x-lg"></i>
-                                                     </button>
-                                                 </div>
-                                                 <div class="wishlist-content">
-                                                     <h5>Sed do eiusmod tempor</h5>
-                                                     <div class="product-price">$199.99</div>
-                                                     <button class="btn btn-add-cart">Add to cart</button>
-                                                 </div>
-                                             </div>
-                                         </div><!-- End Wishlist Item -->
-                                     </div>
+
+                                         </div>
+                                     @else
+                                         <div class="row">
+                                             <h5>Wishlist is empty</h5>
+                                         </div>
+                                     @endif
+
                                  </div>
                              </div>
 
@@ -472,69 +461,50 @@
                                  <div class="tab-header">
                                      <h2>My Reviews</h2>
                                  </div>
-                                 <div class="reviews-list">
-                                     <!-- Review Item 1 -->
-                                     <div class="review-item aos-init aos-animate" data-aos="fade-up"
-                                         data-aos-delay="100">
-                                         <div class="review-header">
-                                             <div class="review-product">
-                                                 <img src="assets/img/product/product-4.webp" alt="Product"
-                                                     class="product-image" loading="lazy">
-                                                 <div class="product-info">
-                                                     <h5>Lorem ipsum dolor sit amet</h5>
-                                                     <div class="review-date">Reviewed on 01/15/2025</div>
-                                                 </div>
-                                             </div>
-                                             <div class="review-rating">
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star"></i>
-                                             </div>
-                                         </div>
-                                         <div class="review-content">
-                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl
-                                                 eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl
-                                                 eget nisl.</p>
-                                         </div>
-                                         <div class="review-actions">
-                                             <button class="btn btn-sm btn-edit-review" type="button">Edit</button>
-                                             <button class="btn btn-sm btn-delete-review" type="button">Delete</button>
-                                         </div>
-                                     </div><!-- End Review Item -->
 
-                                     <!-- Review Item 2 -->
-                                     <div class="review-item aos-init aos-animate" data-aos="fade-up"
-                                         data-aos-delay="200">
-                                         <div class="review-header">
-                                             <div class="review-product">
-                                                 <img src="assets/img/product/product-5.webp" alt="Product"
-                                                     class="product-image" loading="lazy">
-                                                 <div class="product-info">
-                                                     <h5>Consectetur adipiscing elit</h5>
-                                                     <div class="review-date">Reviewed on 12/03/2024</div>
+
+
+                                 @foreach ($ratingandreview as $review)
+                                     <div class="reviews-list">
+                                         <!-- Review Item 1 -->
+                                         <div class="review-item aos-init aos-animate" data-aos="fade-up"
+                                             data-aos-delay="100">
+                                             <div class="review-header">
+                                                 <div class="review-product">
+                                                     @php
+                                                         $images = json_decode(
+                                                             $review->orderItem->product->images,
+                                                             true,
+                                                         );
+                                                         $firstImage = $images[0] ?? 'default.jpg';
+                                                     @endphp
+                                                     <img src="{{ asset('images/products/' . $firstImage) }}"
+                                                         alt="Product" class="product-image" loading="lazy">
+                                                     <div class="product-info">
+                                                         <h5>{{ $review->orderItem->product->name }}</h5>
+                                                         <div class="review-date">Reviewed on
+                                                             {{ $review->created_at->format('m/d/Y') }}</div>
+                                                     </div>
+                                                 </div>
+                                                 <div class="review-rating">
+                                                     @for ($i = 1; $i <= 5; $i++)
+                                                         <i
+                                                             class="bi {{ $i <= $review->rating ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                                     @endfor
                                                  </div>
                                              </div>
-                                             <div class="review-rating">
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
-                                                 <i class="bi bi-star-fill"></i>
+                                             <div class="review-content">
+                                                 <p>{{ $review->review }}</p>
                                              </div>
-                                         </div>
-                                         <div class="review-content">
-                                             <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-                                                 ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                                                 ex ea commodo consequat.</p>
-                                         </div>
-                                         <div class="review-actions">
-                                             <button class="btn btn-sm btn-edit-review" type="button">Edit</button>
-                                             <button class="btn btn-sm btn-delete-review" type="button">Delete</button>
-                                         </div>
-                                     </div><!-- End Review Item -->
-                                 </div>
+                                             <div class="review-actions">
+                                                 <button class="btn btn-sm btn-edit-review" type="button">Edit</button>
+                                                 <button class="btn btn-sm btn-delete-review"
+                                                     type="button">Delete</button>
+                                             </div>
+                                         </div><!-- End Review Item -->
+                                     </div>
+                                 @endforeach
+
                              </div>
 
                              <!-- Personal Info Tab -->
@@ -544,61 +514,75 @@
                                  </div>
                                  <div class="personal-info-form aos-init aos-animate" data-aos="fade-up"
                                      data-aos-delay="100">
-                                     <form class="php-email-form">
+                                     @php $user = Auth::user(); @endphp
+
+                                     <form method="POST" action="{{ route('profile.update') }}" class="php-email-form">
+                                         @csrf
+                                         @method('PATCH')
+
                                          <div class="row">
-                                             <div class="col-md-6 mb-3">
-                                                 <label for="firstName" class="form-label">First Name</label>
+                                             <div class="col-md-12 mb-3">
+                                                 <label for="firstName" class="form-label"> Name</label>
                                                  <input type="text" class="form-control" id="firstName"
-                                                     name="firstName" value="Lorem" required="">
+                                                     name="first_name" value="{{ old('name', $user->name) }}" readonly
+                                                     required>
                                              </div>
-                                             <div class="col-md-6 mb-3">
-                                                 <label for="lastName" class="form-label">Last Name</label>
-                                                 <input type="text" class="form-control" id="lastName"
-                                                     name="lastName" value="Ipsum" required="">
-                                             </div>
+
                                          </div>
+
                                          <div class="row">
                                              <div class="col-md-6 mb-3">
                                                  <label for="email" class="form-label">Email</label>
                                                  <input type="email" class="form-control" id="email"
-                                                     name="email" value="lorem@example.com" required="">
+                                                     name="email" value="{{ old('email', $user->email) }}" readonly
+                                                     required>
                                              </div>
                                              <div class="col-md-6 mb-3">
                                                  <label for="phone" class="form-label">Phone</label>
                                                  <input type="tel" class="form-control" id="phone"
-                                                     name="phone" value="+1 (555) 123-4567">
+                                                     name="phone" value="{{ old('phone', $user->phone) }}" readonly>
                                              </div>
                                          </div>
+
                                          <div class="mb-3">
                                              <label for="birthdate" class="form-label">Date of Birth</label>
                                              <input type="date" class="form-control" id="birthdate" name="birthdate"
-                                                 value="1990-01-01">
+                                                 value="{{ old('birthdate', $user->birthdate) }}" readonly>
                                          </div>
+
                                          <div class="mb-3">
                                              <label class="form-label d-block">Gender</label>
                                              <div class="form-check form-check-inline">
                                                  <input class="form-check-input" type="radio" name="gender"
-                                                     id="genderMale" value="male" checked="">
+                                                     id="genderMale" value="male"
+                                                     {{ old('gender', $user->gender) == 'male' ? 'checked' : '' }}>
                                                  <label class="form-check-label" for="genderMale">Male</label>
                                              </div>
                                              <div class="form-check form-check-inline">
                                                  <input class="form-check-input" type="radio" name="gender"
-                                                     id="genderFemale" value="female">
+                                                     id="genderFemale" value="female"
+                                                     {{ old('gender', $user->gender) == 'female' ? 'checked' : '' }}>
                                                  <label class="form-check-label" for="genderFemale">Female</label>
                                              </div>
                                              <div class="form-check form-check-inline">
                                                  <input class="form-check-input" type="radio" name="gender"
-                                                     id="genderOther" value="other">
+                                                     id="genderOther" value="other"
+                                                     {{ old('gender', $user->gender) == 'other' ? 'checked' : '' }}>
                                                  <label class="form-check-label" for="genderOther">Other</label>
                                              </div>
                                          </div>
-                                         <div class="loading">Loading</div>
-                                         <div class="error-message"></div>
-                                         <div class="sent-message">Your information has been updated. Thank you!</div>
+
                                          <div class="text-end">
-                                             <button type="submit" class="btn btn-save">Save Changes</button>
+                                             <a href="{{ route('profile.edit') }}" class="btn btn-save">Update
+                                                 Information</a>
                                          </div>
+
+                                         @if (session('status') === 'profile-updated')
+                                             <div class="sent-message mt-2">Your information has been updated. Thank you!
+                                             </div>
+                                         @endif
                                      </form>
+
                                  </div>
                              </div>
 
@@ -777,5 +761,32 @@
          </section><!-- /Account Section -->
 
      </main>
-     
+
  @endsection
+ <script>
+     document.addEventListener('DOMContentLoaded', function() {
+         const buttons = document.querySelectorAll('.order-details-link');
+
+         buttons.forEach(button => {
+             button.addEventListener('click', function() {
+                 const targetId = button.getAttribute('data-bs-target');
+                 const target = document.querySelector(targetId);
+                 const isShown = target.classList.contains('show');
+
+                 // Close all collapses manually if not the same
+                 document.querySelectorAll('.order-details').forEach(collapse => {
+                     if (collapse !== target) {
+                         new bootstrap.Collapse(collapse, {
+                             toggle: false
+                         }).hide();
+                     }
+                 });
+
+                 // Toggle this one manually
+                 new bootstrap.Collapse(target, {
+                     toggle: true
+                 });
+             });
+         });
+     });
+ </script>

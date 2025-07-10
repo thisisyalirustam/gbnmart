@@ -4,23 +4,25 @@
  <head>
      <meta charset="utf-8">
      <meta content="width=device-width, initial-scale=1.0" name="viewport">
-     <title>Index - FashionStore Bootstrap Template</title>
+     <title>{{ config('app.name', 'Laravel') }}</title>
      <meta name="description" content="">
      <meta name="keywords" content="">
      <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
-     <!-- Favicons -->
-     <link href="{{ asset('website/assets/img/favicon.png') }}" rel="icon">
-     <link href="{{ asset('website/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-
-     <!-- Fonts -->
+     {{-- cdns  --}}
      <link href="https://fonts.googleapis.com" rel="preconnect">
      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
      <link
          href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Quicksand:wght@300;400;500;600;700&display=swap"
          rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- Toastr CSS -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+     {{-- end of cdns --}}
+     <!-- Fonts -->
 
+     <!-- Favicons -->
+     <link href="{{ asset('website/assets/img/favicon.png') }}" rel="icon">
+     <link href="{{ asset('website/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
      <!-- Vendor CSS Files -->
      <link href="{{ asset('website/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
      <link href="{{ asset('website/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
@@ -28,9 +30,6 @@
      <link href="{{ asset('website/assets/vendor/aos/aos.css') }}" rel="stylesheet">
      <link href="{{ asset('website/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
      <link href="{{ asset('website/assets/vendor/drift-zoom/drift-basic.css') }}" rel="stylesheet">
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Toastr CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
      <!-- Main CSS File -->
      <link href="{{ asset('website/assets/css/main.css') }}" rel="stylesheet">
@@ -84,7 +83,7 @@
                                  <ul class="dropdown-menu">
                                      <li><a class="dropdown-item" href="#"><i
                                                  class="bi bi-check2 me-2 selected-icon"></i>USD</a></li>
-                                     <li><a class="dropdown-item" href="#">EUR</a></li>
+                                     <li><a class="dropdown-item" href="#">PKR</a></li>
                                      <li><a class="dropdown-item" href="#">GBP</a></li>
                                  </ul>
                              </div>
@@ -105,7 +104,8 @@
                      <!-- Search -->
                      <form class="search-form desktop-search-form" action="{{ route('shoppage') }}" method="GET">
                          <div class="input-group">
-                             <input type="text" class="form-control" name="search"  id="search" value="{{ Request::get('search') }}" placeholder="Search for products...">
+                             <input type="text" class="form-control" name="search" id="search"
+                                 value="{{ Request::get('search') }}" placeholder="Search for products...">
                              <button class="btn search-btn" type="submit">
                                  <i class="bi bi-search"></i>
                              </button>
@@ -151,11 +151,11 @@
                                                  <i class="bi bi-person-circle me-2"></i>
                                                  <span>My Profile</span>
                                              </a>
-                                             <a class="dropdown-item d-flex align-items-center" href="">
+                                             <a class="dropdown-item d-flex align-items-center" href="{{route('option.show')}}">
                                                  <i class="bi bi-bag-check me-2"></i>
                                                  <span>My Orders</span>
                                              </a>
-                                             <a class="dropdown-item d-flex align-items-center" href="">
+                                             <a class="dropdown-item d-flex align-items-center" href="{{route('wishlist.show')}}">
                                                  <i class="bi bi-heart me-2"></i>
                                                  <span>My Wishlist</span>
                                              </a>
@@ -197,7 +197,7 @@
 
 
                          <!-- Wishlist -->
-                         <a href="wishlist.html" class="header-action-btn d-none d-md-flex">
+                         <a href="{{ route('wishlist.show') }}" class="header-action-btn d-none d-md-flex">
                              <i class="bi bi-heart"></i>
                              <span class="action-text d-none d-md-inline-block">Wishlist</span>
                              <span class="badge" id="wishlist-count">{{ $wishlistCount ?? 0 }}</span>
@@ -206,13 +206,14 @@
                          <!-- Cart -->
                          <div class="dropdown cart-dropdown">
                              <button class="header-action-btn" data-bs-toggle="dropdown">
-                              <i class="bi bi-cart3"></i>
-                             <span class="action-text d-none d-md-inline-block">Cart</span>
-                             <span class="badge" id="cart-count">{{ $cartCount ?? 0 }}</span> <!-- Corrected ID -->
-                            </button>
+                                 <i class="bi bi-cart3"></i>
+                                 <span class="action-text d-none d-md-inline-block">Cart</span>
+                                 <span class="badge" id="cart-count">{{ $cartCount ?? 0 }}</span>
+                                 <!-- Corrected ID -->
+                             </button>
 
                              <div class="dropdown-menu cart-dropdown-menu">
-                                 <div class="dropdown-header" >
+                                 <div class="dropdown-header">
                                      <h6>Shopping Cart (<span id="count">{{ $cartCount ?? 0 }}</span>)</h6>
                                  </div>
                                  <div class="dropdown-body">
@@ -269,8 +270,10 @@
                                          <span class="cart-total-price">$279.97</span>
                                      </div>
                                      <div class="cart-actions">
-                                         <a href="{{route('cart.show')}}" class="btn btn-outline-primary">View Cart</a>
-                                         <a href="{{ Auth::check() ? route('checkout.index') : route('option.show') }}" class="btn btn-primary">Checkout</a>
+                                         <a href="{{ route('cart.show') }}" class="btn btn-outline-primary">View
+                                             Cart</a>
+                                         <a href="{{ Auth::check() ? route('checkout.index') : route('option.show') }}"
+                                             class="btn btn-primary">Checkout</a>
                                      </div>
                                  </div>
                              </div>
@@ -289,9 +292,9 @@
              <div class="container-fluid container-xl position-relative">
                  <nav id="navmenu" class="navmenu">
                      <ul>
-                         <li><a href="{{route('homepage')}}" class="active">Home</a></li>
+                         <li><a href="{{ route('homepage') }}" class="active">Home</a></li>
                          <li><a href="about.html">About</a></li>
-                         <li><a href="{{route('shoppage')}}">Shop</a></li>
+                         <li><a href="{{ route('shoppage') }}">Shop</a></li>
                          <li><a href="cart.html">Cart</a></li>
                          <li><a href="checkout.html">Checkout</a></li>
                          @php
@@ -367,4 +370,3 @@
          </div>
 
      </header>
-

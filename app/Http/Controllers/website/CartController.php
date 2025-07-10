@@ -299,5 +299,47 @@ class CartController extends Controller
 
         return response()->json(['count' => $count]);
     }
+
+    public function add(Request $request)
+{
+    $productId = $request->product_id;
+    $quantity = $request->quantity ?? 1;
+
+    if (Auth::check()) {
+        // Logic to add to database cart table
+        Cart::updateOrCreate(
+            ['user_id' => Auth::id(), 'product_id' => $productId],
+            ['quantity' => \DB::raw("quantity + $quantity")]
+        );
+    } else {
+        // Logic to store in session
+        $cart = session()->get('cart', []);
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity'] += $quantity;
+        } else {
+            $cart[$productId] = ['product_id' => $productId, 'quantity' => $quantity];
+        }
+        session()->put('cart', $cart);
+    }
+
+    return response()->json(['success' => true]);
+}
+public function remove(Request $request)
+{
+    $productId = $request->product_id;
+
+    if (Auth::check()) {
+        Wishlist::where('user_id', Auth::id())
+            ->where('product_id', $productId)
+            ->delete();
+    } else {
+        $wishlist = session()->get('wishlist', []);
+        unset($wishlist[$productId]);
+        session()->put('wishlist', $wishlist);
+    }
+
+    return response()->json(['success' => true]);
+}
+
     
 }
