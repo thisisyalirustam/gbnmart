@@ -151,11 +151,13 @@
                                                  <i class="bi bi-person-circle me-2"></i>
                                                  <span>My Profile</span>
                                              </a>
-                                             <a class="dropdown-item d-flex align-items-center" href="{{route('option.show')}}">
+                                             <a class="dropdown-item d-flex align-items-center"
+                                                 href="{{ route('option.show') }}">
                                                  <i class="bi bi-bag-check me-2"></i>
                                                  <span>My Orders</span>
                                              </a>
-                                             <a class="dropdown-item d-flex align-items-center" href="{{route('wishlist.show')}}">
+                                             <a class="dropdown-item d-flex align-items-center"
+                                                 href="{{ route('wishlist.show') }}">
                                                  <i class="bi bi-heart me-2"></i>
                                                  <span>My Wishlist</span>
                                              </a>

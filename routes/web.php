@@ -125,7 +125,7 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/admin/profile',[AdminMainController::class, 'getProfile'])->name('admin.profile');
     Route::post('/profile/update', [AdminMainController::class, 'update'])->name('profile.update');
     Route::post('/change-password', [AdminMainController::class, 'changePassword'])->name('change.admin.password');
-
+    
     Route::get('/Blogs',[BlogController::class, 'index'])->name('admin.blog');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('admin.blog.create');
 

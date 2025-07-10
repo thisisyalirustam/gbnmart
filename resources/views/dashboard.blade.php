@@ -107,7 +107,8 @@
                                      </button>
                                  </li>
                                  <li class="nav-item" role="presentation">
-                                     <a class="nav-link" href="{{route('website.affliate')}}" aria-selected="false" tabindex="-1">
+                                     <a class="nav-link" href="{{ route('website.affliate') }}" aria-selected="false"
+                                         tabindex="-1">
                                          <i class="bi bi-bell"></i>
                                          <span>Affliate Marketing</span>
                                      </a>
@@ -129,7 +130,7 @@
                                      </a>
                                  </li>
                                  <li class="nav-item">
-                                     <a href="{{route('profile.user.password')}}" class="nav-link">
+                                     <a href="{{ route('profile.user.password') }}" class="nav-link">
                                          <i class="bi bi-file-text"></i>
                                          <span>Update Password</span>
                                      </a>
@@ -262,7 +263,8 @@
                                                      </button>
                                                  </div>
 
-                                                 <div class="collapse order-details" id="orderDetails{{ $order->id }}">
+                                                 <div class="collapse order-details"
+                                                     id="orderDetails{{ $order->id }}">
                                                      <div class="order-details-content">
                                                          <div class="order-details-header">
                                                              <h5>Order Details</h5>

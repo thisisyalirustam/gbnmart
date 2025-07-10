@@ -217,52 +217,6 @@
                 </div>
               </div>
             </div>
-
-            {{-- <!-- Recommended products -->
-            <div class="recommended aos-init aos-animate" data-aos="fade-up">
-              <h3>You Might Also Like</h3>
-              <div class="row g-4">
-                <div class="col-6 col-md-4">
-                  <div class="product-card">
-                    <div class="product-image">
-                      <img src="assets/img/product/product-11.webp" alt="Product" loading="lazy">
-                    </div>
-                    <h5>Wireless Earbuds</h5>
-                    <div class="product-price">$59.99</div>
-                    <a href="#" class="btn btn-add-cart">
-                      <i class="bi bi-plus"></i>
-                      Add to Cart
-                    </a>
-                  </div>
-                </div>
-                <div class="col-6 col-md-4">
-                  <div class="product-card">
-                    <div class="product-image">
-                      <img src="assets/img/product/product-10.webp" alt="Product" loading="lazy">
-                    </div>
-                    <h5>Portable Phone Charger</h5>
-                    <div class="product-price">$34.99</div>
-                    <a href="#" class="btn btn-add-cart">
-                      <i class="bi bi-plus"></i>
-                      Add to Cart
-                    </a>
-                  </div>
-                </div>
-                <div class="col-6 col-md-4 d-none d-md-block">
-                  <div class="product-card">
-                    <div class="product-image">
-                      <img src="assets/img/product/product-8.webp" alt="Product" loading="lazy">
-                    </div>
-                    <h5>Smart Watch</h5>
-                    <div class="product-price">$149.99</div>
-                    <a href="#" class="btn btn-add-cart">
-                      <i class="bi bi-plus"></i>
-                      Add to Cart
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div> --}}
           </div>
         </div>
       </div>
@@ -272,33 +226,5 @@
     </section><!-- /Order Confirmation Section -->
 
   </main>
-{{-- <section class="thank-you-page spad bg-light py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <h2 class="thank-you-title mb-4">Thank You for Your Order!</h2>
-                <p class="lead mb-4">Your order has been placed successfully. We are processing it and will send you a confirmation email shortly.</p>
-
-                <div class="order-summary-box p-4 bg-white shadow-sm rounded-lg">
-                    <h4 class="order-summary-title mb-4">Order Summary</h4>
-                    <ul class="order-summary list-unstyled">
-                        <li class="mb-2"><strong>Name:</strong> {{ $order->name }}</li>
-                        <li class="mb-2"><strong>Email:</strong> {{ $order->email }}</li>
-                        <li class="mb-2"><strong>Phone:</strong> {{ $order->phone }}</li>
-                        <li class="mb-2"><strong>Shipping Address:</strong> {{ $order->address }},
-                             {{ $order->city->name }}, {{ $order->state->name }}
-                            </li>
-                        <li class="mb-2"><strong>Country:</strong> {{ $order->country->name }}</li>
-                        <li class="mb-2"><strong>Total Amount:</strong> ${{ number_format($order->grand_total, 2) }}</li>
-                    </ul>
-                </div>
-
-                <p class="mt-4 mb-5">We appreciate your business and look forward to serving you again!</p>
-
-                <a href="{{ route('homepage') }}" class="btn btn-primary btn-lg px-4 py-2">Back to Home</a>
-            </div>
-        </div>
-    </div>
-</section> --}}
 
 @endsection
