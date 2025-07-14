@@ -345,4 +345,11 @@ class AdminController extends Controller
         return response()->json($notifications);
       }
 
+      public function product_dashboard(){
+        $product_cont=Product::count();
+        $product_cat=ProductCat::count();
+        $product_brand=ProductBrand::count();
+        return view('admin.pages.products.product_dashboard',compact('product_cont','product_cat','product_brand'));
+      }
+
 }

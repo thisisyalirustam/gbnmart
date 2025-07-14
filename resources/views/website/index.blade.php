@@ -426,10 +426,10 @@
 
                                     <div class="product-overlay">
                                         <div class="product-actions">
-                                            <button type="button" class="action-btn" data-bs-toggle="tooltip"
+                                            <a type="button" href="{{ route('product.detail', $item->slug) }}" class="action-btn" data-bs-toggle="tooltip"
                                                 title="Quick View">
                                                 <i class="bi bi-eye"></i>
-                                            </button>
+                                            </a>
                                             <button type="button" class="action-btn add-to-cart-btn"
                                                 data-product-id="{{ $item->id }}" title="Add to Cart">
                                                 <i class="bi bi-cart-plus"></i>
@@ -512,11 +512,11 @@
                                     <img src="{{ asset('images/products/' . $hoverImage) }}" class="img-fluid hover-img"
                                         alt="{{ $item->name }}">
                                     <div class="product-overlay">
-                                        <a href="" class="btn-cart"><i class="bi bi-cart-plus"></i> Add to
+                                        <a href="" class="btn-cart add-to-cart-btn" data-product-id="{{ $item->id }}"><i class="bi bi-cart-plus"></i> Add to
                                             Cart</a>
                                         <div class="product-actions">
-                                            <a href="#" class="action-btn"><i class="bi bi-heart"></i></a>
-                                            <a href="#" class="action-btn"><i class="bi bi-eye"></i></a>
+                                            <a href="#" class="action-btn addToWishlistButton"  data-product-id="{{ $item->id }}"><i class="bi bi-heart"></i></a>
+                                            <a href="{{ route('product.detail', $item->slug) }}" class="action-btn"><i class="bi bi-eye"></i></a>
                                             <a href="#" class="action-btn"><i
                                                     class="bi bi-arrow-left-right"></i></a>
                                         </div>

@@ -61,7 +61,13 @@
                  </li>
              </ul>
          </li><!-- End Forms Nav -->
-
+            <li class="nav-item">
+             <a class="nav-link collapsed" href="{{ route('admin.product_dashboard') }}">
+                 <i class="ri-shopping-cart-fill"></i>
+                 <span>Product Management</span>
+             </a>
+         </li><!-- End Profile Page Nav -->
+        
          <!-- End Icons Nav -->
 
          <li class="nav-heading">Shipping Management</li>

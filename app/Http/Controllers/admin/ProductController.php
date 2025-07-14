@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCat;
@@ -12,6 +13,7 @@ use Dotenv\Validator;
 use Faker\Core\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -28,7 +30,8 @@ class ProductController extends Controller
         $brands = ProductBrand::all();
         $subcategories = ProductSubCategory::all();
         $units = Unit::all();
-        return view('admin.pages.products.product', compact('products', 'categories', 'brands', 'subcategories', 'units'));
+        $collections = Collection::all();
+        return view('admin.pages.products.product', compact('products', 'categories', 'brands', 'subcategories', 'units','collections'));
     }
 
     /**
@@ -295,4 +298,8 @@ class ProductController extends Controller
         // Return success response
         return response()->json(['success' => true, 'message' => 'Image deleted successfully']);
     }
+
+    // In your ProductController or a dedicated CollectionAssignmentController
+
+
 }

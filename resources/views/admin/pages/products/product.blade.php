@@ -76,6 +76,38 @@
         .remove-btn:hover {
             background-color: #ff1a1a;
         }
+
+         .dropdown-menu {
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Light gray */
+    }
+    .form-check-label {
+        font-weight: 400;
+    }
+    .btn-secondary {
+        background-color: #e0e0e0;
+        border-color: #ccc;
+        color: #333;
+    }
+    .btn-secondary:hover {
+        background-color: #d6d6d6;
+    }
+    .collection-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .collection-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .collection-scroll::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 3px;
+    }
+
+    .collection-scroll::-webkit-scrollbar-thumb:hover {
+        background: #999;
+    }
     </style>
 
     <section class="section">
@@ -83,9 +115,42 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <a type="button" class="btn mt-2" href="{{ route('product_create') }}">
-                            <i class="bi bi-plus-lg txt-primary"></i> Add New
-                        </a>
+                        <!-- Existing Add New Button -->
+<a type="button" class="btn btn-light mt-2" href="{{ route('product_create') }}">
+    <i class="bi bi-plus-lg"></i> Add New
+</a>
+<!-- Button Group Container -->
+<div class="btn-group mt-2 mr-2">
+    <!-- Add to Collection Button -->
+    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="bi bi-folder-plus"></i> Add to Collection
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown-menu p-3 shadow-sm" style="min-width: 250px;">
+        <h6 class="text-muted mb-2">Select Collections</h6>
+
+        <!-- Scrollable Container for Collections -->
+<form id="collectionAssignmentForm">
+            <!-- Scrollable Container for Collections -->
+            <div class="collection-scroll" style="max-height: 200px; overflow-y: auto;">
+                @foreach ($collections as $collection)
+                <div class="form-check mb-2">
+                    <input class="form-check-input collection-checkbox" type="checkbox" 
+                           id="collection{{$collection->id}}" value="{{$collection->id}}">
+                    <label class="form-check-label" for="collection{{$collection->id}}">{{$collection->name}}</label>
+                </div>
+                @endforeach
+            </div>
+
+            <hr class="my-2">
+            <button type="submit" class="btn btn-sm btn-secondary btn-block">Add Selected Products</button>
+        </form>
+    </div>
+</div>
+
+
+
                         <hr>
                         <div id="gridContainer"></div>
                     </div>

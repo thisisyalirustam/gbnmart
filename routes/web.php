@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\OrdersController;
 use App\Http\Controllers\admin\ProdcutSubCategoryController;
 use App\Http\Controllers\admin\ProductBrandController;
 use App\Http\Controllers\admin\ProductCategoryController;
+use App\Http\Controllers\admin\ProductCollection;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductMainController;
 use App\Http\Controllers\admin\settings\NotificationController;
@@ -60,7 +61,9 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/show-data', [AdminController::class, 'showuser'])->name('showdata');
     //user managment Routs
     Route::resource('/add-user', UserController::class);
+
     //product managment Routes
+    Route::get('/product_dashboard', [AdminController::class, 'product_dashboard'])->name('admin.product_dashboard');
     Route::resource('/product', ProductController::class);
     Route::resource('/product-cat', ProductCategoryController::class);
     Route::get('/product_category', [AdminController::class, 'showproductcat'])->name('p_cat');
@@ -74,6 +77,15 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/get-subcategories-brands/{categoryId}', [AdminMainController::class, 'getSubcategoriesAndBrands'])->name('getSubcategoriesAndBrands');
     Route::post('/product/{id}/status', [AdminMainController::class, 'updateStatus'])->name('product.updateStatus');
     Route::post('/product/{id}/sof', [AdminMainController::class, 'updateSOF'])->name('product.updateSOF');
+
+    // collections
+   Route::post('/products/assign-collections', [ProductCollection::class, 'assignCollections'])
+    ->name('products.assign-collections');
+    Route::get('/products/collections',[ProductCollection::class,'index'])->name('products.collection.index');
+    Route::post('/collections_store', [ProductCollection::class, 'store'])->name('collections.store');
+Route::post('/collections_update/{id}', [ProductCollection::class, 'update'])->name('collections.update');
+Route::delete('/collections_delete/{id}', [ProductCollection::class, 'destroy'])->name('collections.destroy');
+Route::get('/getcollection', [ProductCollection::class, 'getCollection'])->name('collections.get');
 
     //shipping Routes
     Route::resource('/shipping', ShippingController::class);

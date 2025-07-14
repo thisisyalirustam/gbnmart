@@ -1,5 +1,45 @@
 @extends('website.layout.content')
 @section('webcontent')
+{{-- <style>
+    .wishlist-item {
+    border: 1px solid #eaeaea;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.wishlist-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.wishlist-image img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.remove-wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.wishlist-content {
+    padding: 15px;
+}
+
+.btn-add-cart {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+</style> --}}
 
     <main class="main">
         <!-- Page Title -->
@@ -108,12 +148,12 @@
                                         <a href="#reviews" class="rating-count">{{ $ratingandreviewcount }} Reviews</a>
                                     </div>
                                 @else
-                                <i class="bi bi-star"></i>
-                                <i class="bi bi-star"></i>
-                                <i class="bi bi-star"></i>
-                                <i class="bi bi-star"></i>
-                                <i class="bi bi-star"></i>
-                                <span class="rating-value">No rating and review yet</span>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <i class="bi bi-star"></i>
+                                    <span class="rating-value">No rating and review yet</span>
                                 @endif
 
                             </div>
@@ -192,10 +232,12 @@
                                 <button class="btn btn-primary add-to-cart-btn" data-product-id="{{ $product->id }}">
                                     <i class="bi bi-cart-plus"></i> Add to Cart
                                 </button>
-                                <button class="btn btn-outline-primary buy-now-btn">
+                                <button class="btn btn-outline-primary buy-now-btn addToWishlistButton">
                                     <i class="bi bi-lightning-fill"></i> Buy Now
                                 </button>
-                                <button class="btn btn-outline-secondary wishlist-btn" aria-label="Add to wishlist">
+
+                                <button type="button" class=" btn btn-outline-secondary addToWishlistButton"
+                                    data-product-id="{{ $product->id }}">
                                     <i class="bi bi-heart"></i>
                                 </button>
                             </div>
@@ -435,250 +477,85 @@
         </section><!-- /Product Details Section -->
 
         <!-- Related Product Section -->
-        <section class="related-product">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-title related__product__title">
-                            <h2>Related Products</h2>
+    {{-- <section class="related-product">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-lg-12 text-center">
+                <div class="section-title related__product__title">
+                    <h2>Related Products</h2>
+                </div>
+            </div>
+        </div>
+
+        @php
+            $isCarousel = $related->count() > 4;
+        @endphp
+
+        <div class="{{ $isCarousel ? 'related-carousel owl-carousel' : 'row' }}">
+            @foreach ($related as $item)
+                @php
+                    $relatedImages = json_decode($item->images, true);
+                    $imagePath = isset($relatedImages[0]) ? asset('images/products/' . $relatedImages[0]) : asset('images/default.png');
+                @endphp
+
+                <div class="{{ $isCarousel ? '' : 'col-md-6 col-lg-4 mb-4' }} aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                    <div class="wishlist-item">
+                        <div class="wishlist-image position-relative">
+                            <img src="{{ $imagePath }}" alt="{{ $item->name }}" loading="lazy">
+                            @if ($item->discounted_price)
+                                @php
+                                    $discountPercent = round((($item->price - $item->discounted_price) / $item->price) * 100);
+                                @endphp
+                                <span class="badge badge-danger position-absolute top-0 start-0 m-2">-{{ $discountPercent }}%</span>
+                            @endif
+                            <button class="remove-wishlist" type="button">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="wishlist-content text-center">
+                            <h5 class="text-truncate">
+                                <a href="{{ route('product.detail', $item->slug) }}" class="text-dark">{{ $item->name }}</a>
+                            </h5>
+                            <div class="product-price mb-2">
+                                @if ($item->discounted_price)
+                                    <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
+                                    <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
+                                @else
+                                    <span class="text-primary">${{ $item->price }}</span>
+                                @endif
+                            </div>
+                            <button class="btn btn-add-cart btn-sm mt-2" data-product-id="{{ $item->id }}">Add to Cart</button>
                         </div>
                     </div>
                 </div>
+            @endforeach
+        </div>
+    </div>
+</section> --}}
 
-                <div class="row">
-                    @foreach ($related as $item)
-                        @php
-                            $relatedImages = json_decode($item->images, true);
-                        @endphp
-
-                        <div class="col-lg-4 col-md-6 col-sm-6 product-card mb-4">
-                            <div class="card h-100 border-1 shadow-sm position-relative">
-                                @if ($item->discounted_price)
-                                    @php
-                                        $discountPercent = round(
-                                            (($item->price - $item->discounted_price) / $item->price) * 100,
-                                        );
-                                    @endphp
-                                    <div class="product__discount__percent">-{{ $discountPercent }}%</div>
-                                @endif
-
-                                <div id="carousel{{ $item->id }}" class="carousel slide" data-ride="carousel">
-                                    <div class="carousel-inner">
-                                        @foreach ($relatedImages as $index => $imageName)
-                                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                                                <img src="{{ asset('images/products/' . $imageName) }}"
-                                                    class="d-block w-100" alt="...">
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Product Details -->
-                                <div class="card-body text-center p-3">
-                                    <h6 class="product-name text-truncate font-weight-bold mb-2">
-                                        <a href="{{ route('product.detail', $item->slug) }}"
-                                            class="text-dark">{{ $item->name }}</a>
-                                    </h6>
-                                    <p class="product-description text-muted small mb-2">
-                                        {{ Str::limit(strip_tags($item->short_description), 50) }}</p>
-                                    <!-- Product Price -->
-                                    <div class="product-price mb-2">
-                                        @if ($item->discounted_price)
-                                            <span class="text-muted"
-                                                style="text-decoration: line-through;">${{ $item->price }}</span>
-                                            <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
-                                        @else
-                                            <span class="text-primary">${{ $item->price }}</span>
-                                        @endif
-                                    </div>
-                                    <!-- Stock Status -->
-                                    <p class="text-muted small fixed-stock-status">
-                                        {{ $item->stock_quantity > 0 ? 'In Stock' : 'Out of Stock' }}
-                                    </p>
-                                </div>
-                                <!-- Action Buttons -->
-                                <div class="card-footer d-flex justify-content-around bg-light">
-                                    <button class="btn btn-outline-primary btn-sm add-to-cart-btn"
-                                        data-product-id="{{ $item->id }}">Add to Cart</button>
-                                    <button class="btn btn-primary btn-sm">Buy Now</button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
     </main>
 
-    <style>
-        .reviewer-avatar-placeholder {
-            width: 40px;
-            height: 40px;
-            background-color: #f0f0f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .star-rating {
-            direction: rtl;
-            display: inline-block;
-        }
-
-        .star-rating input[type=radio] {
-            display: none;
-        }
-
-        .star-rating label {
-            color: #ddd;
-            font-size: 1.25rem;
-            padding: 0 2px;
-            cursor: pointer;
-        }
-
-        .star-rating input[type=radio]:checked~label {
-            color: #ffc107;
-        }
-
-        .star-rating label:hover,
-        .star-rating label:hover~label {
-            color: #ffc107;
-        }
-
-        .product-price-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .price-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .current-price {
-            font-size: 24px;
-            font-weight: bold;
-            color: #e53637;
-        }
-
-        .original-price {
-            font-size: 18px;
-            color: #aaa;
-            text-decoration: line-through;
-        }
-
-        .discount-badge {
-            background-color: #e53637;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .stock-info {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #28a745;
-        }
-
-        .stock-count {
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
 
     <script>
-        // Add to cart functionality
-        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const productId = this.getAttribute('data-product-id');
-                const quantity = this.closest('.product-actions') ?
-                    document.querySelector('.quantity-input').value :
-                    this.closest('.card-footer').previousElementSibling.querySelector('.quantity-input')
-                    .value;
-
-                // AJAX call to add to cart
-                fetch('{{ route('cart.add') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            product_id: productId,
-                            quantity: quantity || 1
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update cart count in header
-                            const cartCount = document.querySelector('.cart-count');
-                            if (cartCount) {
-                                cartCount.textContent = data.cart_count;
-                            }
-
-                            // Show success message
-                            alert('Product added to cart successfully!');
-                        } else {
-                            alert('Failed to add product to cart: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred while adding to cart');
-                    });
-            });
-        });
-
-        // Image gallery functionality
-        document.querySelectorAll('.thumbnail-item').forEach(thumbnail => {
-            thumbnail.addEventListener('click', function() {
-                const mainImage = document.getElementById('main-product-image');
-                const newImageSrc = this.getAttribute('data-image');
-
-                // Update main image
-                mainImage.src = newImageSrc;
-                mainImage.setAttribute('data-zoom', newImageSrc);
-
-                // Update active thumbnail
-                document.querySelectorAll('.thumbnail-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                this.classList.add('active');
-
-                // Update lightbox
-                const lightboxLink = mainImage.closest('a');
-                lightboxLink.href = newImageSrc;
-            });
-        });
-
-        // Quantity selector functionality
-        document.querySelectorAll('.quantity-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const input = this.closest('.quantity-selector').querySelector('.quantity-input');
-                let value = parseInt(input.value);
-
-                if (this.classList.contains('decrease')) {
-                    if (value > 1) {
-                        input.value = value - 1;
-                    }
-                } else {
-                    if (value < parseInt(input.max)) {
-                        input.value = value + 1;
-                    }
-                }
-            });
-        });
+  
+        //  $(document).ready(function () {
+        // if ($('.related-carousel').length) {
+        //     $('.related-carousel').owlCarousel({
+        //         items: 3,
+        //         loop: true,
+        //         margin: 20,
+        //         nav: true,
+        //         dots: false,
+        //         responsive: {
+        //             0: { items: 1 },
+        //             768: { items: 2 },
+        //             992: { items: 3 },
+        //             1200: { items: 4 }
+        //         }
+        //     });
+        // }
+  
     </script>
 
 
