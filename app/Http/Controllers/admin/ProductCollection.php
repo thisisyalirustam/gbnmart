@@ -15,17 +15,17 @@ class ProductCollection extends Controller
     {
         return view('admin.pages.products.collections');
     }
-   public function getCollection()
-{
-    $collection = Collection::withCount('products')->get()->map(function ($item) {
-        if ($item->image) {
-            $item->image = asset($item->image); 
-        }
-        return $item;
-    });
+    public function getCollection()
+    {
+        $collection = Collection::withCount('products')->get()->map(function ($item) {
+            if ($item->image) {
+                $item->image = asset($item->image);
+            }
+            return $item;
+        });
 
-    return response()->json($collection);
-}
+        return response()->json($collection);
+    }
 
 
 
@@ -77,7 +77,7 @@ class ProductCollection extends Controller
 
     public function show($id)
     {
-        $collection=Collection::findOrFail($id);
+        $collection = Collection::findOrFail($id);
         return response()->json([
             'product' => [$collection]
         ]);
@@ -208,29 +208,29 @@ class ProductCollection extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-    'success' => false,
-    'message' => 'Failed to delete collection.',
-    // optionally: 'error' => $e->getMessage(),  <-- for debugging only
-], 500);
+                'success' => false,
+                'message' => 'Failed to delete collection.',
+                // optionally: 'error' => $e->getMessage(),  <-- for debugging only
+            ], 500);
 
         }
     }
 
     public function showProducts($id)
-{
-    $collection = Collection::with('products')->findOrFail($id);
+    {
+        $collection = Collection::with('products')->findOrFail($id);
 
-    return view('admin.pages.products.product_collection', [
-        'collection' => $collection,
-        'products' => $collection->products,
-    ]);
-}
-public function removeProduct($collectionId, $productId)
-{
-    $collection = Collection::findOrFail($collectionId);
-    $collection->products()->detach($productId);
+        return view('admin.pages.products.product_collection', [
+            'collection' => $collection,
+            'products' => $collection->products,
+        ]);
+    }
+    public function removeProduct($collectionId, $productId)
+    {
+        $collection = Collection::findOrFail($collectionId);
+        $collection->products()->detach($productId);
 
-    return redirect()->back()->with('success', 'Product removed from collection.');
-}
+        return redirect()->back()->with('success', 'Product removed from collection.');
+    }
 
 }
