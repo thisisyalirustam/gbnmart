@@ -83,9 +83,13 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     ->name('products.assign-collections');
     Route::get('/products/collections',[ProductCollection::class,'index'])->name('products.collection.index');
     Route::post('/collections_store', [ProductCollection::class, 'store'])->name('collections.store');
-Route::post('/collections_update/{id}', [ProductCollection::class, 'update'])->name('collections.update');
+Route::put('/collections_update/{id}', [ProductCollection::class, 'update'])->name('collections.update');
 Route::delete('/collections_delete/{id}', [ProductCollection::class, 'destroy'])->name('collections.destroy');
 Route::get('/getcollection', [ProductCollection::class, 'getCollection'])->name('collections.get');
+Route::get('/collections_update/{id}', [ProductCollection::class, 'show'])->name('collections.show');
+Route::get('/collection/{id}/products', [ProductCollection::class, 'showProducts']);
+Route::delete('/collection/{collection}/product/{product}', [ProductCollection::class, 'removeProduct'])
+    ->name('collection.product.remove');
 
     //shipping Routes
     Route::resource('/shipping', ShippingController::class);

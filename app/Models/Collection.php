@@ -26,4 +26,11 @@ class Collection extends Model
             }
         });
     }
+
+    
+public function products()
+{
+    return $this->belongsToMany(Product::class, 'collection_products')->withTimestamps();
+}
+
 }

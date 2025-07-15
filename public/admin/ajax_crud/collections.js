@@ -50,11 +50,11 @@ $(() => {
             },
             {
                 dataField: "is_active",
-                caption: "is_active",
+                caption: "Status",
                 alignment: "center",
                 width: 100,
                 cellTemplate(container, options) {
-                    const isActive = options.data.status;
+                    const isActive = options.data.is_active;
                     $("<span>")
                         .text(isActive ? "Active" : "Inactive")
                         .css({
@@ -66,17 +66,43 @@ $(() => {
             },
             {
                 dataField: "show_on_front",
-                caption: "Show on front",
+                caption: "Show on Front",
                 alignment: "center",
                 width: 100,
                 cellTemplate(container, options) {
-                    const showOnScreen = options.data.sof;
+                    const showOnFront = options.data.show_on_front;
                     $("<i>")
-                        .addClass(showOnScreen === 1 ? "bi bi-eye-fill" : "bi bi-eye-slash-fill")
-                        .css({ color: showOnScreen === 1 ? "blue" : "gray", fontSize: "1.2em" })
+                        .addClass(showOnFront ? "bi bi-eye-fill" : "bi bi-eye-slash-fill")
+                        .css({
+                            color: showOnFront ? "blue" : "gray",
+                            fontSize: "1.2em",
+                        })
                         .appendTo(container);
                 },
             },
+            {
+    dataField: "products_count",
+    caption: "Products",
+    alignment: "center",
+    width: 100,
+    cellTemplate(container, options) {
+        const count = options.data.products_count;
+        const collectionId = options.data.id;
+
+        // Make it clickable
+        $("<a>")
+            .attr("href", `/collection/${collectionId}/products`)
+            .text(count + " Product" + (count !== 1 ? "s" : ""))
+            .css({
+                color: "#007bff",
+                textDecoration: "underline",
+                cursor: "pointer"
+            })
+            .appendTo(container);
+    }
+},
+
+
 
             {
                 caption: "Actions",
@@ -170,51 +196,13 @@ $(document).ready(function () {
         });
     });
 
-
-    // function submitDeleteForm() {
-    //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-    //     const id = document.querySelector("#deleteid").value;
-    //     const formData = new FormData(document.querySelector("#deleteForm"));
-
-    //     $.ajax({
-    //         url: `/product-cat/${id}`,
-    //         type: "POST", // Override POST to DELETE with _method
-    //         data: formData,
-    //         contentType: false,
-    //         processData: false,
-    //         headers: {
-    //             "X-CSRF-TOKEN": csrfToken,
-    //         },
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 // Refresh the DataGrid to reflect the deleted record
-    //                 $("#gridContainer").dxDataGrid("instance").refresh();
-    //                 // Hide the modal
-    //                 $("#delete").modal("hide");
-    //                 // Reset the form
-    //                 $("#deleteForm")[0].reset();
-    //             } else {
-    //                 alert("Error: " + response.message);
-    //             }
-    //         },
-    //         error: function (xhr) {
-    //             console.log("Error:", xhr.responseText);
-    //             alert("An error occurred while deleting the record. Please try again.");
-    //         },
-    //     });
-    // }
-
     function submitDeleteForm() {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
         const id = document.querySelector("#deleteid").value;
-        const formData = new FormData(document.querySelector("#deleteForm"));
 
         $.ajax({
-            url: `/product-cat/${id}`,
-            type: "POST", // Override POST to DELETE with _method
-            data: formData,
-            contentType: false,
-            processData: false,
+            url: `/collections_delete/${id}`,
+            type: "DELETE",
             headers: {
                 "X-CSRF-TOKEN": csrfToken,
             },
@@ -239,112 +227,41 @@ $(document).ready(function () {
 
 });
 
-// Update Modal with Prefilled Data
-// Show existing data in the modal, including the image
-// update.addEventListener("show.bs.modal", function (event) {
-//     var button = event.relatedTarget;
-//     var id = button.getAttribute("data-bs-userId");
+function submitDeleteForm() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    const id = document.querySelector("#deleteid").value;
 
-//     fetch(`/product-cat/${id}`)
-//         .then((response) => response.json())
-//         .then((data) => {
-//             const product = data.product[0];
-//             document.querySelector("#updateid").value = product.id;
-//             document.querySelector("#updatename").value = product.name;
-//             document.querySelector("#updatestatus").value = product.status;
-//             document.querySelector("#updatesof").value = product.sof;
+    $.ajax({
+        url: `/collections_delete/${id}`,
+        type: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+        success: function (response) {
+            if (response.success) {
+                $("#gridContainer").dxDataGrid("instance").refresh();
+                $("#delete").modal("hide");
+                $("#deleteForm")[0].reset();
+                toastr.success(response.message);
+            } else {
+                toastr.error(response.message);
+            }
+        },
+        error: function (xhr) {
+            console.log("Error:", xhr.responseText);
+            toastr.error("An error occurred while deleting the record.");
+        },
+    });
+}
 
-//             // Show current image in preview
-//             if (product.image) {
-//                 const preview = document.querySelector("#updateImagePreview");
-//                 const previewImg = document.querySelector("#updateImagePreviewImg");
-//                 previewImg.src = product.image; // Ensure this is the full image URL
-//                 preview.style.display = "block";
-//             }
-//         });
-// });
 
-// // Image preview on new image selection
-// document.getElementById("updateImage").addEventListener("change", function (event) {
-//     const file = event.target.files[0];
-//     const preview = document.getElementById("updateImagePreview");
-//     const previewImg = document.getElementById("updateImagePreviewImg");
-//     const fileNameInput = document.getElementById("updateFileName");
-
-//     if (file) {
-//         const reader = new FileReader();
-//         reader.onload = function (e) {
-//             previewImg.src = e.target.result; // Show new image preview
-//             preview.style.display = "block";
-//         };
-//         reader.readAsDataURL(file); // Read file
-//         fileNameInput.value = file.name; // Show file name
-//     }
-// });
-
-// // Handle form submission for updating the category
-// $("#updateform").on("submit", function (e) {
-//     e.preventDefault();
-
-//     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-//     const id = document.querySelector("#updateid").value;
-//     const formData = new FormData(this);
-//     formData.append("_method", "PUT"); // Ensure _method is included for PUT requests
-
-//     $.ajax({
-//         url: `/collections_update/${id}`,
-//         type: "POST",
-//         data: formData,
-//         contentType: false,
-//         processData: false,
-//         headers: {
-//             "X-CSRF-TOKEN": csrfToken,
-//         },
-//         success: function (response) {
-//             if (response.success) {
-//                 $("#gridContainer").dxDataGrid("instance").refresh();
-//                 $("#update").modal("hide");
-//                 $("#updateform")[0].reset();
-//             } else {
-//                 alert("Error: " + response.message);
-//             }
-//         },
-//         error: function (response) {
-//             console.log("Error:", response);
-//             alert("Error occurred. Check the console for more details.");
-//         },
-//     });
-// });
 
 $(document).ready(function () {
     // ... existing code ...
 
     // Delete functionality
-    function submitDeleteForm() {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-        const id = document.querySelector("#deleteid").value;
 
-        $.ajax({
-            url: `/collections_delete/${id}`,
-            type: "DELETE",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-            },
-            success: function (response) {
-                if (response.success) {
-                    $("#gridContainer").dxDataGrid("instance").refresh();
-                    $("#delete").modal("hide");
-                    toastr.success(response.message);
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-            error: function (xhr) {
-                console.log("Error:", xhr.responseText);
-                toastr.error("An error occurred while deleting the record.");
-            },
-        });
-    }
+
 
     // Update Modal with Prefilled Data
     update.addEventListener("show.bs.modal", function (event) {
@@ -361,15 +278,24 @@ $(document).ready(function () {
                 document.querySelector("#updatestatus").value = collection.is_active ? "1" : "0";
                 document.querySelector("#updatesof").value = collection.show_on_front ? "1" : "0";
 
-                // Show current image in preview
+                // 👇 FIXED: Make sure the image path is complete
                 if (collection.image) {
                     const preview = document.querySelector("#updateImagePreview");
                     const previewImg = document.querySelector("#updateImagePreviewImg");
-                    previewImg.src = collection.image;
+
+                    // If you're storing relative paths like: 'images/collection_img/file.jpg'
+                    previewImg.src = '/' + collection.image;
+
+                    // Optional: Add fallback if image doesn't load
+                    previewImg.onerror = function () {
+                        previewImg.src = '/images/no-image.png'; // fallback image
+                    };
+
                     preview.style.display = "block";
                 }
             });
     });
+
 
     // Handle form submission for updating the collection
     $("#updateform").on("submit", function (e) {
