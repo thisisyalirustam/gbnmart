@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                         </nav>
-
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
                         <hr>
                         <div class="container my-4">
                             <!-- Row for main cards -->
@@ -349,6 +349,6 @@
 @endsection
 
 @section('tabledev')
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
     <script src="{{ asset('admin/ajax_crud/orders.js') }}"></script>
 @endsection

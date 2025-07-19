@@ -12,7 +12,7 @@
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+{{-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"> --}}
 
 <style>
     body {
@@ -165,16 +165,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <!-- Quick Actions -->
-                    <div class="quick-actions mt-4">
-                        <h5 class="mb-3">Quick Actions</h5>
-                        <div class="d-flex justify-content-center flex-wrap gap-2">
-                            <a href="" class="btn btn-primary btn-sm"><i class="fas fa-plus me-2"></i>Add Product</a>
-                            <a href="" class="btn btn-success btn-sm"><i class="fas fa-plus me-2"></i>Add Category</a>
-                            <a href="" class="btn btn-warning btn-sm"><i class="fas fa-plus me-2"></i>Add Brand</a>
-                            <a href="" class="btn btn-info btn-sm"><i class="fas fa-plus me-2"></i>Add Collection</a>
-                        </div>
-                    </div>
+                  
 
                     <!-- Navigation Tabs -->
                     <ul class="nav nav-tabs mt-4">
@@ -194,7 +185,7 @@
                             <a class="nav-link" href="{{route('products.collection.index')}}"><i class="fas fa-th-large"></i> Collections</a>
                         </li>
                     </ul>
-
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
                     <!-- Card Section -->
                     <div class="container my-4">
                         <div class="row text-center">
@@ -326,6 +317,7 @@
 @endsection
 
 @section('tabledev')
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 <script src="{{ asset('admin/ajax_crud/products.js') }}"></script>
+
 @endsection

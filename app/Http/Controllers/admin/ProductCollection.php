@@ -90,7 +90,7 @@ class ProductCollection extends Controller
             'description' => 'nullable|string',
             'is_active' => 'sometimes|boolean',
             'show_on_front' => 'sometimes|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -140,7 +140,7 @@ class ProductCollection extends Controller
             'description' => 'nullable|string',
             'is_active' => 'sometimes|boolean',
             'show_on_front' => 'sometimes|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         if ($validator->fails()) {

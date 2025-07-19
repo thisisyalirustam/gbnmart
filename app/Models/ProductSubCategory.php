@@ -13,7 +13,8 @@ class ProductSubCategory extends Model
     protected $fillable = [
         'product_cat_id',
         'name',
-        'slug' // Include slug in fillable attributes
+        'slug',
+        'image'// Include slug in fillable attributes
     ];
 
     /**

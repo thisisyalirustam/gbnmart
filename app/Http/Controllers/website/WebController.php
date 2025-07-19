@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Collection;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -15,13 +16,34 @@ use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
-    //
-    public function home()
-    {
-        $product = Product::with('product_cat')->where('status', 'active')->where('sof', 'Yes')->take(8)->get();
-        $category = ProductCat::where('status', '1')->where('sof', 'yes')->get();
-        return view('website.index', compact('product', 'category'));
-    }
+
+public function home()
+{
+    $product = Product::with('product_cat')
+                ->where('status', 'active')
+                ->where('sof', 'Yes')
+                ->take(8)
+                ->get();
+    
+    $category = ProductCat::where('status', '1')
+                ->where('sof', 'yes')
+                ->get();
+    
+    // Get parent categories with only 3 subcategories each
+    $frontCategory = ProductCat::where('status', 1)
+        ->where('sof', 'yes')->take(5)
+        ->with(['product_sub_category' => function($query) {
+            $query->limit(3); // Removed status filter
+        }])
+        ->get();
+
+      $collections = Collection::where('is_active', 1)
+                   ->where('show_on_front', 1)
+                   ->withCount('products') // Optional: if you want product counts
+                   ->get();
+
+    return view('website.index', compact('product', 'category', 'frontCategory','collections'));
+}
 
     public function productDetail($slug)
     {
@@ -187,8 +209,28 @@ class WebController extends Controller
             'subCatSelected',
             'ratingData'
         ));
+    
     }
-    public function showPassword(){
+    public function showPassword()
+    {
         return view('profile.update');
     }
+ public function collectionProduct($slug)
+{
+    $collection_product = Collection::with('products')->where('slug', $slug)->firstOrFail();
+    $productIds = $collection_product->products->pluck('id')->toArray();
+
+    $ratingData = RattingAndReview::selectRaw('order_items.product_id, AVG(ratings_and_reviews.rating) as avg_rating, COUNT(*) as rating_count')
+        ->join('order_items', 'ratings_and_reviews.order_item_id', '=', 'order_items.id')
+        ->whereIn('order_items.product_id', $productIds)
+        ->where('ratings_and_reviews.status', 1)
+        ->groupBy('order_items.product_id')
+        ->get()
+        ->keyBy('product_id');
+
+    // Pass ratingData to the view
+    return view('website.collection_products', compact('collection_product', 'ratingData'));
+}
+
+
 }

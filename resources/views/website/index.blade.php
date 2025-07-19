@@ -94,6 +94,7 @@
             <!-- Inner -->
             <div class="swiper-wrapper">
                 <!-- Slide Template -->
+                
                 <div class="carousel-item active position-relative" style="height: 80vh;" data-aos-delay="100">
                     <video class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline>
                         <source src="https://mdbcdn.b-cdn.net/img/video/Tropical.mp4" type="video/mp4" />
@@ -167,237 +168,166 @@
 
 
     <main class="main">
+
+        <!-- Category Cards Section -->
+    <section id="category-cards" class="category-cards section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="category-slider swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "autoplay": {
+                "delay": 5000,
+                "disableOnInteraction": false
+              },
+              "grabCursor": true,
+              "speed": 600,
+              "slidesPerView": "auto",
+              "spaceBetween": 20,
+              "navigation": {
+                "nextEl": ".swiper-button-next",
+                "prevEl": ".swiper-button-prev"
+              },
+              "breakpoints": {
+                "320": {
+                  "slidesPerView": 2,
+                  "spaceBetween": 15
+                },
+                "576": {
+                  "slidesPerView": 3,
+                  "spaceBetween": 15
+                },
+                "768": {
+                  "slidesPerView": 4,
+                  "spaceBetween": 20
+                },
+                "992": {
+                  "slidesPerView": 5,
+                  "spaceBetween": 20
+                },
+                "1200": {
+                  "slidesPerView": 6,
+                  "spaceBetween": 20
+                }
+              }
+            }
+          </script>
+
+          <div class="swiper-wrapper">
+            <!-- Category Card 1 -->
+            @foreach ($collections as $collection)
+                  <div class="swiper-slide">
+              <div class="category-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="category-image">
+                  <img src="{{ asset($collection->image) }}" alt="Category" class="img-fluid">
+                </div>
+                <h3 class="category-title"><p class="small-text">{{$collection->name}}</p></h3>
+                <p class="category-count">{{ $collection->products_count }} Products</p>
+                <a href="{{route('web.product.collection',$collection->slug)}}" class="stretched-link"></a>
+              </div>
+            </div>
+            @endforeach      
+          </div>
+
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+
+      </div>
+
+    </section><!-- /Category Cards Section -->
         <!-- Promo Cards Section -->
-        <section id="promo-cards" class="promo-cards section">
+        {{-- <section id="promo-cards" class="promo-cards section">
 
             <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
 
                 <div class="row g-4">
                     <!-- Promo Card 1 -->
-                    <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                    @foreach ($collections as $collection)
+                         <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
                         <div class="promo-card card-1">
                             <div class="promo-content">
-                                <p class="small-text">Etiam vel augue</p>
-                                <h3 class="promo-title">Nullam quis ante</h3>
-                                <p class="promo-description">Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                                    arcu in enim justo rhoncus ut.</p>
-                                <a href="#" class="btn-shop">Shop Now</a>
+                                <p class="small-text">{{$collection->name}}</p>
+                                <h3 class="promo-title">{{$collection->name}}</h3>
+                                <p class="promo-description">{{$collection->description}}</p>
+                                <a href="{{route('web.product.collection',$collection->slug)}}" class="btn-shop">Shop Now</a>
                             </div>
                             <div class="promo-image">
-                                <img src="{{ asset('website/assets/img/product/product-1.webp') }}" alt="Product"
+                                <img src="{{ asset($collection->image) }}" alt="Product"
                                     class="img-fluid">
                             </div>
                         </div>
                     </div>
+                    @endforeach
 
-                    <!-- Promo Card 2 -->
-                    <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-                        <div class="promo-card card-2">
-                            <div class="promo-content">
-                                <p class="small-text">Maecenas tempus</p>
-                                <h3 class="promo-title">Sed fringilla mauris</h3>
-                                <p class="promo-description">Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                                    arcu in enim justo rhoncus ut.</p>
-                                <a href="#" class="btn-shop">Shop Now</a>
-                            </div>
-                            <div class="promo-image">
-                                <img src="{{ asset('website/assets/img/product/product-2.webp') }}" alt="Product"
-                                    class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Promo Card 3 -->
-                    <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
-                        <div class="promo-card card-3">
-                            <div class="promo-content">
-                                <p class="small-text">Aenean commodo</p>
-                                <h3 class="promo-title">Fusce vulputate eleifend</h3>
-                                <p class="promo-description">Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                                    arcu in enim justo rhoncus ut.</p>
-                                <a href="#" class="btn-shop">Shop Now</a>
-                            </div>
-                            <div class="promo-image">
-                                <img src="{{ asset('website/assets/img/product/product-f-1.webp') }}" alt="Product"
-                                    class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Promo Card 4 -->
-                    <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
-                        <div class="promo-card card-4">
-                            <div class="promo-content">
-                                <p class="small-text">Pellentesque auctor</p>
-                                <h3 class="promo-title">Vestibulum dapibus nunc</h3>
-                                <p class="promo-description">Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                                    arcu in enim justo rhoncus ut.</p>
-                                <a href="#" class="btn-shop">Shop Now</a>
-                            </div>
-                            <div class="promo-image">
-                                <img src="{{ asset('website/assets/img/product/product-m-1.webp') }}" alt="Product"
-                                    class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
 
-        </section><!-- /Promo Cards Section -->
+        </section><!-- /Promo Cards Section --> --}}
+        
+       
 
-
-
-        <!-- Category Cards Section -->
-        <section id="category-cards" class="category-cards section light-background">
-
-            <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="category-tabs">
-                    <ul class="nav justify-content-center" id="category-cards-tabs" role="tablist">
+<section id="category-cards" class="category-cards section light-background">
+    <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+        @if($frontCategory->count() > 0)
+            <div class="category-tabs">
+                <ul class="nav justify-content-center" id="category-cards-tabs" role="tablist">
+                    @foreach($frontCategory as $index => $pscategory)
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="category-cards-men-tab" data-bs-toggle="tab"
-                                data-bs-target="#category-cards-men-content" type="button" role="tab"
-                                aria-controls="category-cards-men-content" aria-selected="false" tabindex="-1">SHOP
-                                MEN</button>
+                            <button class="nav-link {{ $index === 0 ? 'active' : '' }}" 
+                                id="category-cards-{{ $pscategory->slug }}-tab" 
+                                data-bs-toggle="tab"
+                                data-bs-target="#category-cards-{{ $pscategory->slug }}-content" 
+                                type="button" role="tab"
+                                aria-controls="category-cards-{{ $pscategory->slug }}-content" 
+                                aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                SHOP {{ strtoupper($pscategory->name) }}
+                            </button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="category-cards-women-tab" data-bs-toggle="tab"
-                                data-bs-target="#category-cards-women-content" type="button" role="tab"
-                                aria-controls="category-cards-women-content" aria-selected="true">SHOP WOMEN</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="category-cards-accesoires-tab" data-bs-toggle="tab"
-                                data-bs-target="#category-cards-accesoires-content" type="button" role="tab"
-                                aria-controls="category-cards-accesoires-content" aria-selected="false"
-                                tabindex="-1">SHOP ACCESSOIRCES</button>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="tab-content" id="category-cards-tabContent">
-                    <!-- Men's Categories -->
-                    <div class="tab-pane fade" id="category-cards-men-content" role="tabpanel"
-                        aria-labelledby="category-cards-men-tab">
-                        <div class="row g-4">
-                            <!-- Leather Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-m-11.webp') }}"
-                                        alt="Men's Leather" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        LEATHER <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Denim Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-m-12.webp') }}"
-                                        alt="Men's Denim" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        DENIM <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Swimwear Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-m-19.webp') }}"
-                                        alt="Men's Swimwear" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        SWIMWEAR <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Women's Categories -->
-                    <div class="tab-pane fade show active" id="category-cards-women-content" role="tabpanel"
-                        aria-labelledby="category-cards-women-tab">
-                        <div class="row g-4">
-                            <!-- Dresses Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-f-11.webp') }}"
-                                        alt="Women's Dresses" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        DRESSES <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Tops Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-f-18.webp') }}"
-                                        alt="Women's Tops" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        TOPS <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Accessories Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-f-13.webp') }}"
-                                        alt="Women's Accessories" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        ACCESSORIES <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Kid's Categories -->
-                    <div class="tab-pane fade" id="category-cards-accesoires-content" role="tabpanel"
-                        aria-labelledby="category-cards-accesoires-tab">
-                        <div class="row g-4">
-                            <!-- Boys Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-1.webp') }}"
-                                        alt="Boys Clothing" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        BOYS <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Girls Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-1.webp') }}"
-                                        alt="Girls Clothing" class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        GIRLS <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <!-- Toys Category -->
-                            <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="400">
-                                <div class="category-card">
-                                    <img src="{{ asset('/website/assets/img/product/product-1.webp') }}" alt="Kids Toys"
-                                        class="img-fluid" loading="lazy">
-                                    <a href="#" class="category-link">
-                                        TOYS <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                    @endforeach
+                </ul>
             </div>
 
-        </section><!-- /Category Cards Section -->
-
+            <div class="tab-content" id="category-cards-tabContent">
+                @foreach($frontCategory as $index => $pcategory)
+                    <div class="tab-pane fade {{ $index === 0 ? 'show active' : '' }}" 
+                         id="category-cards-{{ $pcategory->slug }}-content" 
+                         role="tabpanel"
+                         aria-labelledby="category-cards-{{ $pcategory->slug }}-tab">
+                        <div class="row g-4">
+                            @foreach($pcategory->product_sub_category as $subCategory)
+                                <div class="col-12 col-md-4 aos-init aos-animate" 
+                                     data-aos="fade-up" 
+                                     data-aos-delay="{{ ($loop->index + 2) * 100 }}">
+                                    <div class="category-card">
+                                        @if($subCategory->image)
+                                            <img src="{{ asset('storage/'.$subCategory->image) }}" 
+                                                 alt="{{ $subCategory->name }}" 
+                                                 class="img-fluid" 
+                                                 loading="lazy">
+                                        @else
+                                            <!-- Default image if no image is set -->
+                                            <img src="{{ asset('/website/assets/img/product/product-1.webp') }}" 
+                                                 alt="{{ $subCategory->name }}" 
+                                                 class="img-fluid" 
+                                                 loading="lazy">
+                                        @endif
+                                        <a href="{{ route('shoppage', [$pcategory->slug, $subCategory->slug]) }}" class="category-link">
+                                            {{ strtoupper($subCategory->name) }} <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</section>
         <!-- Best Sellers Section -->
         <section id="best-sellers" class="best-sellers section">
 
@@ -428,8 +358,8 @@
 
                                     <div class="product-overlay">
                                         <div class="product-actions">
-                                            <a type="button" href="{{ route('product.detail', $item->slug) }}" class="action-btn" data-bs-toggle="tooltip"
-                                                title="Quick View">
+                                            <a type="button" href="{{ route('product.detail', $item->slug) }}"
+                                                class="action-btn" data-bs-toggle="tooltip" title="Quick View">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             <button type="button" class="action-btn add-to-cart-btn"
@@ -514,11 +444,14 @@
                                     <img src="{{ asset('images/products/' . $hoverImage) }}" class="img-fluid hover-img"
                                         alt="{{ $item->name }}">
                                     <div class="product-overlay">
-                                        <a href="" class="btn-cart add-to-cart-btn" data-product-id="{{ $item->id }}"><i class="bi bi-cart-plus"></i> Add to
+                                        <a href="" class="btn-cart add-to-cart-btn"
+                                            data-product-id="{{ $item->id }}"><i class="bi bi-cart-plus"></i> Add to
                                             Cart</a>
                                         <div class="product-actions">
-                                            <a href="#" class="action-btn addToWishlistButton"  data-product-id="{{ $item->id }}"><i class="bi bi-heart"></i></a>
-                                            <a href="{{ route('product.detail', $item->slug) }}" class="action-btn"><i class="bi bi-eye"></i></a>
+                                            <a href="#" class="action-btn addToWishlistButton"
+                                                data-product-id="{{ $item->id }}"><i class="bi bi-heart"></i></a>
+                                            <a href="{{ route('product.detail', $item->slug) }}" class="action-btn"><i
+                                                    class="bi bi-eye"></i></a>
                                             <a href="#" class="action-btn"><i
                                                     class="bi bi-arrow-left-right"></i></a>
                                         </div>
@@ -547,7 +480,8 @@
                 </div>
 
                 <div class="text-center mt-5 aos-init aos-animate" data-aos="fade-up">
-                    <a href="{{route('shoppage')}}" class="view-all-btn">View All Products <i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ route('shoppage') }}" class="view-all-btn">View All Products <i
+                            class="bi bi-arrow-right"></i></a>
                 </div>
 
             </div>

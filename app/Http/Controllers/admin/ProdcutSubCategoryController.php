@@ -6,38 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductCat;
 use App\Models\ProductSubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdcutSubCategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-        $product_cat=ProductCat::where('status',1)->get();
+        $product_cat = ProductCat::where('status', 1)->get();
         $product_sub_cat = ProductSubCategory::with('product_cat')->get();
-        return view('admin.pages.products.product_sub_cat',compact('product_sub_cat', 'product_cat'));
+        return view('admin.pages.products.product_sub_cat', compact('product_sub_cat', 'product_cat'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-        $p_sub_category = ProductSubCategory::create([
-            'product_cat_id' => request('product_cat_id'),
-            'name' => request('name')
+        $request->validate([
+            'product_cat_id' => 'required',
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_sub_categories', 'public');
+        }
+
+        $p_sub_category = ProductSubCategory::create([
+            'product_cat_id' => $request->product_cat_id,
+            'name' => $request->name,
+            'image' => $imagePath
         ]);
 
         return response()->json([
@@ -45,17 +41,11 @@ class ProdcutSubCategoryController extends Controller
             'message' => 'Product created successfully',
             'product' => $p_sub_category
         ]);
-
-
     }
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
-        //
-        $product =  ProductSubCategory::with('product_cat')->where(['id' => $id])->get();
-
+        $product = ProductSubCategory::with('product_cat')->where(['id' => $id])->get();
         return response()->json([
             'status' => true,
             'message' => 'Your beautiful user',
@@ -63,34 +53,53 @@ class ProdcutSubCategoryController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
-        $product=ProductSubCategory::where('id',$id)->update([
-            'product_cat_id' => request('product_cat_id'),
-            'name' => request('name')
+        $request->validate([
+            'product_cat_id' => 'required',
+            'name' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        return response()->json(['success'=>true,'message'=>'updated successfully','product'=>$product]);
+
+        $product = ProductSubCategory::findOrFail($id);
+        
+        $data = [
+            'product_cat_id' => $request->product_cat_id,
+            'name' => $request->name
+        ];
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = $request->file('image')->store('product_sub_categories', 'public');
+        }
+
+        $product->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'updated successfully',
+            'product' => $product
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        $p_cat=ProductSubCategory::destroy($id);
-        return response()->json(['success'=>true,'message'=>'product Delete successfully','product'=>$p_cat]);
-        //
+        $product = ProductSubCategory::findOrFail($id);
+        
+        // Delete image if exists
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+        
+        $product->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'product deleted successfully',
+            'product' => $product
+        ]);
     }
 }

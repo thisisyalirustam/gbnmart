@@ -34,6 +34,7 @@ Route::get('/wishlist', [CartController::class, 'getWishlist'])->name('wishlist.
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/collection/{slug}', [WebController::class, 'collectionProduct'])->name('web.product.collection');
 
 // Buyer Dashboard
 Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
@@ -79,17 +80,17 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::post('/product/{id}/sof', [AdminMainController::class, 'updateSOF'])->name('product.updateSOF');
 
     // collections
-   Route::post('/products/assign-collections', [ProductCollection::class, 'assignCollections'])
-    ->name('products.assign-collections');
-    Route::get('/products/collections',[ProductCollection::class,'index'])->name('products.collection.index');
+    Route::post('/products/assign-collections', [ProductCollection::class, 'assignCollections'])
+        ->name('products.assign-collections');
+    Route::get('/products/collections', [ProductCollection::class, 'index'])->name('products.collection.index');
     Route::post('/collections_store', [ProductCollection::class, 'store'])->name('collections.store');
-Route::put('/collections_update/{id}', [ProductCollection::class, 'update'])->name('collections.update');
-Route::delete('/collections_delete/{id}', [ProductCollection::class, 'destroy'])->name('collections.destroy');
-Route::get('/getcollection', [ProductCollection::class, 'getCollection'])->name('collections.get');
-Route::get('/collections_update/{id}', [ProductCollection::class, 'show'])->name('collections.show');
-Route::get('/collection/{id}/products', [ProductCollection::class, 'showProducts']);
-Route::delete('/collection/{collection}/product/{product}', [ProductCollection::class, 'removeProduct'])
-    ->name('collection.product.remove');
+    Route::put('/collections_update/{id}', [ProductCollection::class, 'update'])->name('collections.update');
+    Route::delete('/collections_delete/{id}', [ProductCollection::class, 'destroy'])->name('collections.destroy');
+    Route::get('/getcollection', [ProductCollection::class, 'getCollection'])->name('collections.get');
+    Route::get('/collections_update/{id}', [ProductCollection::class, 'show'])->name('collections.show');
+    Route::get('/collection/{id}/products', [ProductCollection::class, 'showProducts']);
+    Route::delete('/collection/{collection}/product/{product}', [ProductCollection::class, 'removeProduct'])
+        ->name('collection.product.remove');
 
     //shipping Routes
     Route::resource('/shipping', ShippingController::class);
@@ -100,29 +101,29 @@ Route::delete('/collection/{collection}/product/{product}', [ProductCollection::
     //orders Routes
     Route::resource('/coustomer-orders', OrderController::class);
     Route::get('/orders', [AdminController::class, 'orders'])->name('admin.orders');
-    Route::get('orders/all',[OrderMainContrller::class,'ordersAll'])->name('order.all');
-    Route::get('/orders/return',[OrderMainContrller::class,'ordersReturn'])->name('order.return');
-    Route::get('/orders/active',[OrderMainContrller::class,'ordersActive'])->name('order.active');
-    Route::get('/orders/returnJson',[OrderMainContrller::class,'OrderReturnJson']);
-    Route::get('/orders/compeleteJson',[OrderMainContrller::class,'OrderCompeleteJson']);
-    Route::get('/orders/activeJson',[OrderMainContrller::class,'OrderActiveJson']);
-    Route::get('/orders/compelete',[OrderMainContrller::class,'ordersCompelete'])->name('order.compelete');
-    Route::get('/orders/admin',[OrderMainContrller::class,'ordersAdmin'])->name('order.admin'); 
+    Route::get('orders/all', [OrderMainContrller::class, 'ordersAll'])->name('order.all');
+    Route::get('/orders/return', [OrderMainContrller::class, 'ordersReturn'])->name('order.return');
+    Route::get('/orders/active', [OrderMainContrller::class, 'ordersActive'])->name('order.active');
+    Route::get('/orders/returnJson', [OrderMainContrller::class, 'OrderReturnJson']);
+    Route::get('/orders/compeleteJson', [OrderMainContrller::class, 'OrderCompeleteJson']);
+    Route::get('/orders/activeJson', [OrderMainContrller::class, 'OrderActiveJson']);
+    Route::get('/orders/compelete', [OrderMainContrller::class, 'ordersCompelete'])->name('order.compelete');
+    Route::get('/orders/admin', [OrderMainContrller::class, 'ordersAdmin'])->name('order.admin');
     Route::post('/orders-show/{id}', [AdminController::class, 'showorder'])->name('admin.ordersshow');
     Route::post('orders/{orderId}/send-invoice', [AdminController::class, 'sendInvoice'])->name('orders.sendInvoice');
     Route::get('/update-order/{id}', [AdminController::class, 'updateOrder'])->name('orderUpdate');
     Route::get('/quick-show/{id}', [AdminMainController::class, 'quickShow'])->name('quickshow');
     Route::post('/customer-orders/{id}/update-delivery-date', [AdminController::class, 'updateDeliveryDate'])->name('orders.updateDeliveryDate');
     Route::post('/customer-orders/{id}/{coupon}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('orders.updateShippingStatus');
-    Route::get('/orders/rating/',[OrderMainContrller::class, 'getRatingAndReview']);
-    Route::get('/orders/rating-review/',[OrderMainContrller::class, 'showRatingAndReview'])->name('admin.rating_review');
+    Route::get('/orders/rating/', [OrderMainContrller::class, 'getRatingAndReview']);
+    Route::get('/orders/rating-review/', [OrderMainContrller::class, 'showRatingAndReview'])->name('admin.rating_review');
     Route::patch('/update-status/{id}', [OrderMainContrller::class, 'updateStatus']);
     Route::delete('delete-order/{id}', [OrderMainContrller::class, 'deleteOrder'])->name('delete-order');
     //settings Routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.setting');
     Route::put('/update-settings/{id}', [SettingsController::class, 'updateSetting'])->name('setting.update');
     Route::resource('/settings/banners', BannerController::class);
-    Route::get('admin/settings_dashboard',[SettingsMainController::class, 'index'])->name('admin.settings.dashboard');
+    Route::get('admin/settings_dashboard', [SettingsMainController::class, 'index'])->name('admin.settings.dashboard');
     //Affliates Routes
     Route::get('/affiliate/dashboard', [AdminController::class, 'affiliateget'])->name('affiliate.index');
     Route::get('/affiliate/active-marketers', [AdminController::class, 'activeMarketers'])->name('affiliate.active');
@@ -138,14 +139,14 @@ Route::delete('/collection/{collection}/product/{product}', [ProductCollection::
     Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-    Route::get('/admin/profile',[AdminMainController::class, 'getProfile'])->name('admin.profile');
+    Route::get('/admin/profile', [AdminMainController::class, 'getProfile'])->name('admin.profile');
     Route::post('/profile/update', [AdminMainController::class, 'update'])->name('profile.update');
     Route::post('/change-password', [AdminMainController::class, 'changePassword'])->name('change.admin.password');
-    
-    Route::get('/Blogs',[BlogController::class, 'index'])->name('admin.blog');
+
+    Route::get('/Blogs', [BlogController::class, 'index'])->name('admin.blog');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('admin.blog.create');
 
-    });
+});
 
 //vendor Routs
 Route::middleware(['auth', 'verified'])->group(function () {

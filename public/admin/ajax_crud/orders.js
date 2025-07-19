@@ -9,13 +9,12 @@ $(() => {
                 key: "id",
             },
         },
-        paging: {
-            pageSize: 10, // Default page size, can be adjusted dynamically
+         paging: {
+            pageSize: 10,
         },
         pager: {
             showPageSizeSelector: true,
-            allowedPageSizes: [10, 25, 50, 100], // Allows users to select page size
-            showInfo: true, // Optionally, show the page info like "Page 1 of 10"
+            allowedPageSizes: [10, 25, 50, 100],
         },
         remoteOperations: false, // Set to true if your server supports paging
         searchPanel: {

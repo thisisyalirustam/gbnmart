@@ -41,7 +41,22 @@ $(() => {
                     return data.product_cat ? data.product_cat.name : "";
                 }
             },
-           
+           // In the DataGrid columns array, add:
+{
+    dataField: "image",
+    caption: "Image",
+    cellTemplate: function(container, options) {
+        if (options.value) {
+            $('<div>')
+                .append(
+                    $('<img>')
+                        .attr('src', '/storage/' + options.value)
+                        .css({ width: '50px', height: '50px', 'object-fit': 'cover' })
+                )
+                .appendTo(container);
+        }
+    }
+},
             {
                 caption: "Actions",
                 alignment: "center", // Center-align the buttons
@@ -209,7 +224,6 @@ $(document).ready(function () {
 
 
 //update Record model
-var update = document.getElementById("update");
 update.addEventListener("show.bs.modal", function (event) {
     var button = event.relatedTarget;
     var id = button.getAttribute("data-bs-userId");
@@ -224,8 +238,17 @@ update.addEventListener("show.bs.modal", function (event) {
             console.log(data);
             const product = data.product[0];
             document.querySelector("#updateid").value = product.id;
-            document.querySelector("#updatename").value = product.name;     
-            document.querySelector("#product_cat_id").value = product.product_cat.name;
+            document.querySelector("#updatename").value = product.name;
+            document.querySelector("#product_cat_id").value = product.product_cat_id;
+            
+            // Display current image if exists
+            const imgElement = document.querySelector("#currentImage");
+            if (product.image) {
+                imgElement.src = '/storage/' + product.image;
+                imgElement.style.display = 'block';
+            } else {
+                imgElement.style.display = 'none';
+            }
         });
 });
 //end update Record model

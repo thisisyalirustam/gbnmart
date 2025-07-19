@@ -15,6 +15,14 @@
             padding-top: 0;
             padding-bottom: 0;
         }
+
+        /* Add to your styles */
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
     <section class="section">
         <div class="row">
@@ -35,136 +43,153 @@
 
     {{-- create model --}}
     <div class="modal fade" id="add" tabindex="-1" aria-hidden="true" style="display: none;">
-      <div class="modal-dialog modal-xl modal-dialog-centered">
-          <div class="modal-content">
-              <div class="modal-header">
-                <div id="successAlert" class="alert alert-success d-none" role="alert">
-                  User created successfully!
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="successAlert" class="alert alert-success d-none" role="alert">
+                        User created successfully!
+                    </div>
+                    <h5 class="modal-title">Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                  <h5 class="modal-title">Add New User</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
+                <div class="modal-body">
 
-                  <form id="addform">
-                      @csrf
-                      <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
-                      <div class="row mb-3">
-                        <label for="inputNumber" class="col-sm-2 col-form-label">Sub Catogry</label>
-                        <div class="col-sm-10">
-                            <select id="product_cat_id" name="product_cat_id" class="form-select">
-                                <option selected="">Select category</option>
-                                @foreach ($product_cat as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
+                    <form id="addform" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" id="csrf_token" name="_token" value="{{ csrf_token() }}">
+                        <div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-2 col-form-label">Sub Catogry</label>
+                            <div class="col-sm-10">
+                                <select id="product_cat_id" name="product_cat_id" class="form-select">
+                                    <option selected="">Select category</option>
+                                    @foreach ($product_cat as $row)
+                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                      <div class="row mb-3">
-                          <label for="inputText" class="col-sm-2 col-form-label">Name</label>
-                          <div class="col-sm-10">
-                              <input type="text" name="name" id="name" class="form-control">
-                          </div>
-                      </div>
-                      <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Submit Button</label>
-                          <div class="col-sm-10">
-                              <button type="submit" class="btn btn-primary">Submit Form</button>
-                          </div>
-                      </div>
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" id="name" class="form-control">
+                            </div>
+                        </div>
+                        <!-- In the create modal (#add) -->
+                        <div class="row mb-3">
+                            <label for="inputImage" class="col-sm-2 col-form-label">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="image" id="image" class="form-control">
+                            </div>
+                        </div>
 
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
 
-<!-- Update Modal -->
-<div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title">Update User</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Submit Button</label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit Form</button>
+                            </div>
+                        </div>
 
-              <form id="updateform">
-
-                @csrf
-                <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
-                <input type="hidden" id="updateid" name="id" value="">
-
-                <div class="row mb-3">
-                    <label for="inputNumber" class="col-sm-2 col-form-label">User Type</label>
-                    <div class="col-sm-10">
-                        <select id="product_cat_id" name="product_cat_id" class="form-select">
-                                @foreach ($product_cat as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                        </select>
-                    </div>
+                    </form>
                 </div>
-
-                  <div class="row mb-3">
-                      <label for="inputText" class="col-sm-2 col-form-label">Name</label>
-                      <div class="col-sm-10">
-                          <input type="text" name="name" id="updatename" class="form-control">
-                      </div>
-                  </div>
-                  <div class="row mb-3">
-                      <label class="col-sm-2 col-form-label">Submit Button</label>
-                      <div class="col-sm-10">
-                          <button type="submit" class="btn btn-primary">Submit Form</button>
-                      </div>
-                  </div>
-
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
-
-{{-- user show model --}}
-<div class="modal fade" id="show" tabindex="-1"
-  aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body">
-        </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary"
-                  data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-      </div>
-  </div>
-</div>
-{{-- edn of user show model --}}
-
-{{-- user delete modal --}}
-<div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
-                <h5 class="card-title text-danger mt-3">Are You Sure?</h5>
-                <p class="text-muted">This action cannot be undone.</p>
             </div>
-            <form id="deleteForm" class="delete-form">
-                @csrf
-                <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
-                <input type="hidden" id="deleteid" name="id" value="">
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger delete-btn">Delete</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
 
+    <!-- Update Modal -->
+    <div class="modal fade" id="update" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form id="updateform" enctype="multipart/form-data">
+
+                        @csrf
+                        <input type="hidden" name="_method" value="PUT"> <!-- Method override for PUT -->
+                        <input type="hidden" id="updateid" name="id" value="">
+
+                        <div class="row mb-3">
+                            <label for="inputNumber" class="col-sm-2 col-form-label">User Type</label>
+                            <div class="col-sm-10">
+                                <select id="product_cat_id" name="product_cat_id" class="form-select">
+                                    @foreach ($product_cat as $row)
+                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="inputText" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="name" id="updatename" class="form-control">
+                            </div>
+                        </div>
+                        <!-- In the update modal (#update) -->
+                        <div class="row mb-3">
+                            <label for="inputImage" class="col-sm-2 col-form-label">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="image" id="updateimage" class="form-control">
+                                <div class="mt-2">
+                                    <img id="currentImage" src="" alt="Current Image"
+                                        style="max-width: 200px; display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Submit Button</label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Submit Form</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- user show model --}}
+    <div class="modal fade" id="show" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- edn of user show model --}}
+
+    {{-- user delete modal --}}
+    <div class="modal fade" id="delete" tabindex="-1" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+                    <h5 class="card-title text-danger mt-3">Are You Sure?</h5>
+                    <p class="text-muted">This action cannot be undone.</p>
+                </div>
+                <form id="deleteForm" class="delete-form">
+                    @csrf
+                    <input type="hidden" name="_method" value="DELETE"> <!-- Method override for DELETE -->
+                    <input type="hidden" id="deleteid" name="id" value="">
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger delete-btn">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('tabledev')
-<script src="{{ asset('admin/ajax_crud/product_sub_category.js') }}"></script>
+    <script src="{{ asset('admin/ajax_crud/product_sub_category.js') }}"></script>
 @endsection
