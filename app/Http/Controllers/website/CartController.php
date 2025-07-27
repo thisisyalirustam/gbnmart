@@ -8,15 +8,15 @@ use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
-
     // MainController or BaseController
     public function index()
     {
-          $cartItems = [];
+        $cartItems = [];
         $subtotal = 0;
         $cartCount = Auth::check() ? Cart::where('user_id', Auth::id())->sum('quantity') : array_sum(array_column(session('cart', []), 'quantity'));
         if (Auth::check()) {
@@ -29,7 +29,7 @@ class CartController extends Controller
             foreach ($sessionCart as $productId => $item) {
                 $product = Product::find($productId);
                 if ($product) {
-                    $cartItems[] = (object)[
+                    $cartItems[] = (object) [
                         'product_id' => $product->id,
                         'name' => $product->name,
                         'price' => $product->price,
@@ -51,48 +51,45 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'count' => $cartCount,
-            'cartitem'=>$cartItems,
-            'subtotal'=> $subtotal
+            'cartitem' => $cartItems,
+            'subtotal' => $subtotal
         ]);
     }
-
-
     public function addToCart(Request $request)
-{
-    $productId = $request->input('product_id');
-    $quantity = $request->input('quantity', 1);
+    {
+        $productId = $request->input('product_id');
+        $quantity = $request->input('quantity', 1);
 
-    if (Auth::check()) {
-        $userId = Auth::id();
-        $cartItem = Cart::where('user_id', $userId)->where('product_id', $productId)->first();
-        if ($cartItem) {
-            return response()->json(['error' => 'Product is already in your cart.'], 409);
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cartItem = Cart::where('user_id', $userId)->where('product_id', $productId)->first();
+            if ($cartItem) {
+                return response()->json(['error' => 'Product is already in your cart.'], 409);
+            } else {
+                Cart::create([
+                    'user_id' => $userId,
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                ]);
+            }
         } else {
-            Cart::create([
-                'user_id' => $userId,
-                'product_id' => $productId,
-                'quantity' => $quantity,
-            ]);
+            $cart = session()->get('cart', []);
+            if (isset($cart[$productId])) {
+                return response()->json(['error' => 'Product is already in your cart.'], 409);
+            } else {
+                $cart[$productId] = [
+                    'product_id' => $productId,
+                    'quantity' => $quantity,
+                ];
+                session()->put('cart', $cart);
+            }
         }
-    } else {
-        $cart = session()->get('cart', []);
-        if (isset($cart[$productId])) {
-            return response()->json(['error' => 'Product is already in your cart.'], 409);
-        } else {
-            $cart[$productId] = [
-                'product_id' => $productId,
-                'quantity' => $quantity,
-            ];
-            session()->put('cart', $cart);
-        }
+
+        return response()->json([
+            'success' => 'Product added to your cart.',
+            'count' => $this->getCartCount()
+        ]);
     }
-
-    return response()->json([
-        'success' => 'Product added to your cart.',
-        'count' => $this->getCartCount()
-    ]);
-}
-
     private function getCartCount()
     {
         if (Auth::check()) {
@@ -116,7 +113,7 @@ class CartController extends Controller
             foreach ($sessionCart as $productId => $item) {
                 $product = Product::find($productId);
                 if ($product) {
-                    $cartItems[] = (object)[
+                    $cartItems[] = (object) [
                         'product_id' => $product->id,
                         'name' => $product->name,
                         'price' => $product->price,
@@ -151,7 +148,6 @@ class CartController extends Controller
 
         return redirect()->route('cart.show')->with('success', 'Product removed from cart');
     }
-
     // Update Quantity
     public function updateQuantity(Request $request, $productId)
     {
@@ -217,42 +213,42 @@ class CartController extends Controller
         ]);
     }
     public function addWishlist(Request $request)
-{
-    $productId = $request->input('product_id');
+    {
+        $productId = $request->input('product_id');
 
-    if (Auth::check()) {
-        $userId = Auth::id();
-        $cartItem = Wishlist::where('user_id', $userId)
-            ->where('product_id', $productId)
-            ->first();
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cartItem = Wishlist::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->first();
 
-        if ($cartItem) {
-            return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
+            if ($cartItem) {
+                return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
+            }
+
+            Wishlist::create([
+                'user_id' => $userId,
+                'product_id' => $productId,
+            ]);
+        } else {
+            $wishlist = session()->get('wishlist', []);
+
+            if (isset($wishlist[$productId])) {
+                return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
+            }
+
+            $wishlist[$productId] = [
+                'product_id' => $productId,
+            ];
+
+            session()->put('wishlist', $wishlist);
         }
 
-        Wishlist::create([
-            'user_id' => $userId,
-            'product_id' => $productId,
+        return response()->json([
+            'success' => 'Product added to your wishlist.',
+            'wishCount' => $this->getCartWishlist()
         ]);
-    } else {
-        $wishlist = session()->get('wishlist', []);
-
-        if (isset($wishlist[$productId])) {
-            return response()->json(['error' => 'Product is already in your Wishlist.'], 409);
-        }
-
-        $wishlist[$productId] = [
-            'product_id' => $productId,
-        ];
-
-        session()->put('wishlist', $wishlist);
     }
-
-    return response()->json([
-        'success' => 'Product added to your wishlist.',
-        'wishCount' => $this->getCartWishlist()
-    ]);
-}
 
     private function getCartWishlist()
     {
@@ -301,45 +297,45 @@ class CartController extends Controller
     }
 
     public function add(Request $request)
-{
-    $productId = $request->product_id;
-    $quantity = $request->quantity ?? 1;
+    {
+        $productId = $request->product_id;
+        $quantity = $request->quantity ?? 1;
 
-    if (Auth::check()) {
-        // Logic to add to database cart table
-        Cart::updateOrCreate(
-            ['user_id' => Auth::id(), 'product_id' => $productId],
-            ['quantity' => \DB::raw("quantity + $quantity")]
-        );
-    } else {
-        // Logic to store in session
-        $cart = session()->get('cart', []);
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += $quantity;
+        if (Auth::check()) {
+            // Logic to add to database cart table
+            Cart::updateOrCreate(
+                ['user_id' => Auth::id(), 'product_id' => $productId],
+                ['quantity' => DB::raw("quantity + $quantity")]
+            );
         } else {
-            $cart[$productId] = ['product_id' => $productId, 'quantity' => $quantity];
+            // Logic to store in session
+            $cart = session()->get('cart', []);
+            if (isset($cart[$productId])) {
+                $cart[$productId]['quantity'] += $quantity;
+            } else {
+                $cart[$productId] = ['product_id' => $productId, 'quantity' => $quantity];
+            }
+            session()->put('cart', $cart);
         }
-        session()->put('cart', $cart);
+
+        return response()->json(['success' => true]);
+    }
+    public function remove(Request $request)
+    {
+        $productId = $request->product_id;
+
+        if (Auth::check()) {
+            Wishlist::where('user_id', Auth::id())
+                ->where('product_id', $productId)
+                ->delete();
+        } else {
+            $wishlist = session()->get('wishlist', []);
+            unset($wishlist[$productId]);
+            session()->put('wishlist', $wishlist);
+        }
+
+        return response()->json(['success' => true]);
     }
 
-    return response()->json(['success' => true]);
-}
-public function remove(Request $request)
-{
-    $productId = $request->product_id;
 
-    if (Auth::check()) {
-        Wishlist::where('user_id', Auth::id())
-            ->where('product_id', $productId)
-            ->delete();
-    } else {
-        $wishlist = session()->get('wishlist', []);
-        unset($wishlist[$productId]);
-        session()->put('wishlist', $wishlist);
-    }
-
-    return response()->json(['success' => true]);
-}
-
-    
 }

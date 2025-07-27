@@ -60,7 +60,7 @@ class ProductController extends Controller
             'weight' => 'required|numeric',
             'dimensions' => 'required|string',
             'images' => 'required', // Required images field
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048' // Each image must follow this rule
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120' // Each image must follow this rule
         ]);
 
         $user = Auth::user();

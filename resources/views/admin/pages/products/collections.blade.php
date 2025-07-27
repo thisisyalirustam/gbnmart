@@ -50,7 +50,7 @@
                 <div class="card">
                     <div class="card-body">
                         <button type="button" class="btn mt-2" data-bs-toggle="modal" data-bs-target="#add">
-                            <i class="bi bi-plus-lg txt-primary"></i> Add New Category
+                            <i class="bi bi-plus-lg txt-primary"></i> Add New Collection
                         </button>
                         <hr>
                         <div id="gridContainer"></div>

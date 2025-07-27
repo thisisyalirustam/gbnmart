@@ -99,7 +99,7 @@
                  <div class="d-flex py-3 align-items-center justify-content-between">
 
                      <a href="{{ route('homepage') }}" class="logo d-flex align-items-center"><img
-                             src="{{ asset(settings()->logo) }}" alt="Logo"></a>
+                             src="{{ asset(settings()->logo) }}" style="width:200px; " alt="Logo"></a>
 
                      <!-- Search -->
                      <form class="search-form desktop-search-form" action="{{ route('shoppage') }}" method="GET">
@@ -324,7 +324,7 @@
                          @endforeach
 
 
-                         <li><a href="contact.html">Contact</a></li>
+                         <li><a href="{{ route('website.contact') }}">Contact</a></li>
 
                      </ul>
                  </nav>

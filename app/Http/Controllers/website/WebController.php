@@ -17,33 +17,53 @@ use Illuminate\Http\Request;
 class WebController extends Controller
 {
 
-public function home()
-{
-    $product = Product::with('product_cat')
-                ->where('status', 'active')
-                ->where('sof', 'Yes')
-                ->take(8)
-                ->get();
-    
-    $category = ProductCat::where('status', '1')
-                ->where('sof', 'yes')
-                ->get();
-    
-    // Get parent categories with only 3 subcategories each
-    $frontCategory = ProductCat::where('status', 1)
-        ->where('sof', 'yes')->take(5)
-        ->with(['product_sub_category' => function($query) {
-            $query->limit(3); // Removed status filter
-        }])
-        ->get();
+    public function home()
+    {
+        $product = Product::with('product_cat')
+            ->where('status', 'active')
+            ->where('sof', 'Yes')
+            ->take(8)->orderBy('id','DESC')
+            ->get();
 
-      $collections = Collection::where('is_active', 1)
-                   ->where('show_on_front', 1)
-                   ->withCount('products') // Optional: if you want product counts
-                   ->get();
+        $sellproduct = Product::with('product_cat')
+            ->where('status', 'active')
+            ->where('sof', 'Yes')
+            ->whereNotNull('discounted_price')
+            ->take(8)->orderBy('id','DESC')
+            ->get();
 
-    return view('website.index', compact('product', 'category', 'frontCategory','collections'));
-}
+        $category = ProductCat::where('status', '1')
+            ->where('sof', 'yes')
+            ->get();
+
+        $frontCategory = ProductCat::where('status', 1)
+            ->where('sof', 'yes')->take(5)
+            ->with([
+                'product_sub_category' => function ($query) {
+                    $query->limit(3);
+                }
+            ])
+            ->get();
+
+        $collections = Collection::where('is_active', 1)
+            ->where('show_on_front', 1)
+            ->withCount('products')
+            ->get();
+
+        // Combine product IDs from both product sets
+        $productIds = $product->pluck('id')->merge($sellproduct->pluck('id'))->unique()->toArray();
+
+        $ratingData = RattingAndReview::selectRaw('order_items.product_id, AVG(ratings_and_reviews.rating) as avg_rating, COUNT(*) as rating_count')
+            ->join('order_items', 'ratings_and_reviews.order_item_id', '=', 'order_items.id')
+            ->whereIn('order_items.product_id', $productIds)
+            ->where('ratings_and_reviews.status', 1)
+            ->groupBy('order_items.product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        return view('website.index', compact('product', 'category', 'frontCategory', 'collections', 'sellproduct', 'ratingData'));
+    }
+
 
     public function productDetail($slug)
     {
@@ -90,7 +110,110 @@ public function home()
 
 
 
-    public function admin()
+   
+
+
+
+    public function shop(Request $request, $catslug = null, $subcatslug = null)
+    {
+        $catSelected = '';
+        $subCatSelected = '';
+
+        // Get categories with subcategories
+        $categories = ProductCat::orderBy('name', 'ASC')
+            ->with('product_sub_category')
+            ->where('status', 1)
+            ->get();
+
+        // Get all brands
+        $brands = ProductBrand::orderBy('name', 'ASC')->get();
+
+        // Start building the product query
+        $productsQuery = Product::where('status', 'active')
+            ->where('sof', 'Yes');
+
+        // Apply category filter if exists
+        if (!empty($catslug)) {
+            $category = ProductCat::where('slug', $catslug)->first();
+            if ($category) {
+                $productsQuery->where('product_cat_id', $category->id);
+                $catSelected = $category->id;
+            }
+        }
+
+        // Apply subcategory filter if exists
+        if (!empty($subcatslug)) {
+            $subcategory = ProductSubCategory::where('slug', $subcatslug)->first();
+            if ($subcategory) {
+                $productsQuery->where('product_sub_category_id', $subcategory->id);
+                $subCatSelected = $subcategory->id;
+            }
+        }
+
+        // Handle brand filter
+        $brandsArray = [];
+        if (!empty($request->get('brand'))) {
+            $brandsArray = explode(',', $request->get('brand'));
+            $productsQuery->whereIn('product_brand_id', $brandsArray);
+        }
+
+        // Handle search
+        if (!empty($request->get('search'))) {
+            $productsQuery->where('name', 'like', '%' . $request->get('search') . '%');
+        }
+
+        // Price range handling
+        $maxPriceProduct = Product::max('price');
+        $min_price = intval($request->input('minprice', 0));
+        $max_price = intval($request->input('maxprice', $maxPriceProduct));
+        $productsQuery->whereBetween('price', [$min_price, $max_price]);
+
+        // Sorting
+        $sort = $request->get('sort');
+        switch ($sort) {
+            case 'price_high':
+                $productsQuery->orderBy('price', 'DESC');
+                break;
+            case 'price_low':
+                $productsQuery->orderBy('price', 'ASC');
+                break;
+            case 'latest_product':
+            default:
+                $productsQuery->orderBy('id', 'DESC');
+        }
+
+        // Pagination
+        $perPage = $request->get('per_page', 12); // Default to 12 items per page
+        $products = $productsQuery->paginate($perPage);
+
+        // Get product IDs for rating data
+        $productIds = $products->pluck('id')->toArray();
+
+        // Get rating data
+        $ratingData = RattingAndReview::selectRaw('order_items.product_id, AVG(ratings_and_reviews.rating) as avg_rating, COUNT(*) as rating_count')
+            ->join('order_items', 'ratings_and_reviews.order_item_id', '=', 'order_items.id')
+            ->whereIn('order_items.product_id', $productIds)
+            ->where('ratings_and_reviews.status', 1)
+            ->groupBy('order_items.product_id')
+            ->get()
+            ->keyBy('product_id');
+
+        return view('website.shop', [
+            'categories' => $categories,
+            'brands' => $brands,
+            'products' => $products,
+            'brandsArray' => $brandsArray,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'maxPriceProduct' => $maxPriceProduct,
+            'sort' => $sort,
+            'catSelected' => $catSelected,
+            'subCatSelected' => $subCatSelected,
+            'ratingData' => $ratingData
+        ]);
+    }
+
+     public function admin()
     {
         $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(12);
 
@@ -118,75 +241,15 @@ public function home()
 
         return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct', 'notifications'));
     }
-
-
-
-    public function shop(Request $request, $catslug = null, $subcatslug = null)
+    public function showPassword()
     {
-        $catSelected = '';
-        $subCatSelected = '';
+        return view('profile.update');
+    }
+    public function collectionProduct($slug)
+    {
+        $collection_product = Collection::with('products')->where('slug', $slug)->firstOrFail();
+        $productIds = $collection_product->products->pluck('id')->toArray();
 
-        $categories = ProductCat::orderBy('name', 'ASC')
-            ->with('product_sub_category')
-            ->where('status', 1)
-            ->get();
-
-        $brands = ProductBrand::orderBy('name', 'ASC')->get();
-
-        $productsQuery = Product::where('status', 'active')
-            ->where('sof', 'Yes');
-
-        if (!empty($catslug)) {
-            $category = ProductCat::where('slug', $catslug)->first();
-            if ($category) {
-                $productsQuery = $productsQuery->where('product_cat_id', $category->id);
-                $catSelected = $category->id;
-            }
-        }
-
-        if (!empty($subcatslug)) {
-            $subcategory = ProductSubCategory::where('slug', $subcatslug)->first();
-            if ($subcategory) {
-                $productsQuery = $productsQuery->where('product_sub_category_id', $subcategory->id);
-                $subCatSelected = $subcategory->id;
-            }
-        }
-
-        $brandsArray = [];
-        if (!empty($request->get('brand'))) {
-            $brandsArray = explode(',', $request->get('brand'));
-            $productsQuery = $productsQuery->whereIn('product_brand_id', $brandsArray);
-        }
-
-        if (!empty($request->get('search'))) {
-            $productsQuery = $productsQuery->where('name', 'like', '%' . $request->get('search') . '%');
-        }
-
-        $maxPriceProduct = Product::max('price');
-        $min_price = intval($request->input('minprice', 0));
-        $max_price = intval($request->input('maxprice', $maxPriceProduct));
-        $sort = $request->get('sort');
-
-        $productsQuery = $productsQuery->whereBetween('price', [$min_price, $max_price]);
-
-        if ($sort != '') {
-            if ($sort == 'latest_product') {
-                $productsQuery = $productsQuery->orderBy('id', 'DESC');
-            } elseif ($sort == 'price_high') {
-                $productsQuery = $productsQuery->orderBy('price', 'DESC');
-            } elseif ($sort == 'price_low') {
-                $productsQuery = $productsQuery->orderBy('price', 'ASC');
-            }
-        } else {
-            $productsQuery = $productsQuery->orderBy('id', 'DESC');
-        }
-
-        $products = $productsQuery->get();
-
-        // Get all product IDs to fetch ratings and reviews grouped
-        $productIds = $products->pluck('id')->toArray();
-
-        // Fetch avg rating and review count grouped by product_id
         $ratingData = RattingAndReview::selectRaw('order_items.product_id, AVG(ratings_and_reviews.rating) as avg_rating, COUNT(*) as rating_count')
             ->join('order_items', 'ratings_and_reviews.order_item_id', '=', 'order_items.id')
             ->whereIn('order_items.product_id', $productIds)
@@ -195,42 +258,12 @@ public function home()
             ->get()
             ->keyBy('product_id');
 
-
-        return view('website.shop', compact(
-            'categories',
-            'brands',
-            'products',
-            'brandsArray',
-            'min_price',
-            'max_price',
-            'maxPriceProduct',
-            'sort',
-            'catSelected',
-            'subCatSelected',
-            'ratingData'
-        ));
-    
+        // Pass ratingData to the view
+        return view('website.collection_products', compact('collection_product', 'ratingData'));
     }
-    public function showPassword()
-    {
-        return view('profile.update');
-    }
- public function collectionProduct($slug)
-{
-    $collection_product = Collection::with('products')->where('slug', $slug)->firstOrFail();
-    $productIds = $collection_product->products->pluck('id')->toArray();
 
-    $ratingData = RattingAndReview::selectRaw('order_items.product_id, AVG(ratings_and_reviews.rating) as avg_rating, COUNT(*) as rating_count')
-        ->join('order_items', 'ratings_and_reviews.order_item_id', '=', 'order_items.id')
-        ->whereIn('order_items.product_id', $productIds)
-        ->where('ratings_and_reviews.status', 1)
-        ->groupBy('order_items.product_id')
-        ->get()
-        ->keyBy('product_id');
+public function contactus(){
 
-    // Pass ratingData to the view
-    return view('website.collection_products', compact('collection_product', 'ratingData'));
+    return view('website.contact');
 }
-
-
 }

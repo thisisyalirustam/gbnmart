@@ -97,7 +97,7 @@
                 
                 <div class="carousel-item active position-relative" style="height: 80vh;" data-aos-delay="100">
                     <video class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline>
-                        <source src="https://mdbcdn.b-cdn.net/img/video/Tropical.mp4" type="video/mp4" />
+                        <source src="{{asset('website/Dry Fruits Animation - 720-1.mp4')}}" type="video/mp4" />
                     </video>
                     <!-- Dark Gradient Overlay -->
                     <div class="position-absolute top-0 start-0 w-100 h-100"
@@ -121,7 +121,7 @@
                 <!-- Repeat for Other Slides (with similar structure & reduced height) -->
                 <div class="carousel-item position-relative" style="height: 80vh;">
                     <video class="w-100 h-100 object-fit-cover" autoplay loop muted playsinline>
-                        <source src="https://mdbcdn.b-cdn.net/img/video/forest.mp4" type="video/mp4" />
+                        <source src="{{asset('website/Fruits Animation - 720.mp4')}}" type="video/mp4" />
                     </video>
                     <div class="position-absolute top-0 start-0 w-100 h-100"
                         style="background: linear-gradient(to top left, rgba(0,0,0,0.6), rgba(0,0,0,0.4)); z-index: 1;">
@@ -339,67 +339,88 @@
 
             <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
 
-                <div class="row g-4">
-                    <!-- Product 1 -->
-                    @foreach ($product as $item)
-                        @php
-                            $images = json_decode($item->images, true);
-                            $mainImage = isset($images[0]) ? $images[0] : 'default.jpg';
-                            $hoverImage = isset($images[1]) ? $images[1] : $mainImage; // fallback if only one image
-                        @endphp
+  <div class="row g-4">
+    @foreach ($sellproduct as $item)
+        @php
+            $images = json_decode($item->images, true);
+            $mainImage = $images[0] ?? 'default.jpg';
+            $hoverImage = $images[1] ?? $mainImage;
 
-                        <div class="col-6 col-lg-3">
-                            <div class="product-card aos-init aos-animate" data-aos="zoom-in">
-                                <div class="product-image">
-                                    <img src="{{ asset('images/products/' . $mainImage) }}" class="main-image img-fluid"
-                                        alt="{{ $item->name }}">
-                                    <img src="{{ asset('images/products/' . $hoverImage) }}"
-                                        class="hover-image img-fluid" alt="{{ $item->name }} variant">
+            $discount = null;
+            if ($item->discounted_price && $item->price > 0) {
+                $discount = round((($item->price - $item->discounted_price) / $item->price) * 100);
+            }
 
-                                    <div class="product-overlay">
-                                        <div class="product-actions">
-                                            <a type="button" href="{{ route('product.detail', $item->slug) }}"
-                                                class="action-btn" data-bs-toggle="tooltip" title="Quick View">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <button type="button" class="action-btn add-to-cart-btn"
-                                                data-product-id="{{ $item->id }}" title="Add to Cart">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+            $rating = $ratingData[$item->id] ?? null;
+            $avgRating = $rating->avg_rating ?? 0;
+            $ratingCount = $rating->rating_count ?? 0;
+        @endphp
 
-                                <div class="product-details">
-                                    <div class="product-category">{{ $item->product_cat->name ?? 'Category' }}</div>
-                                    <h4 class="product-title">
-                                        <a href="{{ route('product.detail', $item->slug) }}">
-                                            {{ \Illuminate\Support\Str::words(strip_tags($item->name), 4, '...') }}
-                                        </a>
-                                    </h4>
+        <div class="col-6 col-lg-3">
+            <div class="product-card aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+                
+                {{-- Product Image Section --}}
+                <div class="product-image">
+                    <img src="{{ asset('images/products/' . $mainImage) }}" class="main-image img-fluid" alt="{{ $item->name }}">
+                    <img src="{{ asset('images/products/' . $hoverImage) }}" class="hover-image img-fluid" alt="{{ $item->name }} Variant">
 
+                    {{-- Product Badge --}}
+                    @if ($discount)
+                        <div class="product-badge sale">-{{ $discount }}%</div>
+                    @endif
 
-                                    <div class="product-meta">
-                                        <div class="product-price">
-                                            @if ($item->discounted_price)
-                                                <span class="text-muted"
-                                                    style="text-decoration: line-through;">${{ $item->price }}</span>
-                                                <span class="text-primary">${{ $item->discounted_price }}</span>
-                                            @else
-                                                <span class="text-primary">${{ $item->price }}</span>
-                                            @endif
-                                        </div>
-                                        <div class="product-rating">
-                                            <i class="bi bi-star-fill"></i>
-                                            4.8 <span>(42)</span> {{-- You can replace this with dynamic rating later --}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    {{-- Overlay Action Buttons --}}
+                    <div class="product-overlay">
+                        <div class="product-actions">
+                            <a href="{{ route('product.detail', $item->slug) }}" class="action-btn" data-bs-toggle="tooltip" title="Quick View">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <button type="button" class="action-btn add-to-cart-btn" data-product-id="{{ $item->id }}" title="Add to Cart">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
                         </div>
-                    @endforeach
-
+                    </div>
                 </div>
+
+                {{-- Product Details --}}
+                <div class="product-details">
+                    <div class="product-category">{{ $item->product_cat->name ?? 'Category' }}</div>
+
+                    <h4 class="product-title">
+                        <a href="{{ route('product.detail', $item->slug) }}">
+                            {{ \Illuminate\Support\Str::words(strip_tags($item->name), 4, '...') }}
+                        </a>
+                    </h4>
+
+                    <div class="product-meta">
+                        {{-- Price --}}
+                        <div class="product-price">
+                            @if ($item->discounted_price)
+                                ${{ number_format($item->discounted_price, 2) }}
+                                <span class="original-price">${{ number_format($item->price, 2) }}</span>
+                            @else
+                                ${{ number_format($item->price, 2) }}
+                            @endif
+                        </div>
+
+                        {{-- Rating --}}
+                        <div class="product-rating">
+                            @if ($ratingCount > 0)
+                                <i class="bi bi-star-fill"></i>
+                                {{ number_format($avgRating, 1) }} <span>({{ $ratingCount }})</span>
+                            @else
+                                <span class="text-muted">No rating</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
 
             </div>
 

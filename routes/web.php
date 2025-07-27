@@ -35,7 +35,7 @@ Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::get('/collection/{slug}', [WebController::class, 'collectionProduct'])->name('web.product.collection');
-
+Route::get('/contact-us',[WebController::class, 'contactus'])->name('website.contact');
 // Buyer Dashboard
 Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::get('/dashboard', [BuyerDashboadController::class, 'dash'])->name('dashboard');

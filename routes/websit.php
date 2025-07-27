@@ -41,7 +41,7 @@ Route::post('/review/{token}', [OrderMainContrller::class, 'store'])->name('revi
 
 Route::get('profile/update-user-password',[WebController::class,'showPassword'])->name('profile.user.password');
 
-
+Route::get('/contact-us',[WebController::class, 'contactus'])->name('website.contact');
 
 
 

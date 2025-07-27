@@ -1,45 +1,5 @@
 @extends('website.layout.content')
 @section('webcontent')
-{{-- <style>
-    .wishlist-item {
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.wishlist-image {
-    position: relative;
-    overflow: hidden;
-}
-
-.wishlist-image img {
-    width: 100%;
-    object-fit: cover;
-}
-
-.remove-wishlist {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #fff;
-    border: none;
-    padding: 5px;
-    border-radius: 50%;
-}
-
-.wishlist-content {
-    padding: 15px;
-}
-
-.btn-add-cart {
-    background-color: #007bff;
-    color: white;
-    border: none;
-}
-
-</style> --}}
 
     <main class="main">
         <!-- Page Title -->
@@ -100,6 +60,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
 
                     <!-- Product Info Column -->
@@ -193,7 +154,7 @@
                             <!-- Product Options -->
                             <div class="product-options">
                                 <!-- Color Options -->
-                                @if (!empty($colors))
+                                {{-- @if (!empty($colors))
                                     <div class="option-group">
                                         <div class="option-header">
                                             <h6 class="option-title">Color</h6>
@@ -209,7 +170,7 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                @endif
+                                @endif --}}
 
                                 <!-- Quantity Selector -->
                                 <div class="option-group">
