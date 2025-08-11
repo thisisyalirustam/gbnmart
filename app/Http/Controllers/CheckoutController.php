@@ -29,7 +29,7 @@ class CheckoutController extends Controller
     {
         $cartItems = [];
         $subtotal = 0;
-
+        
         if (Auth::check()) {
             $userId = Auth::id();
             $cartItems = Cart::where('carts.user_id', $userId)

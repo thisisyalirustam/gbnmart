@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AdminReturnMail;
 use App\Mail\OrderCompeleteMail;
 use App\Mail\OrderInvoice;
 use App\Mail\OrderProcessMail;
 use App\Mail\OrderShipped;
+use App\Mail\ReturnPolicyMail;
 use App\Models\Affiliate;
+use App\Models\AppManagement;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Notification;
@@ -155,6 +158,26 @@ class AdminController extends Controller
                 Mail::to($buyerEmail)->send(
                     new OrderShipped($total, $orderDate, $buyerName, $buyerAddress, $buyerPhone, $buyerEmail)
                 );
+            }
+            if ($request->shipping_status == 'Return') {
+                $total = $order->grand_total;
+                $orderDate = $order->delivered_date;
+                $buyerName = $order->name;
+                $buyerEmail = $order->email;
+                $buyerAddress = $order->address;
+                $buyerPhone = $order->phone;
+                $orderid= $order->id;
+
+                $order->save();
+
+                // Get all admin emails as an array
+                $adminEmails = AppManagement::pluck('email')->toArray();
+
+                // Send email to buyer
+                Mail::to($buyerEmail)->send(new ReturnPolicyMail($total, $orderDate, $buyerName, $buyerAddress, $buyerPhone, $buyerEmail, $orderid));
+
+                // Send email to all admins
+                Mail::to($adminEmails)->send(new AdminReturnMail($total, $orderDate, $buyerName, $buyerAddress, $buyerPhone, $buyerEmail));
             }
 
             $order->save();

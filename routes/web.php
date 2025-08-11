@@ -51,6 +51,7 @@ Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::post('/affliate/bankdetails', [BuyerDashboadController::class, 'affliateStore'])->name('website.affliate.store');
     Route::post('/affliate/savebankdetails', [BuyerDashboadController::class, 'saveBankDetails'])->name('website.affliate.storeBankDetails');
     Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('website.orders.updateShippingStatus');
+    Route::get('/buyer/return-policy/{id}',[WebController::class, 'returnPolicy'])->name('website.returnPolicy');
 });
 
 // Admin routes

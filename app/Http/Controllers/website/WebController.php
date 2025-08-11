@@ -281,4 +281,9 @@ class WebController extends Controller
 public function aboutus(){
     return view('website.about');
 }
+
+public function returnPolicy($id){
+    $returnpolicy=Order::where('id',$id)->first();
+    return view('website.returnpolicy',compact('returnpolicy'));
+}
 }

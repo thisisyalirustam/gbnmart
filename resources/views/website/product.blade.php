@@ -17,7 +17,6 @@
                 <h1>{{ $product->name }}</h1>
             </div>
         </div><!-- End Page Title -->
-
         <!-- Product Details Section -->
         <section id="product-details" class="product-details section">
             <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
@@ -71,20 +70,30 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span class="product-category">{{ $product->product_cat->name }}</span>
                                     <div class="product-share">
-                                        <button class="share-btn" aria-label="Share product">
-                                            <i class="bi bi-share"></i>
-                                        </button>
-                                        <div class="share-dropdown">
-                                            <a href="#" aria-label="Share on Facebook"><i
-                                                    class="bi bi-facebook"></i></a>
-                                            <a href="#" aria-label="Share on Twitter"><i
-                                                    class="bi bi-twitter-x"></i></a>
-                                            <a href="#" aria-label="Share on Pinterest"><i
-                                                    class="bi bi-pinterest"></i></a>
-                                            <a href="#" aria-label="Share via Email"><i
-                                                    class="bi bi-envelope"></i></a>
-                                        </div>
-                                    </div>
+    <button class="share-btn" aria-label="Share product">
+        <i class="bi bi-share"></i>
+    </button>
+    <div class="share-dropdown">
+        <a href="#" class="share-option" data-social="facebook" aria-label="Share on Facebook">
+            <i class="bi bi-facebook"></i>
+        </a>
+        <a href="#" class="share-option" data-social="twitter" aria-label="Share on Twitter">
+            <i class="bi bi-twitter-x"></i>
+        </a>
+        <a href="#" class="share-option" data-social="whatsapp" aria-label="Share on WhatsApp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+        <a href="#" class="share-option" data-social="instagram" aria-label="Share on Instagram">
+            <i class="bi bi-instagram"></i>
+        </a>
+        <a href="#" class="share-option" data-social="email" aria-label="Share via Email">
+            <i class="bi bi-envelope"></i>
+        </a>
+        <a href="#" class="share-option" data-social="copy" aria-label="Copy link">
+            <i class="bi bi-link-45deg"></i>
+        </a>
+    </div>
+</div>
                                 </div>
 
                                 <h1 class="product-title">{{ $product->name }}</h1>
@@ -437,88 +446,63 @@
             </div>
         </section><!-- /Product Details Section -->
 
-        <!-- Related Product Section -->
-    {{-- <section class="related-product">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-lg-12 text-center">
-                <div class="section-title related__product__title">
-                    <h2>Related Products</h2>
-                </div>
-            </div>
-        </div>
-
-        @php
-            $isCarousel = $related->count() > 4;
-        @endphp
-
-        <div class="{{ $isCarousel ? 'related-carousel owl-carousel' : 'row' }}">
-            @foreach ($related as $item)
-                @php
-                    $relatedImages = json_decode($item->images, true);
-                    $imagePath = isset($relatedImages[0]) ? asset('images/products/' . $relatedImages[0]) : asset('images/default.png');
-                @endphp
-
-                <div class="{{ $isCarousel ? '' : 'col-md-6 col-lg-4 mb-4' }} aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                    <div class="wishlist-item">
-                        <div class="wishlist-image position-relative">
-                            <img src="{{ $imagePath }}" alt="{{ $item->name }}" loading="lazy">
-                            @if ($item->discounted_price)
-                                @php
-                                    $discountPercent = round((($item->price - $item->discounted_price) / $item->price) * 100);
-                                @endphp
-                                <span class="badge badge-danger position-absolute top-0 start-0 m-2">-{{ $discountPercent }}%</span>
-                            @endif
-                            <button class="remove-wishlist" type="button">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
-                        </div>
-
-                        <div class="wishlist-content text-center">
-                            <h5 class="text-truncate">
-                                <a href="{{ route('product.detail', $item->slug) }}" class="text-dark">{{ $item->name }}</a>
-                            </h5>
-                            <div class="product-price mb-2">
-                                @if ($item->discounted_price)
-                                    <span class="text-muted" style="text-decoration: line-through;">${{ $item->price }}</span>
-                                    <span class="text-primary ml-1">${{ $item->discounted_price }}</span>
-                                @else
-                                    <span class="text-primary">${{ $item->price }}</span>
-                                @endif
-                            </div>
-                            <button class="btn btn-add-cart btn-sm mt-2" data-product-id="{{ $item->id }}">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-</section> --}}
+    
 
     </main>
 
 
-    <script>
-  
-        //  $(document).ready(function () {
-        // if ($('.related-carousel').length) {
-        //     $('.related-carousel').owlCarousel({
-        //         items: 3,
-        //         loop: true,
-        //         margin: 20,
-        //         nav: true,
-        //         dots: false,
-        //         responsive: {
-        //             0: { items: 1 },
-        //             768: { items: 2 },
-        //             992: { items: 3 },
-        //             1200: { items: 4 }
-        //         }
-        //     });
-        // }
-  
-    </script>
-
-
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current product URL and title
+    const currentUrl = window.location.href;
+    const productTitle = document.querySelector('.product-title').textContent;
+    
+    // Handle all share options
+    document.querySelectorAll('.share-option').forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const socialType = this.getAttribute('data-social');
+            let shareUrl = '';
+            
+            switch(socialType) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(productTitle)}&url=${encodeURIComponent(currentUrl)}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(productTitle + ' ' + currentUrl)}`;
+                    break;
+                case 'instagram':
+                    // Instagram doesn't have direct web sharing, this opens the app if installed
+                    shareUrl = `instagram://library?AssetPath=${encodeURIComponent(currentUrl)}`;
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=${encodeURIComponent(productTitle)}&body=${encodeURIComponent('Check this out: ' + currentUrl)}`;
+                    break;
+                case 'copy':
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(currentUrl).then(() => {
+                        // Temporarily change icon to checkmark
+                        const icon = this.querySelector('i');
+                        const originalClass = icon.className;
+                        icon.className = 'bi bi-check';
+                        
+                        setTimeout(() => {
+                            icon.className = originalClass;
+                        }, 2000);
+                    });
+                    return; // Don't open a new window for copy
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank');
+            }
+        });
+    });
+});
+</script>
 
 @endsection

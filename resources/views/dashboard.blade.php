@@ -337,10 +337,11 @@
                                                                  <p>{{ $order->payment_method }}</p>
                                                              </div>
                                                          </div>
-
-                                                         <div class="shipping-info">
+                                                         <hr>
+                                                         <div class="shipping-info ">
+                                                            
                                                              <div class="shipping-address">
-                                                                <a href="{{route('website.orderproduct',$order->id)}}" class=""><h6>see more</h6></a> 
+                                                                <a href="{{route('website.returnPolicy', $order->id)}}" class=""><h4>Return Policy-></h4></a> 
                                                              </div>
                                                           
                                                          </div>
