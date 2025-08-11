@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\BlogController;
 use App\Http\Controllers\admin\orders\OrderMainContrller;
 use App\Http\Controllers\admin\orders\OrderMainController;
 use App\Http\Controllers\CheckoutController;
@@ -41,7 +42,8 @@ Route::post('/review/{token}', [OrderMainContrller::class, 'store'])->name('revi
 
 Route::get('profile/update-user-password',[WebController::class,'showPassword'])->name('profile.user.password');
 
-Route::get('/contact-us',[WebController::class, 'contactus'])->name('website.contact');
+Route::get('/blog/{slug}', [WebController::class, 'blogshow'])->name('website.blog.show');
+
 
 
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderCompeleteMail;
 use App\Mail\OrderInvoice;
+use App\Mail\OrderProcessMail;
+use App\Mail\OrderShipped;
 use App\Models\Affiliate;
 use App\Models\City;
 use App\Models\Country;
@@ -111,91 +113,68 @@ class AdminController extends Controller
             $order->shipping_status = $request->shipping_status;
 
             if ($request->shipping_status == 'Complete') {
-                // Generate a unique review token
                 $order->review_token = Str::random(60);
                 $order->save();
 
-                // Handle coupon logic
                 $sub_total = $order->subtotal;
                 $bonnes = 0;
-                if ($coupon) {
+                if ($coupon && $coupon != 'null123') {  // Check for dummy value
                     $vendor = Affiliate::where('coupon', $coupon)->first();
                     if ($vendor) {
                         $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-                        $vendor->sales = $vendor->sales + 1;
-                        $vendor->amount = $vendor->amount + $bonnes;
+                        $vendor->sales += 1;
+                        $vendor->amount += $bonnes;
                         $vendor->save();
                     }
                 }
 
-                // Send email with review link
                 $reviewLink = route('review.show', ['token' => $order->review_token]);
                 Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
+
+            } elseif ($request->shipping_status == 'Process') {
+
+                $total = $order->grand_total;
+                $order_date = $order->delivered_date;
+                $buyer_name = $order->name;
+                $buyer_mail = $order->email;
+
+                $order->save();
+
+                Mail::to($buyer_mail)->send(new OrderProcessMail($buyer_name, $order_date, $total));
+            } elseif ($request->shipping_status == 'Delivered') {
+                $total = $order->grand_total;
+                $orderDate = $order->delivered_date;
+                $buyerName = $order->name;
+                $buyerEmail = $order->email;
+                $buyerAddress = $order->address;
+                $buyerPhone = $order->phone;
+
+                $order->save();
+
+                // Send mail to customer
+                Mail::to($buyerEmail)->send(
+                    new OrderShipped($total, $orderDate, $buyerName, $buyerAddress, $buyerPhone, $buyerEmail)
+                );
             }
 
             $order->save();
-            return redirect()->back()->with('success', 'Delivery date updated successfully!');
+
+            // Return JSON response instead of redirect
+            return response()->json([
+                'success' => true,
+                'shipping_status' => $order->shipping_status,
+                'message' => 'Delivery status updated successfully!'
+            ]);
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
         }
     }
-    // public function updateShippingStatus(Request $request, $id, $coupon = null)
-    // {
-    //     $order = Order::findOrFail($id);
-    //     $order->shipping_status = $request->shipping_status;
-    //     $order->save();
-    //     $sub_total = $order->subtotal;
-    //     $bonnes = 0;
-    //     if ($request->shipping_status == 'Complete') {
-    //         $order->review_token = Str::random(60);
-    //         $order->save();
-    //         if ($coupon) {
-    //             $vendor = Affiliate::where('coupon', $coupon)->first();
-    //             $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-    //             $vendor->sales = $vendor->sales + 1;
-    //             $vendor->amount = $vendor->amount + $bonnes;
-    //             $vendor->save();
-    //         }
-    //         $reviewLink = route('review.show', ['token' => $order->review_token]);
-    //         Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
-    //     }
-
-    //     return redirect()->back()->with('success', 'Delivery date updated successfully!');
-    // }
 
 
-    //     public function updateShippingStatus(Request $request, $id, $coupon = null)
-//     {
-//     $order = Order::findOrFail($id);
-//     $order->shipping_status = $request->shipping_status;
-
-    //     // Generate review token and send email if order is marked as "Complete"
-//     if ($request->shipping_status == 'Complete') {
-//         // Generate a unique review token
-//         $order->review_token = Str::random(60);
-//         $order->save();
-
-    //         // Handle coupon logic
-//         $sub_total = $order->subtotal;
-//         $bonnes = 0;
-//         if ($coupon) {
-//             if ($coupon) {
-//              $vendor = Affiliate::where('coupon', $coupon)->first();
-//              $bonnes = ($vendor->vendor_percentage / 100) * $sub_total;
-//              $vendor->sales = $vendor->sales + 1;
-//              $vendor->amount = $vendor->amount + $bonnes;
-//              $vendor->save();
-//             }
-//         }
-
-    //         // Send email with review link
-//         $reviewLink = route('review.show', ['token' => $order->review_token]);
-//         Mail::to($order->email)->send(new OrderCompeleteMail($reviewLink));
-//     }
-
-    //     $order->save();
-//     return redirect()->back()->with('success', 'Delivery date updated successfully!');
-// }
 
     public function sendInvoice($orderId)
     {
@@ -301,8 +280,8 @@ class AdminController extends Controller
         }
 
         // Update the affiliate details
-        $affiliate->status = 1; 
-        $affiliate->coupon = $validated['coupon_code']; 
+        $affiliate->status = 1;
+        $affiliate->coupon = $validated['coupon_code'];
         $affiliate->percentage = $validated['percentage'];
         $affiliate->vendor_percentage = $validated['vendor_percentage'];
         $affiliate->save();
@@ -340,16 +319,17 @@ class AdminController extends Controller
     }
 
     public function getNotifications()
-      {
+    {
         $notifications = Auth::user()->notifications; // Fetch notifications for the authenticated user
         return response()->json($notifications);
-      }
+    }
 
-      public function product_dashboard(){
-        $product_cont=Product::count();
-        $product_cat=ProductCat::count();
-        $product_brand=ProductBrand::count();
-        return view('admin.pages.products.product_dashboard',compact('product_cont','product_cat','product_brand'));
-      }
+    public function product_dashboard()
+    {
+        $product_cont = Product::count();
+        $product_cat = ProductCat::count();
+        $product_brand = ProductBrand::count();
+        return view('admin.pages.products.product_dashboard', compact('product_cont', 'product_cat', 'product_brand'));
+    }
 
 }

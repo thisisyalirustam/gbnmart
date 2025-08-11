@@ -354,7 +354,7 @@ class CheckoutController extends Controller
         $userphone = $request->input('phone');
         $method = $request->payment_method;
 
-        Mail::to($useremail)->queue(new OrderConformation($username, $useremail, $useradress, $grandTotal, $userphone, $subtotal, $cartItems));
+        Mail::to($useremail)->send(new OrderConformation($username, $useremail, $useradress, $grandTotal, $userphone, $subtotal, $cartItems));
 
         $orderDetails = [
             'orderId' => $order->id,

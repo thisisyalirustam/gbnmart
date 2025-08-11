@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('title'); 
             $table->text('content'); 
             $table->string('slug')->unique(); 
-            $table->json('images')->nullable(); 
             $table->boolean('is_published')->default(false); 
             $table->timestamp('published_at')->nullable(); 
             $table->foreignIdFor(ProductCat::class)->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');

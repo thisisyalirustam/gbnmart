@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Collection;
 use App\Models\Notification;
 use App\Models\Order;
@@ -22,14 +23,14 @@ class WebController extends Controller
         $product = Product::with('product_cat')
             ->where('status', 'active')
             ->where('sof', 'Yes')
-            ->take(8)->orderBy('id','DESC')
+            ->take(8)->orderBy('id', 'DESC')
             ->get();
 
         $sellproduct = Product::with('product_cat')
             ->where('status', 'active')
             ->where('sof', 'Yes')
             ->whereNotNull('discounted_price')
-            ->take(8)->orderBy('id','DESC')
+            ->take(8)->orderBy('id', 'DESC')
             ->get();
 
         $category = ProductCat::where('status', '1')
@@ -61,9 +62,10 @@ class WebController extends Controller
             ->get()
             ->keyBy('product_id');
 
-        return view('website.index', compact('product', 'category', 'frontCategory', 'collections', 'sellproduct', 'ratingData'));
-    }
+            $blogs=Blog::where('is_published',1)->take(4)->get();
 
+        return view('website.index', compact('product', 'category', 'frontCategory', 'collections', 'sellproduct', 'ratingData','blogs'));
+    }
 
     public function productDetail($slug)
     {
@@ -105,15 +107,6 @@ class WebController extends Controller
         // Return the view with the product data and ratings
         return view('website.product', $data);
     }
-
-
-
-
-
-   
-
-
-
     public function shop(Request $request, $catslug = null, $subcatslug = null)
     {
         $catSelected = '';
@@ -126,11 +119,13 @@ class WebController extends Controller
             ->get();
 
         // Get all brands
-        $brands = ProductBrand::orderBy('name', 'ASC')->get();
-
+       
         // Start building the product query
         $productsQuery = Product::where('status', 'active')
             ->where('sof', 'Yes');
+
+             $brands = ProductBrand::orderBy('name', 'ASC')->get();
+
 
         // Apply category filter if exists
         if (!empty($catslug)) {
@@ -209,11 +204,11 @@ class WebController extends Controller
             'sort' => $sort,
             'catSelected' => $catSelected,
             'subCatSelected' => $subCatSelected,
-            'ratingData' => $ratingData
+            'ratingData' => $ratingData,
         ]);
     }
 
-     public function admin()
+    public function admin()
     {
         $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(12);
 
@@ -262,8 +257,28 @@ class WebController extends Controller
         return view('website.collection_products', compact('collection_product', 'ratingData'));
     }
 
-public function contactus(){
+    public function contactus()
+    {
 
-    return view('website.contact');
+        return view('website.contact');
+    }
+
+    public function blogshow($slug){
+    $blog=Blog::with('user','product_cat')->where('slug',$slug)->first();
+    $relatedBlogs=Blog::with('user','product_cat')->where('product_cat_id',$blog->product_cat_id)->where('is_published',1)->whereNot('slug',$slug)->get();
+    return view('website.blogshow',compact('blog','relatedBlogs'));
+    }
+    public function blogs()
+{
+    $blogs = Blog::with('user', 'product_cat')
+                ->where('is_published', 1)
+                ->orderBy('created_at', 'desc')
+                ->paginate(9); // 9 blogs per page
+    
+    return view('website.blogs', compact('blogs'));
+}
+
+public function aboutus(){
+    return view('website.about');
 }
 }

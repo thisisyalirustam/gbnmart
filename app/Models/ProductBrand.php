@@ -43,4 +43,5 @@ class ProductBrand extends Model
     {
         return $this->belongsTo(ProductCat::class);
     }
+
 }

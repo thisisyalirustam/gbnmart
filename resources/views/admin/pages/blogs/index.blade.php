@@ -175,31 +175,50 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Top 10 eCommerce Trends</td>
-                                <td>John Doe</td>
-                                <td><span class="badge bg-success">Published</span></td>
-                                <td>2023-10-15</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary action-btn">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn">Delete</button>
-                                    <button class="btn btn-sm btn-warning action-btn">View</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>How to Optimize Your Store</td>
-                                <td>Jane Smith</td>
-                                <td><span class="badge bg-warning">Draft</span></td>
-                                <td>2023-10-14</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary action-btn">Edit</button>
-                                    <button class="btn btn-sm btn-danger action-btn">Delete</button>
-                                    <button class="btn btn-sm btn-warning action-btn">View</button>
-                                </td>
-                            </tr>
-                            <!-- Add more rows as needed -->
+  @foreach ($blogs as $index=>$blog)
+<tr>
+    <td>{{ $index + 1 }}</td>
+    <td>{{\Illuminate\Support\Str::words(strip_tags($blog->title), 5, '...')  }}</td>
+    <td>{{ $blog->user ? $blog->user->name : 'Anonymous Writer' }}</td>
+    <td>
+        @if ($blog->is_published == 1)
+            <span class="badge bg-success">Active</span>
+        @else
+            <span class="badge bg-warning">Pending</span>
+        @endif
+    </td>
+    <td>{{ $blog->created_at->format('Y-m-d') }}</td>
+    <td>
+        <a href="{{ route('admin.blog.edit', $blog->id) }}" class="btn btn-sm btn-primary">Edit</a>
+        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $blog->id }}">Delete</button>
+        <a href="{{ route('blogs.show', $blog->id) }}" class="btn btn-sm btn-warning">View</a>
+    </td>
+</tr>
+@endforeach
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="deleteForm" method="POST">
+        @csrf
+        @method('DELETE')
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this blog?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+                            
                         </tbody>
                     </table>
                 </div>
@@ -219,4 +238,15 @@
     </div>
 </div>
 </section>
+<script>
+    let deleteForm = document.getElementById('deleteForm');
+    let deleteModal = document.getElementById('deleteModal');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
+        let id = button.getAttribute('data-id');
+        deleteForm.setAttribute('action', '/blogs/' + id);
+    });
+</script>
+
 @endsection

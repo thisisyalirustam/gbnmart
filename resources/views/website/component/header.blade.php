@@ -295,10 +295,9 @@
                  <nav id="navmenu" class="navmenu">
                      <ul>
                          <li><a href="{{ route('homepage') }}" class="active">Home</a></li>
-                         <li><a href="about.html">About</a></li>
+                         <li><a href="{{route('website.about')}}">About</a></li>
                          <li><a href="{{ route('shoppage') }}">Shop</a></li>
-                         <li><a href="cart.html">Cart</a></li>
-                         <li><a href="checkout.html">Checkout</a></li>
+        
                          @php
                              $categories = getCategories();
                              $subcategories = getSubCategories();
@@ -324,13 +323,13 @@
                          @endforeach
 
 
+                         <li><a href="{{ route('website.blog') }}">Blogs</a></li>
                          <li><a href="{{ route('website.contact') }}">Contact</a></li>
 
                      </ul>
                  </nav>
              </div>
          </div>
-
          <!-- Announcement Bar -->
          <div class="announcement-bar py-2">
              <div class="container-fluid container-xl">

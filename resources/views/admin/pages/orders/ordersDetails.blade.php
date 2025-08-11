@@ -348,7 +348,11 @@
                                     <option value="Return">Return</option>
                                     <option value="Complete">Complete</option>
                                 </select>
-                                <button class="btn btn-sm btn-primary mt-2" type="submit">Update Status</button>
+                                <button id="status-btn" class="btn btn-sm btn-primary mt-2" type="submit">
+                                    <span class="spinner-border spinner-border-sm d-none" id="status-spinner"
+                                        role="status" aria-hidden="true"></span>
+                                    <span id="btn-text">Update Status</span>
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -397,12 +401,22 @@
 
                                 // Check if $vendor is null and provide a default coupon value
                                 let coupon = "{{ $vendor ? $vendor->coupon ?? 'null123' : 'null123' }}";
+                                let form = $(this);
+                                let button = $('#status-btn');
+                                let spinner = $('#status-spinner');
+                                let btnText = $('#btn-text');
+
+                                // Show spinner
+                                spinner.removeClass('d-none');
+                                btnText.text('Updating...');
 
                                 $.ajax({
                                     type: 'POST',
                                     url: "{{ route('orders.updateShippingStatus', ['id' => $ordershow->id, 'coupon' => $vendor ? $vendor->coupon ?? 'null123' : 'null123']) }}", // Correct URL
                                     data: formData,
                                     success: function(response) {
+                                        spinner.addClass('d-none');
+                                        btnText.text('Update Status');
                                         // Update the message and shipping status
                                         $('#message').removeClass('d-none alert-danger').addClass(
                                                 'alert-success')

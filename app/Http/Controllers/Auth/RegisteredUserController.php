@@ -50,7 +50,7 @@ class RegisteredUserController extends Controller
         $useremail=$request->email;
         $create_date=$request->create_date;
         $subject='';
-        Mail::to($useremail)->queue(new UserResgistration($username, $useremail, $create_date, $subject));
+        Mail::to($useremail)->send(new UserResgistration($username, $useremail, $create_date, $subject));
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));

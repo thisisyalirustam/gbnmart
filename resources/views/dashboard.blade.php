@@ -337,6 +337,13 @@
                                                                  <p>{{ $order->payment_method }}</p>
                                                              </div>
                                                          </div>
+
+                                                         <div class="shipping-info">
+                                                             <div class="shipping-address">
+                                                                <a href="{{route('website.orderproduct',$order->id)}}" class=""><h6>see more</h6></a> 
+                                                             </div>
+                                                          
+                                                         </div>
                                                      </div>
                                                  </div>
                                              </div>

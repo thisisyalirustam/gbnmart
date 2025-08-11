@@ -38,10 +38,10 @@ class BuyerDashboadController extends Controller
         ->where('user_id', $userId)
         ->get();
 
-    // Safeguard for empty orders
-    if ($ordershow->isEmpty()) {
-        return redirect()->route('orders.index')->with('error', 'Order not found.');
-    }
+    // // Safeguard for empty orders
+    // if ($ordershow->isEmpty()) {
+    //     return redirect()->route('dashboard')->with('error', 'Order not found.');
+    // }
 
     // Format product images
   

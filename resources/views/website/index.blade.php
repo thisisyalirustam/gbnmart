@@ -69,6 +69,53 @@
                 font-size: 0.9rem;
             }
         }
+
+         .content-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        background: white;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-image {
+        transition: all 0.5s ease;
+    }
+    
+    .content-card:hover .card-image img {
+        transform: scale(1.05);
+    }
+    
+    .card-image img {
+        transition: transform 0.5s ease;
+    }
+    
+    .read-more {
+        color: #0d6efd;
+        transition: all 0.3s ease;
+    }
+    
+    .read-more:hover {
+        color: #0a58ca;
+        transform: translateX(5px);
+    }
+    
+    .category-badge {
+        font-size: 0.7rem;
+        z-index: 1;
+    }
+    
+    .object-fit-cover {
+        object-fit: cover;
+    }
     </style>
 
     <div class="ecommerce-hero-2 hero">
@@ -509,5 +556,47 @@
 
         </section><!-- /Product List Section -->
 
+       <section id="about-2" class="about-2 section">
+    <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+        <div class="row mb-lg-5">
+            <h2 class="text-uppercase about-title mb-2">Our Blogs</h2>       
+        </div>
+
+        <div class="row g-4">
+            @foreach ($blogs as $blog)
+            <div class="col-lg-3 col-md-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+                <div class="content-card h-100">
+                    <div class="card-image position-relative overflow-hidden" style="height: 200px;">
+                        <img src="{{ asset($blog->image) }}" alt="{{ $blog->title }}" class="img-fluid h-100 w-100 object-fit-cover">
+                        <div class="category-badge position-absolute top-0 end-0 m-2 bg-primary text-white px-2 py-1 rounded">
+                            {{ optional($blog->product_cat)->name ?? 'Uncategorized' }}
+                        </div>
+                    </div>
+                    <div class="card-content p-3 d-flex flex-column" style="height: calc(100% - 200px);">
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="{{ asset('uploads/'.optional($blog->user)->image) }}" 
+                                 alt="{{ optional($blog->user)->name }}" 
+                                 class="rounded-circle me-2" 
+                                 width="30" height="30">
+                            <small class="text-muted">{{ optional($blog->user)->name }}</small>
+                            <small class="text-muted mx-2">•</small>
+                            <small class="text-muted">{{ $blog->created_at->format('M d, Y') }}</small>
+                        </div>
+                        <h3 class="h5 mb-2">{{ $blog->title }}</h3>
+                        <p class="text-muted flex-grow-1">
+                            {!! \Illuminate\Support\Str::words(strip_tags($blog->content), 15, '...') !!}
+                        </p>
+                        <a href="{{ route('website.blog.show', $blog->slug) }}" class="read-more text-decoration-none d-flex align-items-center">
+                            Read more <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- End Content Card -->
+            @endforeach
+        </div>
+    </div>
+</section>
+
+        
     </main>
 @endsection

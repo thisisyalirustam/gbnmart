@@ -36,6 +36,8 @@ Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::get('/collection/{slug}', [WebController::class, 'collectionProduct'])->name('web.product.collection');
 Route::get('/contact-us',[WebController::class, 'contactus'])->name('website.contact');
+Route::get('/blog',[WebController::class,'blogs'])->name('website.blog');
+Route::get('/about-us',[WebController::class,'aboutus'])->name('website.about');
 // Buyer Dashboard
 Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::get('/dashboard', [BuyerDashboadController::class, 'dash'])->name('dashboard');
@@ -48,6 +50,7 @@ Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::get('affliate/applay/', [BuyerDashboadController::class, 'applayAffliate'])->name('website.affliate.applay');
     Route::post('/affliate/bankdetails', [BuyerDashboadController::class, 'affliateStore'])->name('website.affliate.store');
     Route::post('/affliate/savebankdetails', [BuyerDashboadController::class, 'saveBankDetails'])->name('website.affliate.storeBankDetails');
+    Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('website.orders.updateShippingStatus');
 });
 
 // Admin routes
@@ -145,6 +148,11 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
 
     Route::get('/Blogs', [BlogController::class, 'index'])->name('admin.blog');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('admin.blog.create');
+     Route::post('/blogs/store', [BlogController::class, 'store'])->name('blogs.store');
+    Route::get('/blogs/show/{id}', [BlogController::class, 'show'])->name('blogs.show');
+    Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
 
 });
 
