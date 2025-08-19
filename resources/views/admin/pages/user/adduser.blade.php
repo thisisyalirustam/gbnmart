@@ -143,6 +143,12 @@
                           <input class="form-control" name="image" type="file" id="updateimage">
                       </div>
                   </div>
+
+    <div class="mb-3">
+        <label>Roles</label>
+        <div id="roleCheckboxes"></div>
+    </div>
+
                  <div class="row mb-3">
                       <label for="inputNumber" class="col-sm-2 col-form-label">Profile</label>
 
@@ -150,6 +156,8 @@
                         <img src="" id="imageshow" height="200"  width="150" alt="" >
                       </label>
                   </div>
+
+
 
                   <div class="row mb-3">
                       <label class="col-sm-2 col-form-label">Submit Button</label>

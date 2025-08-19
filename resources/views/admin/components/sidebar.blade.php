@@ -21,8 +21,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="components-accordion.html">
-                        <i class="bi bi-person-badge"></i><span>Buyers</span>
+                    <a href="{{route('admin.user.role')}}">
+                        <i class="bi bi-person-badge"></i><span>role Management</span>
                     </a>
                 </li>
                 <li>
@@ -86,7 +86,7 @@
             </a>
         </li><!-- End Affiliate Nav -->
 
-        <li class="nav-heading">Orders Management</li>
+<li class="nav-heading">Orders Management</li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('coustomer-orders.index') }}">
@@ -94,6 +94,7 @@
                 <span>Orders</span>
             </a>
         </li><!-- End Orders Nav -->
+       
 
         <li class="nav-heading">Blog Management</li>
 
@@ -120,12 +121,14 @@
             </a>
         </li><!-- End Settings Nav -->
 
-        <li class="nav-item">
+    <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('admin.settings.dashboard') }}">
                 <i class="bi bi-sliders"></i>
                 <span>Settings Dashboard</span>
             </a>
         </li><!-- End Settings Dashboard Nav -->
+
+        
 
     </ul>
 

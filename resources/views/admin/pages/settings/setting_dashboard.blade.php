@@ -1,805 +1,588 @@
+@extends('admin.layout.content')
 
-@extends('admin.pages.settings.layout.setting_main')
-@section('setting_content')
-    <div class="content-wrapper pb-0">
-      <div class="page-header flex-wrap">
-        <h3 class="mb-0"> Hi, welcome back! <span class="pl-0 h6 pl-sm-2 text-muted d-inline-block">Your web analytics dashboard template.</span>
-        </h3>
-        <div class="d-flex">
-          <button type="button" class="btn btn-sm bg-white btn-icon-text border">
-            <i class="mdi mdi-email btn-icon-prepend"></i> Email </button>
-          <button type="button" class="btn btn-sm bg-white btn-icon-text border ml-3">
-            <i class="mdi mdi-printer btn-icon-prepend"></i> Print </button>
-          <button type="button" class="btn btn-sm ml-3 btn-success"> Add User </button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-3 col-lg-12 stretch-card grid-margin">
-          <div class="row">
-            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
-              <div class="card bg-warning">
-                <div class="card-body px-3 py-4">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div class="color-card">
-                      <p class="mb-0 color-card-head">Sales</p>
-                      <h2 class="text-white"> $8,753.<span class="h5">00</span>
-                      </h2>
-                    </div>
-                    <i class="card-icon-indicator mdi mdi-basket bg-inverse-icon-warning"></i>
-                  </div>
-                  <h6 class="text-white">18.33% Since last month</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3">
-              <div class="card bg-danger">
-                <div class="card-body px-3 py-4">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div class="color-card">
-                      <p class="mb-0 color-card-head">Margin</p>
-                      <h2 class="text-white"> $5,300.<span class="h5">00</span>
-                      </h2>
-                    </div>
-                    <i class="card-icon-indicator mdi mdi-cube-outline bg-inverse-icon-danger"></i>
-                  </div>
-                  <h6 class="text-white">13.21% Since last month</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-12 col-md-6 stretch-card grid-margin grid-margin-sm-0 pb-sm-3 pb-lg-0 pb-xl-3">
-              <div class="card bg-primary">
-                <div class="card-body px-3 py-4">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div class="color-card">
-                      <p class="mb-0 color-card-head">Orders</p>
-                      <h2 class="text-white"> $1,753.<span class="h5">00</span>
-                      </h2>
-                    </div>
-                    <i class="card-icon-indicator mdi mdi-briefcase-outline bg-inverse-icon-primary"></i>
-                  </div>
-                  <h6 class="text-white">67.98% Since last month</h6>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-12 col-md-6 stretch-card pb-sm-3 pb-lg-0">
-              <div class="card bg-success">
-                <div class="card-body px-3 py-4">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div class="color-card">
-                      <p class="mb-0 color-card-head">Affiliate</p>
-                      <h2 class="text-white">2368</h2>
-                    </div>
-                    <i class="card-icon-indicator mdi mdi-account-circle bg-inverse-icon-success"></i>
-                  </div>
-                  <h6 class="text-white">20.32% Since last month</h6>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-9 stretch-card grid-margin">
-          <div class="card">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-7">
-                  <h5>Business Survey</h5>
-                  <p class="text-muted"> Show overview jan 2018 - Dec 2019 <a class="text-muted font-weight-medium pl-2" href="#"><u>See Details</u></a>
-                  </p>
-                </div>
-                <div class="col-sm-5 text-md-right">
-                  <button type="button" class="btn btn-icon-text mb-3 mb-sm-0 btn-inverse-primary font-weight-normal">
-                    <i class="mdi mdi-email btn-icon-prepend"></i>Download Report </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-4">
-                  <div class="card mb-3 mb-sm-0">
-                    <div class="card-body py-3 px-4">
-                      <p class="m-0 survey-head">Today Earnings</p>
-                      <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
-                        <div>
-                          <h3 class="m-0 survey-value">$5,300</h3>
-                          <p class="text-success m-0">-310 avg. sales</p>
-                        </div>
-                        <div id="earningChart" class="flot-chart"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="card mb-3 mb-sm-0">
-                    <div class="card-body py-3 px-4">
-                      <p class="m-0 survey-head">Product Sold</p>
-                      <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
-                        <div>
-                          <h3 class="m-0 survey-value">$9,100</h3>
-                          <p class="text-danger m-0">-310 avg. sales</p>
-                        </div>
-                        <div id="productChart" class="flot-chart"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="card">
-                    <div class="card-body py-3 px-4">
-                      <p class="m-0 survey-head">Today Orders</p>
-                      <div class="d-flex justify-content-between align-items-end flot-bar-wrapper">
-                        <div>
-                          <h3 class="m-0 survey-value">$4,354</h3>
-                          <p class="text-success m-0">-310 avg. sales</p>
-                        </div>
-                        <div id="orderChart" class="flot-chart"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row my-3">
-                <div class="col-sm-12">
-                  <div class="flot-chart-wrapper">
-                    <div id="flotChart" class="flot-chart">
-                      <canvas class="flot-base"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-8">
-                  <p class="text-muted mb-0"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. <b>Learn More</b>
-                  </p>
-                </div>
-                <div class="col-sm-4">
-                  <p class="mb-0 text-muted">Sales Revenue</p>
-                  <h5 class="d-inline-block survey-value mb-0"> $2,45,500 </h5>
-                  <p class="d-inline-block text-danger mb-0"> last 8 months </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-8 col-sm-6 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body px-0 overflow-auto">
-              <h4 class="card-title pl-4">Purchase History</h4>
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class="bg-light">
-                    <tr>
-                      <th>Customer</th>
-                      <th>Project</th>
-                      <th>Invoice</th>
-                      <th>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="assets/images/faces/face1.jpg" alt="image" />
-                          <div class="table-user-name ml-3">
-                            <p class="mb-0 font-weight-medium"> Cecelia Cooper </p>
-                            <small> Payment on hold</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Angular Admin</td>
-                      <td>
-                        <div class="badge badge-inverse-success"> Completed </div>
-                      </td>
-                      <td>$ 77.99</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="assets/images/faces/face10.jpg" alt="image" />
-                          <div class="table-user-name ml-3">
-                            <p class="mb-0 font-weight-medium"> Victor Watkins </p>
-                            <small>Email verified</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Angular Admin</td>
-                      <td>
-                        <div class="badge badge-inverse-success"> Completed </div>
-                      </td>
-                      <td>$245.30</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="assets/images/faces/face11.jpg" alt="image" />
-                          <div class="table-user-name ml-3">
-                            <p class="mb-0 font-weight-medium"> Ada Burgess </p>
-                            <small>Email verified</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>One page html</td>
-                      <td>
-                        <div class="badge badge-inverse-danger"> Completed </div>
-                      </td>
-                      <td>$ 160.25</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="assets/images/faces/face13.jpg" alt="image" />
-                          <div class="table-user-name ml-3">
-                            <p class="mb-0 font-weight-medium"> Dollie Lynch </p>
-                            <small>Email verified</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Wordpress</td>
-                      <td>
-                        <div class="badge badge-inverse-success"> Declined </div>
-                      </td>
-                      <td>$ 123.21</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <img src="assets/images/faces/face16.jpg" alt="image" />
-                          <div class="table-user-name ml-3">
-                            <p class="mb-0 font-weight-medium"> Harry Holloway </p>
-                            <small>Payment on process</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td>VueJs Application</td>
-                      <td>
-                        <div class="badge badge-inverse-danger"> Declined </div>
-                      </td>
-                      <td>$ 150.00</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <a class="text-black mt-3 d-block pl-4" href="#">
-                <span class="font-weight-medium h6">View all order history</span>
-                <i class="mdi mdi-chevron-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-sm-6 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <div class="card-title font-weight-medium"> Business Survey </div>
-              <p class="text-muted"> Lorem ipsum dolor sitadipiscing elit, sed amet do eiusmod tempor we find a new solution </p>
-              <div class="d-flex flex-wrap border-bottom py-2 border-top justify-content-between">
-                <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_3.jpg" alt="" />
-                <div class="pt-2">
-                  <h5 class="mb-0">Villa called Archagel</h5>
-                  <p class="mb-0 text-muted">St, San Diego, CA</p>
-                  <h5 class="mb-0">$600/mo</h5>
-                </div>
-              </div>
-              <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
-                <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_1.jpg" alt="" />
-                <div class="pt-2">
-                  <h5 class="mb-0">Luxury villa in Hermo</h5>
-                  <p class="mb-0 text-muted">Glendale, CA</p>
-                  <h5 class="mb-0">$900/mo</h5>
-                </div>
-              </div>
-              <div class="d-flex flex-wrap border-bottom py-2 justify-content-between">
-                <img class="survey-img mb-lg-3" src="assets/images/dashboard/img_2.jpg" alt="" />
-                <div class="pt-2">
-                  <h5 class="mb-0">House on the Clarita</h5>
-                  <p class="mb-0 text-muted">Business Survey</p>
-                  <h5 class="mb-0">$459/mo</h5>
-                </div>
-              </div>
-              <a class="text-black mt-3 d-block font-weight-medium h6" href="#">View all <i class="mdi mdi-chevron-right"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-4 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title text-black">To do Task List</h4>
-              <p class="text-muted">Created by anonymous</p>
-              <div class="list-wrapper">
-                <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" /> Meeting with Alisa </label>
-                      <span class="list-time">4 Hours Ago</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" /> Create invoice </label>
-                      <span class="list-time">6 Hours Ago</span>
-                    </div>
-                  </li>
-                  <li class="completed">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" checked /> Prepare for presentation </label>
-                      <span class="list-time">2 Hours Ago</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="checkbox" type="checkbox" /> Pick up kids from school </label>
-                      <span class="list-time">8 Hours Ago</span>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="add-items d-flex flex-wrap flex-sm-nowrap">
-                <input type="text" class="form-control todo-list-input flex-grow" placeholder="Add task name" />
-                <button class="add btn btn-primary font-weight-regular text-nowrap" id="add-task"> Add Task </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-md-6 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title text-black">Recent Customers</h4>
-              <p class="text-muted">All contacts</p>
-              <div class="row pt-2 pb-1">
-                <div class="col-12 col-sm-7">
-                  <div class="row">
-                    <div class="col-4 col-md-4">
-                      <img class="customer-img" src="assets/images/faces/face22.jpg" alt="" />
-                    </div>
-                    <div class="col-8 col-md-8 p-sm-0">
-                      <h6 class="mb-0">Cecelia Cooper</h6>
-                      <p class="text-muted font-12">05:58AM</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-5 pl-0">
-                  <canvas id="areaChart1"></canvas>
-                </div>
-              </div>
-              <div class="row py-1">
-                <div class="col-sm-7">
-                  <div class="row">
-                    <div class="col-4 col-sm-4">
-                      <img class="customer-img" src="assets/images/faces/face25.jpg" alt="" />
-                    </div>
-                    <div class="col-8 col-sm-8 p-sm-0">
-                      <h6 class="mb-0">Victor Watkins</h6>
-                      <p class="text-muted font-12">05:28AM</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-5 pl-0">
-                  <canvas id="areaChart2"></canvas>
-                </div>
-              </div>
-              <div class="row py-1">
-                <div class="col-sm-7">
-                  <div class="row">
-                    <div class="col-4 col-sm-4">
-                      <img class="customer-img" src="assets/images/faces/face15.jpg" alt="" />
-                    </div>
-                    <div class="col-8 col-sm-8 p-sm-0">
-                      <h6 class="mb-0">Ada Burgess</h6>
-                      <p class="text-muted font-12">05:57AM</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-5 pl-0">
-                  <canvas id="areaChart3"></canvas>
-                </div>
-              </div>
-              <div class="row py-1">
-                <div class="col-sm-7">
-                  <div class="row">
-                    <div class="col-4 col-sm-4">
-                      <img class="customer-img" src="assets/images/faces/face5.jpg" alt="" />
-                    </div>
-                    <div class="col-8 col-sm-8 p-sm-0">
-                      <h6 class="mb-0">Dollie Lynch</h6>
-                      <p class="text-muted font-12">05:59AM</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-5 pl-0">
-                  <canvas id="areaChart4"></canvas>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-7">
-                  <div class="row">
-                    <div class="col-4 col-sm-4">
-                      <img class="customer-img" src="assets/images/faces/face2.jpg" alt="" />
-                    </div>
-                    <div class="col-8 col-sm-8 p-sm-0">
-                      <h6 class="mb-0">Harry Holloway</h6>
-                      <p class="text-muted font-12 mb-0">05:13AM</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-5 pl-0">
-                  <canvas id="areaChart5" height="100"></canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-md-6 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title text-black">Business Survey</h4>
-              <p class="text-muted pb-2">Jan 01 2019 - Dec 31 2019</p>
-              <canvas id="surveyBar"></canvas>
-              <div class="row border-bottom pb-3 pt-4 align-items-center mx-0">
-                <div class="col-sm-9 pl-0">
-                  <div class="d-flex">
-                    <img src="assets/images/dashboard/img_4.jpg" alt="" />
-                    <div class="pl-2">
-                      <h6 class="m-0">Red Chair</h6>
-                      <p class="m-0">Home Decoration</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-3 pl-0 pl-sm-3">
-                  <div class="badge badge-inverse-success mt-3 mt-sm-0"> +7.7% </div>
-                </div>
-              </div>
-              <div class="row py-3 align-items-center mx-0">
-                <div class="col-sm-9 pl-0">
-                  <div class="d-flex">
-                    <img src="assets/images/dashboard/img_5.jpg" alt="" />
-                    <div class="pl-2">
-                      <h6 class="m-0">Gray Sofa</h6>
-                      <p class="m-0">Home Decoration</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-3 pl-0 pl-sm-3">
-                  <div class="badge badge-inverse-success mt-3 mt-sm-0"> +7.7% </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-8 grid-margin stretch-card">
-          <div class="card card-calender">
-            <div class="card-body">
-              <div class="row pt-4">
-                <div class="col-sm-6">
-                  <h1 class="text-white">10:16PM</h1>
-                  <h5 class="text-white">Monday 25 October, 2016</h5>
-                  <h5 class="text-white pt-2 m-0">Precipitation:50%</h5>
-                  <h5 class="text-white m-0">Humidity:23%</h5>
-                  <h5 class="text-white m-0">Wind:13 km/h</h5>
-                </div>
-                <div class="col-sm-6 text-sm-right pt-3 pt-sm-0">
-                  <h3 class="text-white">Clear Sky</h3>
-                  <p class="text-white m-0">London, UK</p>
-                  <h3 class="text-white m-0">21°C</h3>
-                </div>
-              </div>
-              <div class="row mt-5">
-                <div class="col-sm-12">
-                  <ul class="d-flex pl-0 overflow-auto">
-                    <li class="weakly-weather-item text-white font-weight-medium text-center active">
-                      <p class="mb-0">TODAY</p>
-                      <i class="mdi mdi-weather-cloudy"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">MON</p>
-                      <i class="mdi mdi-weather-hail"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">TUE</p>
-                      <i class="mdi mdi-weather-cloudy"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">WED</p>
-                      <i class="mdi mdi-weather-fog"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">THU</p>
-                      <i class="mdi mdi-weather-hail"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">FRI</p>
-                      <i class="mdi mdi-weather-cloudy"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">SAT</p>
-                      <i class="mdi mdi-weather-hail"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                    <li class="weakly-weather-item text-white font-weight-medium text-center">
-                      <p class="mb-0">SUN</p>
-                      <i class="mdi mdi-weather-cloudy"></i>
-                      <p class="mb-0">21<span class="symbol">°c</span></p>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 grid-margin stretch-card">
-          <!--activity-->
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">
-                <span class="d-flex justify-content-between">
-                  <span>Activity</span>
-                  <span class="dropdown dropleft d-block">
-                    <span id="dropdownMenuButton1" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                      <span><i class="mdi mdi-dots-horizontal"></i></span>
-                    </span>
-                    <span class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <a class="dropdown-item" href="#">Contact</a>
-                      <a class="dropdown-item" href="#">Helpdesk</a>
-                      <a class="dropdown-item" href="#">Chat with us</a>
-                    </span>
-                  </span>
-                </span>
-              </h4>
-              <ul class="gradient-bullet-list border-bottom">
-                <li>
-                  <h6 class="mb-0"> It's awesome when we find a new solution </h6>
-                  <p class="text-muted">2h ago</p>
-                </li>
-                <li>
-                  <h6 class="mb-0">Report has been updated</h6>
-                  <p class="text-muted">
-                    <span>2h ago</span>
-                    <span class="d-inline-block">
-                      <span class="d-flex d-inline-block">
-                        <img class="ml-1" src="assets/images/faces/face1.jpg" alt="" />
-                        <img class="ml-1" src="assets/images/faces/face10.jpg" alt="" />
-                        <img class="ml-1" src="assets/images/faces/face14.jpg" alt="" />
-                      </span>
-                    </span>
-                  </p>
-                </li>
-                <li>
-                  <h6 class="mb-0"> Analytics dashboard has been created#Slack </h6>
-                  <p class="text-muted">2h ago</p>
-                </li>
-                <li>
-                  <h6 class="mb-0"> It's awesome when we find a new solution </h6>
-                  <p class="text-muted">2h ago</p>
-                </li>
-              </ul>
-              <a class="text-black mt-3 mb-0 d-block h6" href="#">View all <i class="mdi mdi-chevron-right"></i></a>
-            </div>
-          </div>
-          <!--activity ends-->
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-4 col-md-6 grid-margin stretch-card">
-          <div class="card card-invoice">
-            <div class="card-body">
-              <h4 class="card-title pb-3">Pending invoices</h4>
-              <div class="list-card">
-                <div class="row align-items-center">
-                  <div class="col-7 col-sm-8">
-                    <div class="row align-items-center">
-                      <div class="col-sm-4">
-                        <img src="assets/images/faces/face2.jpg" alt="" />
-                      </div>
-                      <div class="col-sm-8 pr-0 pl-sm-0">
-                        <span>06 Jan 2019</span>
-                        <h6 class="mb-1 mb-sm-0">Isabel Cross</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-5 col-sm-4">
-                    <div class="d-flex pt-1 align-items-center">
-                      <div class="reload-outer bg-info">
-                        <i class="mdi mdi-reload"></i>
-                      </div>
-                      <div class="dropdown dropleft pl-1 pt-3">
-                        <div id="dropdownMenuButton2" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                          <p><i class="mdi mdi-dots-vertical"></i></p>
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                          <a class="dropdown-item" href="#">Sales</a>
-                          <a class="dropdown-item" href="#">Track Invoice</a>
-                          <a class="dropdown-item" href="#">Payment History</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list-card">
-                <div class="row align-items-center">
-                  <div class="col-7 col-sm-8">
-                    <div class="row align-items-center">
-                      <div class="col-sm-4">
-                        <img src="assets/images/faces/face3.jpg" alt="" />
-                      </div>
-                      <div class="col-sm-8 pr-0 pl-sm-0">
-                        <span>18 Mar 2019</span>
-                        <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-5 col-sm-4">
-                    <div class="d-flex pt-1 align-items-center">
-                      <div class="reload-outer bg-primary">
-                        <i class="mdi mdi-reload"></i>
-                      </div>
-                      <div class="dropdown dropleft pl-1 pt-3">
-                        <div id="dropdownMenuButton3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                          <p><i class="mdi mdi-dots-vertical"></i></p>
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                          <a class="dropdown-item" href="#">Sales</a>
-                          <a class="dropdown-item" href="#">Track Invoice</a>
-                          <a class="dropdown-item" href="#">Payment History</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list-card">
-                <div class="row align-items-center">
-                  <div class="col-7 col-sm-8">
-                    <div class="row align-items-center">
-                      <div class="col-sm-4">
-                        <img src="assets/images/faces/face11.jpg" alt="" />
-                      </div>
-                      <div class="col-sm-8 pr-0 pl-sm-0">
-                        <span>10 Apr 2019</span>
-                        <h6 class="mb-1 mb-sm-0">Don Bennett</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-5 col-sm-4">
-                    <div class="d-flex pt-1 align-items-center">
-                      <div class="reload-outer bg-warning">
-                        <i class="mdi mdi-reload"></i>
-                      </div>
-                      <div class="dropdown dropleft pl-1 pt-3">
-                        <div id="dropdownMenuButton4" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                          <p><i class="mdi mdi-dots-vertical"></i></p>
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton4">
-                          <a class="dropdown-item" href="#">Sales</a>
-                          <a class="dropdown-item" href="#">Track Invoice</a>
-                          <a class="dropdown-item" href="#">Payment History</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="list-card">
-                <div class="row align-items-center">
-                  <div class="col-7 col-sm-8">
-                    <div class="row align-items-center">
-                      <div class="col-sm-4">
-                        <img src="assets/images/faces/face3.jpg" alt="" />
-                      </div>
-                      <div class="col-sm-8 pr-0 pl-sm-0">
-                        <span>18 Mar 2019</span>
-                        <h6 class="mb-1 mb-sm-0">Carrie Parker</h6>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-5 col-sm-4">
-                    <div class="d-flex pt-1 align-items-center">
-                      <div class="reload-outer bg-info">
-                        <i class="mdi mdi-reload"></i>
-                      </div>
-                      <div class="dropdown dropleft pl-1 pt-3">
-                        <div id="dropdownMenuButton5" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                          <p><i class="mdi mdi-dots-vertical"></i></p>
-                        </div>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5">
-                          <a class="dropdown-item" href="#">Sales</a>
-                          <a class="dropdown-item" href="#">Track Invoice</a>
-                          <a class="dropdown-item" href="#">Payment History</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-md-6 grid-margin stretch-card">
-          <!--datepicker-->
-          <div class="card">
-            <div class="card-body">
-              <div id="inline-datepicker" class="datepicker table-responsive"></div>
-            </div>
-          </div>
-          <!--datepicker ends-->
-        </div>
-        <div class="col-xl-4 col-md-6 stretch-card grid-margin stretch-card">
-          <!--browser stats-->
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Browser stats</h4>
-              <div class="row py-2">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between pb-3 border-bottom">
-                    <div>
-                      <img class="mr-2" src="assets/images/browser-logo/opera-logo.png" alt="" />
-                      <span class="p">opera mini</span>
-                    </div>
-                    <p class="mb-0">23%</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row py-2">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between pb-3 border-bottom">
-                    <div>
-                      <img class="mr-2" src="assets/images/browser-logo/safari-logo.png" alt="" />
-                      <span class="p">Safari</span>
-                    </div>
-                    <p class="mb-0">07%</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row py-2">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between pb-3 border-bottom">
-                    <div>
-                      <img class="mr-2" src="assets/images/browser-logo/chrome-logo.png" alt="" />
-                      <span class="p">Chrome</span>
-                    </div>
-                    <p class="mb-0">33%</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row py-2">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between pb-3 border-bottom">
-                    <div>
-                      <img class="mr-2" src="assets/images/browser-logo/firefox-logo.png" alt="" />
-                      <span class="p">Firefox</span>
-                    </div>
-                    <p class="mb-0">17%</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row py-2">
-                <div class="col-sm-12">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <img class="mr-2" src="assets/images/browser-logo/explorer-logo.png" alt="" />
-                      <span class="p">Explorer</span>
-                    </div>
-                    <p class="mb-0">05%</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--browser stats ends-->
-        </div>
-      </div>
+@section('content')
+    <div class="pagetitle">
+        <h1>Website Settings Dashboard</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Website Settings</li>
+            </ol>
+        </nav>
     </div>
+
+    <style>
+        /* Main Dashboard Styles */
+        .settings-dashboard {
+            padding: 20px;
+        }
+        
+        /* Top Navigation Menu */
+        .settings-menu {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            padding: 10px 15px;
+        }
+        
+        .settings-menu ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-x: auto;
+        }
+        
+        .settings-menu li {
+            margin-right: 15px;
+        }
+        
+        .settings-menu a {
+            display: block;
+            padding: 8px 15px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .settings-menu a:hover,
+        .settings-menu a.active {
+            background-color: #f0f4ff;
+            color: #4154f1;
+        }
+        
+        .settings-menu a i {
+            margin-right: 8px;
+        }
+        
+        /* Settings Cards */
+        .settings-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            border: none;
+            overflow: hidden;
+        }
+        
+        .settings-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .settings-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-card .card-header i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            color: #4154f1;
+        }
+        
+        .settings-card .card-body {
+            padding: 20px;
+        }
+        
+        /* Settings Groups */
+        .settings-group {
+            margin-bottom: 25px;
+        }
+        
+        .settings-group-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #4154f1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-group-title i {
+            margin-right: 8px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .setting-value {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #4154f1;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Buttons */
+        .btn-edit {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit:hover {
+            background-color: #f8f9fa;
+            color: #4154f1;
+            border-color: #4154f1;
+        }
+        
+        /* Preview Section */
+        .preview-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .preview-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .logo-preview {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        /* Role & Permissions Specific Styles */
+        .permission-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .permission-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        
+        /* Responsive Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-menu ul {
+                flex-wrap: wrap;
+            }
+            
+            .settings-menu li {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+
+    <section class="section settings-dashboard">
+        <!-- Top Navigation Menu -->
+        <div class="settings-menu">
+            <ul>
+                <li><a href="#general" class="active"><i class="fas fa-cog"></i> General</a></li>
+                <li><a href="#appearance"><i class="fas fa-paint-brush"></i> Appearance</a></li>
+                <li><a href="#social"><i class="fas fa-share-alt"></i> Social Media</a></li>
+                <li><a href="#seo"><i class="fas fa-search"></i> SEO</a></li>
+                <li><a href="#roles"><i class="fas fa-user-shield"></i> Roles & Permissions</a></li>
+                <li><a href="#maintenance"><i class="fas fa-tools"></i> Maintenance</a></li>
+                <li><a href="#advanced"><i class="fas fa-sliders-h"></i> Advanced</a></li>
+            </ul>
+        </div>
+
+        <div class="settings-grid">
+            <!-- General Settings Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-cog"></i>
+                    <span>General Settings</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Basic Information</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Website Name</div>
+                                <div class="setting-value">My Awesome Site</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Website Description</div>
+                                <div class="setting-value">Premium content for our community</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-language"></i>
+                            <span>Language & Region</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Default Language</div>
+                                <div class="setting-value">English</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Appearance Settings Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-paint-brush"></i>
+                    <span>Appearance</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-palette"></i>
+                            <span>Theme & Colors</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Primary Color</div>
+                                <div class="setting-value">#4154f1</div>
+                            </div>
+                            <button class="btn-edit">Change</button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-image"></i>
+                            <span>Branding</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Logo</div>
+                                <div class="setting-value">logo.png</div>
+                            </div>
+                            <button class="btn-edit">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Roles & Permissions Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Roles & Permissions</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-users"></i>
+                            <span>Roles $ Permessions Managment</span>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Permessions</div>
+                                <div class="setting-value">Add Permessions</div>
+                            </div>
+                            <a href="{{route('admin.settings.permissions.page')}}" class="btn-edit">Manage</a>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Role</div>
+                                <div class="setting-value">Add Roles</div>
+                            </div>
+                            <a href="{{route('role.index')}}" class="btn-edit">Manage</a>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Assign </div>
+                                <div class="setting-value">Role $ Permessions</div>
+                            </div>
+                            <a href="{{route('admin.settings.roleandpermession')}}" class="btn-edit">Manage</a>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <div class="settings-group-title">
+                            <i class="fas fa-key"></i>
+                            <span>Permissions</span>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <div class="permission-name">Manage Settings</div>
+                            <span class="role-badge">Admin</span>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <div class="permission-name">Create Content</div>
+                            <span class="role-badge">Admin</span>
+                            <span class="role-badge">Editor</span>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <div class="permission-name">Edit Content</div>
+                            <span class="role-badge">Admin</span>
+                            <span class="role-badge">Editor</span>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <div class="permission-name">Delete Content</div>
+                            <span class="role-badge">Admin</span>
+                        </div>
+                        
+                        <div class="permission-item">
+                            <div class="permission-name">View Content</div>
+                            <span class="role-badge">All Roles</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <button class="btn-edit"><i class="fas fa-plus"></i> Add New Role</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Settings Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Social Media</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Facebook</div>
+                                <div class="setting-value">https://facebook.com/mywebsite</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Twitter</div>
+                                <div class="setting-value">https://twitter.com/mywebsite</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SEO Settings Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-search"></i>
+                    <span>SEO Settings</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Meta Title</div>
+                                <div class="setting-value">My Awesome Website</div>
+                            </div>
+                            <button class="btn-edit">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Maintenance Settings Card -->
+            <div class="card settings-card">
+                <div class="card-header">
+                    <i class="fas fa-tools"></i>
+                    <span>Maintenance</span>
+                </div>
+                <div class="card-body">
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Maintenance Mode</div>
+                                <div class="setting-value">Disabled</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Structure (hidden by default) -->
+    <div class="modal fade" id="settingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Setting</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="settingName" class="form-label">Setting Name</label>
+                            <input type="text" class="form-control" id="settingName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="settingValue" class="form-label">Value</label>
+                            <input type="text" class="form-control" id="settingValue">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle top menu navigation
+        document.querySelectorAll('.settings-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.settings-menu a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // In a real implementation, this would load the corresponding section
+                console.log('Navigating to:', this.getAttribute('href'));
+            });
+        });
+        
+        // Handle edit button clicks
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('Edit button clicked for:', 
+                    this.closest('.setting-item').querySelector('.setting-label').textContent);
+                
+                // Example of showing a modal
+                // $('#settingModal').modal('show');
+            });
+        });
+        
+        // Toggle switch functionality
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const settingItem = this.closest('.setting-item');
+                const valueDisplay = settingItem.querySelector('.setting-value');
+                
+                if(this.checked) {
+                    valueDisplay.textContent = 'Enabled';
+                } else {
+                    valueDisplay.textContent = 'Disabled';
+                }
+            });
+        });
+    </script>
 @endsection
-    
-  
-  

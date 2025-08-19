@@ -64,7 +64,27 @@ class WebController extends Controller
 
             $blogs=Blog::where('is_published',1)->take(4)->get();
 
-        return view('website.index', compact('product', 'category', 'frontCategory', 'collections', 'sellproduct', 'ratingData','blogs'));
+             $topRatedProduct = RattingAndReview::with('orderItem.product')
+    ->selectRaw('
+        products.id as product_id, 
+        products.name as product_name, 
+        products.slug as product_slug, 
+        products.price as product_price,
+        COUNT(ratings_and_reviews.rating) as review_count, 
+        AVG(ratings_and_reviews.rating) as average_rating, 
+        products.images as product_images,
+        SUM(order_items.quantity) as sold_quantity
+    ')
+    ->join('order_items', 'order_items.id', '=', 'ratings_and_reviews.order_item_id')
+    ->join('products', 'products.id', '=', 'order_items.product_id')
+    ->join('orders', 'orders.id', '=', 'order_items.order_id')
+    ->where('orders.shipping_status', 'Complete')
+    ->groupBy('products.id', 'products.name', 'products.slug', 'products.price', 'products.images')
+    ->orderByDesc('average_rating')
+    ->get();
+
+
+        return view('website.index', compact('product', 'category', 'frontCategory', 'collections', 'sellproduct', 'ratingData','blogs','topRatedProduct'));
     }
 
     public function productDetail($slug)

@@ -14,10 +14,13 @@ use App\Http\Controllers\admin\ProductCollection;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductMainController;
 use App\Http\Controllers\admin\settings\NotificationController;
+use App\Http\Controllers\admin\settings\RoleAndPermessions;
+use App\Http\Controllers\Admin\Settings\RoleController;
 use App\Http\Controllers\admin\settings\SettingsMainController;
 use App\Http\Controllers\admin\SettingsController;
 use App\Http\Controllers\admin\ShippingController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\suplair\SuplairController;
@@ -27,7 +30,7 @@ use App\Http\Controllers\website\WebController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsBuyer;
 use Illuminate\Support\Facades\Route;
-
+use Spatie\Permission\Contracts\Role;
 
 Route::get('/wishlist', [CartController::class, 'getWishlist'])->name('wishlist.show');
 //Route::get('/dashboard',[BuyerDashboadController::class,'dash'])->middleware(['auth','verified'])->name('dashboard');
@@ -66,7 +69,10 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/show-data', [AdminController::class, 'showuser'])->name('showdata');
     //user managment Routs
     Route::resource('/add-user', UserController::class);
-
+    Route::get('/user/roles',[UserManagementController::class, 'adminshow'])->name('admin.user.role');
+    Route::get('/user-management',[UserManagementController::class, 'getadmin']);
+    Route::get('/user/{id}/roles', [UserManagementController::class, 'getUserWithRoles'])->name('admin.user.getRoles');
+    Route::post('/user/{id}/assign-roles', [UserManagementController::class, 'assignRoles'])->name('admin.user.assignRoles');
     //product managment Routes
     Route::get('/product_dashboard', [AdminController::class, 'product_dashboard'])->name('admin.product_dashboard');
     Route::resource('/product', ProductController::class);
@@ -154,8 +160,28 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('admin.blog.update');
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
+ 
+Route::prefix('settings/permissions')->group(function () {
+    // Permission CRUD routes
+    Route::get('/', [RoleAndPermessions::class, 'permession'])->name('admin.settings.permissions.page');
+    Route::get('/data', [RoleAndPermessions::class, 'index'])->name('admin.settings.permissions.data');
+    Route::post('/', [RoleAndPermessions::class, 'store'])->name('admin.settings.permissions.store');
+    Route::get('/{id}', [RoleAndPermessions::class, 'show'])->name('admin.settings.permissions.show');
+    Route::put('/{id}', [RoleAndPermessions::class, 'update'])->name('admin.settings.permissions.update');
+    Route::delete('/{id}', [RoleAndPermessions::class, 'destroy'])->name('admin.settings.permissions.destroy');
+});
+
+Route::get('/roleall', [RoleController::class, 'indexjson']);
+Route::resource('/settings/role', RoleController::class);
+
+Route::get('/settings/role-and-permissions',[RoleAndPermessions::class,'roleAndPermession'])->name('admin.settings.roleandpermession');
+Route::get('/roleAndPermessionApi',[RoleAndPermessions::class, 'getRoles']);
+Route::post('/settings/assign-role', [RoleAndPermessions::class, 'assignPermissionsToRole'])
+    ->name('permissions.assign-roles');
 
 });
+
+
 
 //vendor Routs
 Route::middleware(['auth', 'verified'])->group(function () {

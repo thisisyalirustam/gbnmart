@@ -286,37 +286,7 @@
 
     </section><!-- /Category Cards Section -->
         <!-- Promo Cards Section -->
-        {{-- <section id="promo-cards" class="promo-cards section">
-
-            <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="row g-4">
-                    <!-- Promo Card 1 -->
-                    @foreach ($collections as $collection)
-                         <div class="col-md-6 col-lg-3 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                        <div class="promo-card card-1">
-                            <div class="promo-content">
-                                <p class="small-text">{{$collection->name}}</p>
-                                <h3 class="promo-title">{{$collection->name}}</h3>
-                                <p class="promo-description">{{$collection->description}}</p>
-                                <a href="{{route('web.product.collection',$collection->slug)}}" class="btn-shop">Shop Now</a>
-                            </div>
-                            <div class="promo-image">
-                                <img src="{{ asset($collection->image) }}" alt="Product"
-                                    class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-
-                </div>
-
-            </div>
-
-        </section><!-- /Promo Cards Section --> --}}
-        
-       
-
+             
 <section id="category-cards" class="category-cards section light-background">
     <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
         @if($frontCategory->count() > 0)
@@ -472,6 +442,92 @@
             </div>
 
         </section><!-- /Best Sellers Section -->
+<section id="top-rated-product" class="best-sellers section">
+    <!-- Section Title -->
+    <div class="container section-title aos-init aos-animate" data-aos="fade-up">
+        <h2>Top Rated Products</h2>
+        <p>Our most loved products based on customer ratings & reviews</p>
+    </div><!-- End Section Title -->
+
+    <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-4">
+            @foreach ($topRatedProduct as $item)
+                @php
+                    $images = json_decode($item->product_images, true);
+                    $mainImage = $images[0] ?? 'default.jpg';
+                    $hoverImage = $images[1] ?? $mainImage;
+
+                    $avgRating = $item->average_rating ?? 0;
+                    $ratingCount = $item->review_count ?? 0;
+                @endphp
+
+                <div class="col-6 col-lg-3">
+                    <div class="product-card aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+                        
+                        {{-- Product Image Section --}}
+                        <div class="product-image">
+                            <img src="{{ asset('images/products/' . $mainImage) }}" 
+                                 class="main-image img-fluid" 
+                                 alt="{{ $item->product_name }}">
+                            <img src="{{ asset('images/products/' . $hoverImage) }}" 
+                                 class="hover-image img-fluid" 
+                                 alt="{{ $item->product_name }} Variant">
+
+                            {{-- Overlay Action Buttons --}}
+                            <div class="product-overlay">
+                                <div class="product-actions">
+                                    <a href="{{ route('product.detail', $item->orderItem->product->slug ?? '') }}" 
+                                       class="action-btn" data-bs-toggle="tooltip" title="Quick View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <button type="button" 
+                                            class="action-btn add-to-cart-btn" 
+                                            data-product-id="{{ $item->product_id }}" 
+                                            title="Add to Cart">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Product Details --}}
+                        <div class="product-details">
+                            <h4 class="product-title">
+                                <a href="{{ route('product.detail', $item->orderItem->product->slug ?? '') }}">
+                                    {{ \Illuminate\Support\Str::words(strip_tags($item->product_name), 4, '...') }}
+                                </a>
+                            </h4>
+
+                            <div class="product-meta">
+                                {{-- Price --}}
+                                <div class="product-price">
+                                    ${{ number_format($item->product_price, 2) }}
+                                </div>
+
+                                {{-- Rating --}}
+                                <div class="product-rating">
+                                    @if ($ratingCount > 0)
+                                        <i class="bi bi-star-fill"></i>
+                                        {{ number_format($avgRating, 1) }} <span>({{ $ratingCount }})</span>
+                                    @else
+                                        <span class="text-muted">No rating</span>
+                                    @endif
+                                </div>
+
+                                {{-- Extra Info (only sold quantity) --}}
+                                <div class="product-stats small text-muted">
+                                    Sold: {{ $item->sold_quantity ?? 0 }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section><!-- /Top Rated Section -->
+
 
         <!-- Product List Section -->
         <section id="product-list" class="product-list section">
