@@ -29,10 +29,21 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AdminController extends Controller
+class AdminController extends Controller implements HasMiddleware
 {
-    //
+     public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:product.view', only: ['product']),
+            new Middleware('permission:coupon.view', only: ['affiliateget']),
+            new Middleware('permission:coupon.view', only: ['activeMarketers']),
+            new Middleware('permission:coupon.view', only: ['approveAffiliate']),
+        ];
+    //l
+    }
     public function index()
     {
         // return view('admin.pages.dashboard.index');
@@ -60,8 +71,6 @@ class AdminController extends Controller
 
         return response()->json($product_cat);
     }
-
-
     public function product_sub_cat()
     {
         $product_sub_cat = ProductSubCategory::with('product_cat')->get();
@@ -196,9 +205,6 @@ class AdminController extends Controller
             ], 500);
         }
     }
-
-
-
     public function sendInvoice($orderId)
     {
         // Retrieve the order with the necessary relationships
@@ -255,20 +261,17 @@ class AdminController extends Controller
         // Send the email with the populated order data
         Mail::to($ordershow->email)->send(new OrderInvoice($orderData));
     }
-
     public function getStates($country_id)
     {
         $states = State::where('country_id', $country_id)->get();
         return response()->json($states);
     }
-
     // Fetch cities based on selected state
     public function getCities($state_id)
     {
         $cities = City::where('state_id', $state_id)->get();
         return response()->json($cities);
     }
-
     public function affiliateget()
     {
         return view('admin.pages.affiliate.dashboard');
@@ -284,8 +287,6 @@ class AdminController extends Controller
         $affiliate->delete();
         return redirect()->back()->with('success', 'delete marketer');
     }
-
-
     public function approveAffiliate(Request $request)
     {
         // Validate incoming data
@@ -311,8 +312,6 @@ class AdminController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Affiliate Approved']);
     }
-
-    // Controller Method for Sending Funds
     public function sendFunds(Request $request)
     {
         $validated = $request->validate([
@@ -333,20 +332,17 @@ class AdminController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Funds sent successfully.']);
     }
-
     public function updateOrder(string $id)
     {
         $orderShow = Order::with(['user', 'country', 'state', 'city'])->find($id);
         $countries = Country::all();
         return view('admin.pages.orders.orders_update', compact('orderShow', 'countries'));
     }
-
     public function getNotifications()
     {
         $notifications = Auth::user()->notifications; // Fetch notifications for the authenticated user
         return response()->json($notifications);
     }
-
     public function product_dashboard()
     {
         $product_cont = Product::count();

@@ -7,9 +7,21 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+      public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:user.managment', only: ['index']),
+            new Middleware('permission:user.managment', only: ['store']),
+            new Middleware('permission:user.managment', only: ['show']),
+            new Middleware('permission:user.managment', only: ['update']),
+            new Middleware('permission:user.managment', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */

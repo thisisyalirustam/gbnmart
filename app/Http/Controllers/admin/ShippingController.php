@@ -9,9 +9,20 @@ use App\Models\ShippingCharge;
 use App\Models\State;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ShippingController extends Controller
+class ShippingController extends Controller implements HasMiddleware
 {
+        public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:shipping.view', only: ['index']),
+            new Middleware('permission:shipping.view', only: ['show']),
+            new Middleware('permission:shipping.view', only: ['update']),
+            new Middleware('permission:shipping.view', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */

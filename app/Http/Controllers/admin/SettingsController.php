@@ -5,13 +5,23 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\AppManagement;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class SettingsController extends Controller
+class SettingsController extends Controller implements HasMiddleware
 {
+
+         public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:setting.view', only: ['index']),
+            new Middleware('permission:setting.store', only: ['updateSetting']),
+        ];
+    }
     //
     public function index(){
         $settings= AppManagement::first();
-        return view ('admin.pages.settings.index',compact('settings'));
+        return view ('admin.pages.settings.dash',compact('settings'));
     }
 
     public function updateSetting(Request $request, $id)
@@ -20,7 +30,7 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'fullName'    => 'required|string|max:255',
             'about'       => 'nullable|string|max:1000',
-            'address'     => 'nullable|string|max:255',
+             'address'     => 'nullable|string|max:255',
             'phone'       => 'nullable|string|max:15',
             'email'       => 'nullable|email|max:255',
             'twitter'     => 'nullable|url|max:255',

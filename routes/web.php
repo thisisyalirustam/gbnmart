@@ -38,9 +38,9 @@ Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 Route::get('/cart-option', [CartController::class, 'checkoption'])->name('option.show');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::get('/collection/{slug}', [WebController::class, 'collectionProduct'])->name('web.product.collection');
-Route::get('/contact-us',[WebController::class, 'contactus'])->name('website.contact');
-Route::get('/blog',[WebController::class,'blogs'])->name('website.blog');
-Route::get('/about-us',[WebController::class,'aboutus'])->name('website.about');
+Route::get('/contact-us', [WebController::class, 'contactus'])->name('website.contact');
+Route::get('/blog', [WebController::class, 'blogs'])->name('website.blog');
+Route::get('/about-us', [WebController::class, 'aboutus'])->name('website.about');
 // Buyer Dashboard
 Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::get('/dashboard', [BuyerDashboadController::class, 'dash'])->name('dashboard');
@@ -54,7 +54,7 @@ Route::middleware(['auth', EnsureUserIsBuyer::class])->group(function () {
     Route::post('/affliate/bankdetails', [BuyerDashboadController::class, 'affliateStore'])->name('website.affliate.store');
     Route::post('/affliate/savebankdetails', [BuyerDashboadController::class, 'saveBankDetails'])->name('website.affliate.storeBankDetails');
     Route::post('/customer-orders/{id}/update-shipping-status', [AdminController::class, 'updateShippingStatus'])->name('website.orders.updateShippingStatus');
-    Route::get('/buyer/return-policy/{id}',[WebController::class, 'returnPolicy'])->name('website.returnPolicy');
+    Route::get('/buyer/return-policy/{id}', [WebController::class, 'returnPolicy'])->name('website.returnPolicy');
 });
 
 // Admin routes
@@ -69,8 +69,8 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/show-data', [AdminController::class, 'showuser'])->name('showdata');
     //user managment Routs
     Route::resource('/add-user', UserController::class);
-    Route::get('/user/roles',[UserManagementController::class, 'adminshow'])->name('admin.user.role');
-    Route::get('/user-management',[UserManagementController::class, 'getadmin']);
+    Route::get('/user/roles', [UserManagementController::class, 'adminshow'])->name('admin.user.role');
+    Route::get('/user-management', [UserManagementController::class, 'getadmin']);
     Route::get('/user/{id}/roles', [UserManagementController::class, 'getUserWithRoles'])->name('admin.user.getRoles');
     Route::post('/user/{id}/assign-roles', [UserManagementController::class, 'assignRoles'])->name('admin.user.assignRoles');
     //product managment Routes
@@ -88,7 +88,6 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/get-subcategories-brands/{categoryId}', [AdminMainController::class, 'getSubcategoriesAndBrands'])->name('getSubcategoriesAndBrands');
     Route::post('/product/{id}/status', [AdminMainController::class, 'updateStatus'])->name('product.updateStatus');
     Route::post('/product/{id}/sof', [AdminMainController::class, 'updateSOF'])->name('product.updateSOF');
-
     // collections
     Route::post('/products/assign-collections', [ProductCollection::class, 'assignCollections'])
         ->name('products.assign-collections');
@@ -101,7 +100,6 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/collection/{id}/products', [ProductCollection::class, 'showProducts']);
     Route::delete('/collection/{collection}/product/{product}', [ProductCollection::class, 'removeProduct'])
         ->name('collection.product.remove');
-
     //shipping Routes
     Route::resource('/shipping', ShippingController::class);
     Route::get('/shiping-show', [AdminController::class, 'shipping'])->name('admin.shipingshow');
@@ -155,30 +153,28 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
 
     Route::get('/Blogs', [BlogController::class, 'index'])->name('admin.blog');
     Route::get('/blogs/create', [BlogController::class, 'create'])->name('admin.blog.create');
-     Route::post('/blogs/store', [BlogController::class, 'store'])->name('blogs.store');
+    Route::post('/blogs/store', [BlogController::class, 'store'])->name('blogs.store');
     Route::get('/blogs/show/{id}', [BlogController::class, 'show'])->name('blogs.show');
     Route::get('/blogs/{id}/edit', [BlogController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blogs/{id}', [BlogController::class, 'update'])->name('admin.blog.update');
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy'])->name('admin.blog.destroy');
- 
-Route::prefix('settings/permissions')->group(function () {
-    // Permission CRUD routes
-    Route::get('/', [RoleAndPermessions::class, 'permession'])->name('admin.settings.permissions.page');
-    Route::get('/data', [RoleAndPermessions::class, 'index'])->name('admin.settings.permissions.data');
-    Route::post('/', [RoleAndPermessions::class, 'store'])->name('admin.settings.permissions.store');
-    Route::get('/{id}', [RoleAndPermessions::class, 'show'])->name('admin.settings.permissions.show');
-    Route::put('/{id}', [RoleAndPermessions::class, 'update'])->name('admin.settings.permissions.update');
-    Route::delete('/{id}', [RoleAndPermessions::class, 'destroy'])->name('admin.settings.permissions.destroy');
-});
 
-Route::get('/roleall', [RoleController::class, 'indexjson']);
-Route::resource('/settings/role', RoleController::class);
+    Route::prefix('settings/permissions')->group(function () {
+        // Permission CRUD routes
+        Route::get('/', [RoleAndPermessions::class, 'permession'])->name('admin.settings.permissions.page');
+        Route::get('/data', [RoleAndPermessions::class, 'index'])->name('admin.settings.permissions.data');
+        Route::post('/', [RoleAndPermessions::class, 'store'])->name('admin.settings.permissions.store');
+        Route::get('/{id}', [RoleAndPermessions::class, 'show'])->name('admin.settings.permissions.show');
+        Route::put('/{id}', [RoleAndPermessions::class, 'update'])->name('admin.settings.permissions.update');
+        Route::delete('/{id}', [RoleAndPermessions::class, 'destroy'])->name('admin.settings.permissions.destroy');
+    });
+    Route::get('/roleall', [RoleController::class, 'indexjson']);
+    Route::resource('/settings/role', RoleController::class);
 
-Route::get('/settings/role-and-permissions',[RoleAndPermessions::class,'roleAndPermession'])->name('admin.settings.roleandpermession');
-Route::get('/roleAndPermessionApi',[RoleAndPermessions::class, 'getRoles']);
-Route::post('/settings/assign-role', [RoleAndPermessions::class, 'assignPermissionsToRole'])
-    ->name('permissions.assign-roles');
-
+    Route::get('/settings/role-and-permissions', [RoleAndPermessions::class, 'roleAndPermession'])->name('admin.settings.roleandpermession');
+    Route::get('/roleAndPermessionApi', [RoleAndPermessions::class, 'getRoles']);
+    Route::post('/settings/assign-role', [RoleAndPermessions::class, 'assignPermissionsToRole'])
+        ->name('permissions.assign-roles');
 });
 
 

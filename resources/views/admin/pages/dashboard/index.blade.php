@@ -241,7 +241,9 @@
           </div><!-- End Reports -->
 
           <!-- Recent Sales -->
-          <div class="col-12">
+
+          @can('order.view')
+            <div class="col-12">
             <div class="card recent-sales overflow-auto">
 
               <div class="filter">
@@ -314,6 +316,8 @@
 
             </div>
           </div><!-- End Recent Sales -->
+          @endcan
+          
 
           <!-- Top Selling -->
           <div class="col-12">

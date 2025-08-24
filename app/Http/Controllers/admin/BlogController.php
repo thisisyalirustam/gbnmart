@@ -10,9 +10,22 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Str;
 use function Laravel\Prompts\alert;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class BlogController extends Controller
+class BlogController extends Controller implements HasMiddleware
 {
+        public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:blog.managment', only: ['index']),
+            new Middleware('permission:blog.managment', only: ['create']),
+            new Middleware('permission:blog.managment', only: ['store']),
+            new Middleware('permission:blog.managment', only: ['show']),
+            new Middleware('permission:blog.managment', only: ['update']),
+            new Middleware('permission:blog.managment', only: ['destroy']),
+        ];
+    }
 //   public function index() {
 //         $blogs = Blog::all();
 //         return view('admin.pages.blogs.index', compact('blogs'));
