@@ -401,45 +401,15 @@
                             </div>
                             <a href="{{route('admin.settings.roleandpermession')}}" class="btn-edit">Manage</a>
                         </div>
-                    </div>
-                    
-                    <div class="settings-group">
-                        <div class="settings-group-title">
-                            <i class="fas fa-key"></i>
-                            <span>Permissions</span>
-                        </div>
-                        
-                        <div class="permission-item">
-                            <div class="permission-name">Manage Settings</div>
-                            <span class="role-badge">Admin</span>
-                        </div>
-                        
-                        <div class="permission-item">
-                            <div class="permission-name">Create Content</div>
-                            <span class="role-badge">Admin</span>
-                            <span class="role-badge">Editor</span>
-                        </div>
-                        
-                        <div class="permission-item">
-                            <div class="permission-name">Edit Content</div>
-                            <span class="role-badge">Admin</span>
-                            <span class="role-badge">Editor</span>
-                        </div>
-                        
-                        <div class="permission-item">
-                            <div class="permission-name">Delete Content</div>
-                            <span class="role-badge">Admin</span>
-                        </div>
-                        
-                        <div class="permission-item">
-                            <div class="permission-name">View Content</div>
-                            <span class="role-badge">All Roles</span>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">All</div>
+                                <div class="setting-value">Role & Permessions</div>
+                            </div>
+                            <a href="{{route('admin.settings.allpermession')}}" class="btn-edit">Manage</a>
                         </div>
                     </div>
                     
-                    <div class="text-center mt-3">
-                        <button class="btn-edit"><i class="fas fa-plus"></i> Add New Role</button>
-                    </div>
                 </div>
             </div>
             

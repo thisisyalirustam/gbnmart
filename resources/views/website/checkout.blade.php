@@ -1,5 +1,16 @@
 @extends('website.layout.content')
 @section('webcontent')
+<style>
+    /* Add this CSS */
+#place-order-btn {
+    position: relative;
+    min-width: 120px;
+}
+
+#place-order-btn .spinner-border {
+    margin-left: 8px;
+}
+</style>
     <main class="main">
 
         <!-- Page Title -->
@@ -349,13 +360,14 @@
                                     <div class="success-message"
                                         style="animation: 0.5s ease 0s 1 normal forwards running fadeInUp;">Your
                                         order has been placed successfully! Thank you for your purchase.</div>
-                                    <div class="d-flex justify-content-between mt-4" style="display: none;">
-                                        <button type="button" class="btn btn-outline-secondary prev-step"
-                                            data-prev="3">Back to
-                                            Payment</button>
-                                        <button type="submit" class="btn btn-success place-order-btn">Place
-                                            Order</button>
-                                    </div>
+                                   <!-- In the Order Review section, update the button and surrounding elements -->
+<div class="d-flex justify-content-between mt-4">
+    <button type="button" class="btn btn-outline-secondary prev-step" data-prev="3">Back to Payment</button>
+    <button type="button" class="btn btn-success" id="place-order-btn">
+        <span class="btn-text">Place Order</span>
+        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+    </button>
+</div> 
                                
                             </div>
                         </div>
@@ -641,39 +653,67 @@
             document.getElementById('payment-details').style.display = 'block';
         }
 
-        $(document).ready(function() {
-            // Set up CSRF token for AJAX requests
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+     // Add this JavaScript code
+$(document).ready(function() {
+    // ... your existing code ...
+    
+    // Handle the Place Order button click
+    $('#place-order-btn').click(function(e) {
+        e.preventDefault();
+        
+        // Validate the terms checkbox
+        if (!$('#terms').is(':checked')) {
+            alert('Please agree to the Terms and Conditions');
+            return;
+        }
+        
+        // Disable button and show spinner
+        $(this).prop('disabled', true);
+        $('.btn-text', this).text('Processing...');
+        $('.spinner-border', this).removeClass('d-none');
+        
+        // Submit the form via AJAX
+        $.ajax({
+            url: '{{ route("checkout.process") }}',
+            type: 'POST',
+            data: new FormData($('#orderForm')[0]),
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.status === true) {
+                    // Show success message
+                    $('.success-message').show();
+                    
+                    // Hide other elements
+                    $('.review-sections, .form-check, .d-flex.justify-content-between.mt-4').hide();
+                    
+                    // Redirect after delay
+                    setTimeout(function() {
+                        window.location.href = '/thank-you/' + response.orderId;
+                    }, 2000);
+                } else {
+                    // Re-enable button on error
+                    $('#place-order-btn').prop('disabled', false);
+                    $('.btn-text', '#place-order-btn').text('Place Order');
+                    $('.spinner-border', '#place-order-btn').addClass('d-none');
+                    
+                    alert(response.message || "There was an error with your order. Please try again.");
                 }
-            });
-
-            // Handle form submission with AJAX
-            $("#orderForm").submit(function(event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                $.ajax({
-                    url: '{{ route('checkout.process') }}', // Your checkout processing route
-                    type: 'POST',
-                    data: $(this).serialize(), // Serialize form data
-                    dataType: 'JSON',
-                    success: function(response) {
-                        if (response.status === true) {
-                            // Redirect to the Thank You page using the order ID from the JSON response
-                            window.location.href = '/thank-you/' + response.orderId;
-                        } else {
-                            // Handle errors (if any)
-                            alert("There was an error with your order. Please try again.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle unexpected errors
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
+            },
+            error: function(xhr) {
+                // Re-enable button on error
+                $('#place-order-btn').prop('disabled', false);
+                $('.btn-text', '#place-order-btn').text('Place Order');
+                $('.spinner-border', '#place-order-btn').addClass('d-none');
+                
+                alert("An error occurred. Please try again.");
+                console.error(xhr.responseText);
+            }
         });
+    });
+    
+    // ... rest of your existing JavaScript ...
+});
 
 
 

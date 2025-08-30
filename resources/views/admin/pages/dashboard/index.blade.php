@@ -365,7 +365,7 @@
                                 <td>
                                     <a href="#" class="text-primary fw-bold">{{ $product->product_name }}</a>
                                 </td>
-                                <td>${{ number_format($product->product_price * 10, 2) }}</td> <!-- Assuming rating can be translated to price -->
+                                <td>${{ number_format($product->product_price, 2) }}</td> <!-- Assuming rating can be translated to price -->
                                 <td class="fw-bold">{{ $product->sold_quantity }}</td> <!-- Display sold quantity -->
                                 <td>${{ number_format($product->revenue, 2) }}</td> <!-- Display revenue -->
                             </tr>
@@ -433,7 +433,7 @@
         </div><!-- End Recent Activity -->
 
         <!-- Budget Report -->
-        <div class="card">
+        {{-- <div class="card">
           <div class="filter">
             <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -504,7 +504,7 @@
             </script>
 
           </div>
-        </div><!-- End Budget Report -->
+        </div><!-- End Budget Report --> --}}
 
         <!-- Website Traffic -->
         <div class="card">
@@ -600,38 +600,17 @@
           </div>
 
           <div class="card-body pb-0">
-            <h5 class="card-title">News &amp; Updates <span>| Today</span></h5>
+            <h5 class="card-title">Latest &amp; Blogs <span>| Today</span></h5>
 
             <div class="news">
-              <div class="post-item clearfix">
-                <img src="assets/img/news-1.jpg" alt="">
-                <h4><a href="#">Nihil blanditiis at in nihil autem</a></h4>
-                <p>Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+              @foreach ($blogs as $blog)
+                <div class="post-item clearfix">
+                <img src="{{$blog->image}}" alt="">
+                <h4><a href="{{ route('blogs.show', $blog->id) }}">{{\Illuminate\Support\Str::words(strip_tags($blog->title), 5, '...')}}</a></h4>
+                <p>{{\Illuminate\Support\Str::words(strip_tags($blog->content), 10, '...')}}</p>
               </div>
-
-              <div class="post-item clearfix">
-                <img src="assets/img/news-2.jpg" alt="">
-                <h4><a href="#">Quidem autem et impedit</a></h4>
-                <p>Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-              </div>
-
-              <div class="post-item clearfix">
-                <img src="assets/img/news-3.jpg" alt="">
-                <h4><a href="#">Id quia et et ut maxime similique occaecati ut</a></h4>
-                <p>Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-              </div>
-
-              <div class="post-item clearfix">
-                <img src="assets/img/news-4.jpg" alt="">
-                <h4><a href="#">Laborum corporis quo dara net para</a></h4>
-                <p>Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-              </div>
-
-              <div class="post-item clearfix">
-                <img src="assets/img/news-5.jpg" alt="">
-                <h4><a href="#">Et dolores corrupti quae illo quod dolor</a></h4>
-                <p>Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-              </div>
+              @endforeach
+              
 
             </div><!-- End sidebar recent posts-->
 

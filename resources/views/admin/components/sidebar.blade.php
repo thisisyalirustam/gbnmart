@@ -11,6 +11,7 @@
         </li><!-- End Dashboard Nav -->
 
         @can('user.managment')
+        <li class="nav-heading">User Management</li>
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-people"></i><span>User Management</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -38,9 +39,9 @@
             </li><!-- End User Management Nav -->
         @endcan
 
-
+<li class="nav-heading">Product Management</li>
         @can('product.view')
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-box-seam"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
@@ -66,7 +67,7 @@
                         </a>
                     </li>
                 </ul>
-            </li><!-- End Products Nav -->
+            </li><!-- End Products Nav --> --}}
 
 
             <li class="nav-item">
@@ -77,16 +78,6 @@
             </li><!-- End Product Management Nav -->
         @endcan
 
-        @can('shipping.view')
-            <li class="nav-heading">Shipping Management</li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('shipping.index') }}">
-                    <i class="bi bi-truck"></i>
-                    <span>Shipping</span>
-                </a>
-            </li><!-- End Shipping Nav -->
-        @endcan
         @can('coupon.view')
             <li class="nav-heading">Affiliate Marketing</li>
 
@@ -122,16 +113,25 @@
         @endcan
 
 
+        @can('shipping.view')
+            <li class="nav-heading">Shipping Management</li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('shipping.index') }}">
+                    <i class="bi bi-truck"></i>
+                    <span>Shipping</span>
+                </a>
+            </li><!-- End Shipping Nav -->
+        @endcan
 
         <li class="nav-heading">Pages</li>
-
+      
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('admin.profile') }}">
                 <i class="bi bi-person-circle"></i>
                 <span>Profile</span>
             </a>
         </li><!-- End Profile Nav -->
-
         @can('setting.view')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('admin.setting') }}">

@@ -175,6 +175,10 @@ Route::middleware(['auth', 'verified', EnsureUserIsAdmin::class])->group(functio
     Route::get('/roleAndPermessionApi', [RoleAndPermessions::class, 'getRoles']);
     Route::post('/settings/assign-role', [RoleAndPermessions::class, 'assignPermissionsToRole'])
         ->name('permissions.assign-roles');
+    Route::get('/setting/getAllPermession',[SettingsMainController::class,'allRoles'])->name('admin.settings.allpermession');
+    Route::get('/role/{id}/permissions', [SettingsMainController::class, 'getPermissions']);
+  Route::post('/role/{id}/assign-permissions', [SettingsMainController::class, 'assignPermissions']);
+
 });
 
 

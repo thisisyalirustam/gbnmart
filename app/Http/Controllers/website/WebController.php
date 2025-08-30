@@ -230,7 +230,7 @@ class WebController extends Controller
 
     public function admin()
     {
-        $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(12);
+        $orders = Order::with('user')->orderBy('created_at', 'desc')->paginate(8);
 
         // Get the top-rated products with the additional sold count and revenue calculations
         $topRatedProduct = RattingAndReview::with('orderItem.product')
@@ -252,9 +252,11 @@ class WebController extends Controller
             ->orderByDesc('average_rating')
             ->get();
 
-        $notifications = Notification::latest()->take(8)->get();
+        $notifications = Notification::latest()->take(5)->get();
 
-        return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct', 'notifications'));
+        $blogs=Blog::latest()->take(5)->get();
+
+        return view('admin.pages.dashboard.index', compact('orders', 'topRatedProduct', 'notifications','blogs'));
     }
     public function showPassword()
     {

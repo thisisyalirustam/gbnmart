@@ -34,7 +34,7 @@ use Illuminate\Routing\Controllers\Middleware;
 
 class AdminController extends Controller implements HasMiddleware
 {
-     public static function middleware(): array
+    public static function middleware(): array
     {
         return [
             new Middleware('permission:product.view', only: ['product']),
@@ -42,7 +42,7 @@ class AdminController extends Controller implements HasMiddleware
             new Middleware('permission:coupon.view', only: ['activeMarketers']),
             new Middleware('permission:coupon.view', only: ['approveAffiliate']),
         ];
-    //l
+        //l
     }
     public function index()
     {
@@ -88,16 +88,22 @@ class AdminController extends Controller implements HasMiddleware
         $products = Product::with('product_cat', 'product_sub_category', 'product_brand', 'user')
             ->get()
             ->map(function ($product) {
+                // handle images
                 if ($product->images) {
                     $images = json_decode($product->images, true);
                     if (is_array($images) && count($images) > 0) {
                         $product->image = url('images/products/' . basename($images[0]));
                     }
                 }
+
+                // shorten product name (e.g. max 5 words)
+                $product->name = Str::words(strip_tags($product->name), 5);
+
                 return $product;
             });
 
         return response()->json($products);
+
     }
     public function shipping()
     {
@@ -175,7 +181,7 @@ class AdminController extends Controller implements HasMiddleware
                 $buyerEmail = $order->email;
                 $buyerAddress = $order->address;
                 $buyerPhone = $order->phone;
-                $orderid= $order->id;
+                $orderid = $order->id;
 
                 $order->save();
 
