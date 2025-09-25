@@ -219,7 +219,7 @@
                                      <h6>Shopping Cart (<span id="count">{{ $cartCount ?? 0 }}</span>)</h6>
                                  </div>
                                  <div class="dropdown-body">
-                                     <div class="cart-items">
+                                     {{-- <div class="cart-items">
                                          <!-- Cart Item 1 -->
                                          <div class="cart-item">
                                              <div class="cart-item-image">
@@ -264,13 +264,13 @@
                                                  <i class="bi bi-x"></i>
                                              </button>
                                          </div>
-                                     </div>
+                                     </div> --}}
                                  </div>
                                  <div class="dropdown-footer">
-                                     <div class="cart-total">
+                                     {{-- <div class="cart-total">
                                          <span>Total:</span>
                                          <span class="cart-total-price">$279.97</span>
-                                     </div>
+                                     </div> --}}
                                      <div class="cart-actions">
                                          <a href="{{ route('cart.show') }}" class="btn btn-outline-primary">View
                                              Cart</a>

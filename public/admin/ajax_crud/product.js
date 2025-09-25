@@ -461,7 +461,6 @@ $(document).ready(function () {
         var id = button.getAttribute("data-bs-userId");
         document.querySelector("#deleteid").value = id;
     });
-
     // Status and SOF form submissions
     $('#statusForm').on('submit', function (e) {
         e.preventDefault();
