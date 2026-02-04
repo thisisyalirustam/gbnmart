@@ -27,7 +27,7 @@ class ProductCategoryController extends Controller
             'name' => 'required|string|max:255',
             'status' => 'required|boolean',
             'sof' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         // Handle image upload if provided

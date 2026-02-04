@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Settings;
-
+namespace App\Http\Controllers\admin\settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

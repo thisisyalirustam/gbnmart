@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('blogs', function (Blueprint $table) {
             //
-            $table->string('image')->nullable()->after('images');
+            $table->string('images')->nullable()->after('content');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('blogs', function (Blueprint $table) {
             //
-             $table->dropColumn('image');
+             $table->dropColumn('images');
         });
     }
 };

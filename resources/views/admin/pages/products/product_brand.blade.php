@@ -1,7 +1,7 @@
 @extends('admin.layout.content')
 @section('content')
     <div class="pagetitle">
-        <h1>Users</h1>
+        <h1>Brands </h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -22,7 +22,7 @@
                 <div class="card">
                     <div class="card-body">
                         <button type="button" class="btn mt-2" data-bs-toggle="modal" data-bs-target="#add">
-                            <i class="bi bi-plus-lg txt-primary"></i> Add New Category
+                            <i class="bi bi-plus-lg txt-primary"></i> Add New Brand
                         </button>
                         <hr>
                         <div id="gridContainer"></div>
@@ -64,7 +64,7 @@
                       <div class="row mb-3">
                           <label for="inputText" class="col-sm-2 col-form-label">Name</label>
                           <div class="col-sm-10">
-                              <input type="text" name="name" id="name" class="form-control">
+                              <input type="text" name="name" id="name" placeholder="Enter Brand Name" class="form-control">
                           </div>
                       </div>
 

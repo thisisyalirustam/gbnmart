@@ -22,13 +22,13 @@
                             <i class="bi bi-person-plus"></i><span>Add New User</span>
                         </a>
                     </li>
-                    @can('superadmin')
+                    {{-- @can('superadmin') --}}
                         <li>
                             <a href="{{ route('admin.user.role') }}">
                                 <i class="bi bi-person-badge"></i><span>role Management</span>
                             </a>
                         </li>
-                    @endcan
+                    {{-- @endcan --}}
 
                     <li>
                         <a href="components-badges.html">
