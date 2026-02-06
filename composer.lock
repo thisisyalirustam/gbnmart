@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "89646270c421e2966138a3b5334576a0",
+    "content-hash": "d17034373ac19868640486df884991c6",
     "packages": [
         {
             "name": "brick/math",
@@ -8394,6 +8394,68 @@
                 }
             ],
             "time": "2025-08-27T11:34:33+00:00"
+        },
+        {
+            "name": "thecodeholic/laravel-hostinger-deploy",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thecodeholic/laravel-hostinger-deploy.git",
+                "reference": "a561d4589fe7bee48eb804ff9ac9946609874144"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thecodeholic/laravel-hostinger-deploy/zipball/a561d4589fe7bee48eb804ff9ac9946609874144",
+                "reference": "a561d4589fe7bee48eb804ff9ac9946609874144",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^11.0|^12.0",
+                "illuminate/process": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2",
+                "symfony/console": "^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.0|^9.0",
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TheCodeholic\\LaravelHostingerDeploy\\HostingerDeployServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TheCodeholic\\LaravelHostingerDeploy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zura Sekhniashvili",
+                    "email": "zura@thecodeholic.com"
+                }
+            ],
+            "description": "Laravel package for automated Hostinger deployment with GitHub Actions support",
+            "keywords": [
+                "deployment",
+                "github-actions",
+                "hostinger",
+                "laravel",
+                "ssh"
+            ],
+            "support": {
+                "issues": "https://github.com/thecodeholic/laravel-hostinger-deploy/issues",
+                "source": "https://github.com/thecodeholic/laravel-hostinger-deploy/tree/v0.3.0"
+            },
+            "time": "2025-10-31T17:01:34+00:00"
         },
         {
             "name": "theseer/tokenizer",

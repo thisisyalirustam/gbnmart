@@ -78,7 +78,7 @@
             </li><!-- End Product Management Nav -->
         @endcan
 
-        @can('coupon.view')
+        {{-- @can('coupon.view') --}}
             <li class="nav-heading">Affiliate Marketing</li>
 
             <li class="nav-item">
@@ -87,7 +87,7 @@
                     <span>Affiliate Marketers</span>
                 </a>
             </li><!-- End Affiliate Nav -->
-        @endcan
+        {{-- @endcan --}}
 
 
 
