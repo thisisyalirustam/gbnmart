@@ -95,8 +95,8 @@
 
                             <div class="price-range-container">
                                 <div class="current-range mb-3">
-                                    <span class="min-price">${{ $min_price ?: '0' }}</span>
-                                    <span class="max-price float-end">${{ $max_price ?: $maxPriceProduct }}</span>
+                                    <span class="min-price">{{ settings()->currency }} {{ $min_price ?: '0' }}</span>
+                                    <span class="max-price float-end">{{ settings()->currency }} {{ $max_price ?: $maxPriceProduct }}</span>
                                 </div>
 
                                 <div class="range-slider">
@@ -112,14 +112,14 @@
                                     <div class="row g-2">
                                         <div class="col-6">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text">$</span>
+                                                <span class="input-group-text">{{ settings()->currency }}</span>
                                                 <input type="number" class="form-control min-price-input" placeholder="Min"
                                                     min="0" max="1000" value="0" step="10">
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group input-group-sm">
-                                                <span class="input-group-text">$</span>
+                                                <span class="input-group-text">{{ settings()->currency }}</span>
                                                 <input type="number" class="form-control max-price-input" placeholder="Max"
                                                     min="0" max="1000" value="500" step="10">
                                             </div>
@@ -309,10 +309,10 @@
                                             <select class="form-select" id="priceRange">
                                                 <option selected="">All Prices</option>
                                                 <option>Under $25</option>
-                                                <option>$25 to $50</option>
-                                                <option>$50 to $100</option>
-                                                <option>$100 to $200</option>
-                                                <option>$200 &amp; Above</option>
+                                                <option>{{ settings()->currency }} 25 to {{ settings()->currency }} 50</option>
+                                                <option>{{ settings()->currency }}50 to {{ settings()->currency }}100</option>
+                                                <option>{{ settings()->currency }}100 to {{ settings()->currency }}200</option>
+                                                <option>{{ settings()->currency }}200 &amp; Above</option>
                                             </select>
                                         </div>
                                     </div>
@@ -373,7 +373,7 @@
                                                             class="bi bi-x"></i></button>
                                                 </span>
                                                 <span class="filter-tag">
-                                                    $50 to $100 <button class="filter-remove"><i
+                                                    {{ settings()->currency }}50 to {{ settings()->currency }}100 <button class="filter-remove"><i
                                                             class="bi bi-x"></i></button>
                                                 </span>
                                                 <button class="clear-all-btn">Clear All</button>
@@ -442,11 +442,11 @@
                                                     <div class="product-price">
                                                         @if ($item->discounted_price)
                                                             <span
-                                                                style="text-decoration: line-through;">${{ $item->price }}</span>
+                                                                style="text-decoration: line-through;">{{ settings()->currency }}{{ $item->price }}</span>
                                                             <span
-                                                                class="text-danger ms-1">${{ $item->discounted_price }}</span>
+                                                                class="text-danger ms-1">{{ settings()->currency }}{{ $item->discounted_price }}</span>
                                                         @else
-                                                            <span>${{ $item->price }}</span>
+                                                            <span>{{ settings()->currency }}{{ $item->price }}</span>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -585,8 +585,8 @@
                 }
 
                 function updateDisplays() {
-                    minPriceDisplay.textContent = `$${minValue}`;
-                    maxPriceDisplay.textContent = `$${maxValue}`;
+                    minPriceDisplay.textContent = `{{ settings()->currency }} ${minValue}`;
+                    maxPriceDisplay.textContent = `{{ settings()->currency }} ${maxValue}`;
                     minPriceInput.value = minValue;
                     maxPriceInput.value = maxValue;
                 }

@@ -413,10 +413,10 @@
                         {{-- Price --}}
                         <div class="product-price">
                             @if ($item->discounted_price)
-                                ${{ number_format($item->discounted_price, 2) }}
-                                <span class="original-price">${{ number_format($item->price, 2) }}</span>
+                                {{ settings()->currency }}{{ number_format($item->discounted_price, 2) }}
+                                <span class="original-price">{{ settings()->currency }}{{ number_format($item->price, 2) }}</span>
                             @else
-                                ${{ number_format($item->price, 2) }}
+                                {{ settings()->currency }}{{ number_format($item->price, 2) }}
                             @endif
                         </div>
 
@@ -589,10 +589,10 @@
                                     </h5>
                                     <div class="product-price">
                                         @if ($item->discounted_price)
-                                            <span class="current-price">${{ $item->discounted_price }}</span>
-                                            <span class="old-price">${{ $item->price }}</span>
+                                            <span class="current-price">{{ settings()->currency }}{{ $item->discounted_price }}</span>
+                                            <span class="old-price">{{ settings()->currency }}{{ $item->price }}</span>
                                         @else
-                                            <span class="current-price">${{ $item->price }}</span>
+                                            <span class="current-price">{{ settings()->currency }}{{ $item->price }}</span>
                                         @endif
                                     </div>
                                     {{-- Optional: Add rating, stock info here --}}

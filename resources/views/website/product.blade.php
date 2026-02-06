@@ -218,7 +218,7 @@
                                     <i class="bi bi-truck"></i>
                                     <div>
                                         <h6>Free Shipping</h6>
-                                        <p>On orders over $50</p>
+                                        <p>On orders over {{ settings()->currency }}50</p>
                                     </div>
                                 </div>
                                 <div class="delivery-option">
@@ -251,9 +251,9 @@
                                     <h5 class="product-title">{{ $product->name }}</h5>
                                     <div class="product-price">
                                         @if ($product->discounted_price)
-                                            ${{ $product->discounted_price }}
+                                            {{ settings()->currency }}{{ $product->discounted_price }}
                                         @else
-                                            ${{ $product->price }}
+                                            {{ settings()->currency }}{{ $product->price }}
                                         @endif
                                     </div>
                                 </div>
