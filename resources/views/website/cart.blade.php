@@ -91,7 +91,7 @@
                   </div>
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <div class="item-total">
-                      <span id="item-total-{{ $item->product_id }}">${{ number_format($item->quantity * $item->price, 2) }}</span>
+                      <span id="item-total-{{ $item->product_id }}"> {{ settings()->currency }} {{ number_format($item->quantity * $item->price, 2) }}</span>
                     </div>
                   </div>
                 </div>
@@ -131,45 +131,13 @@
 
               <div class="summary-item">
                 <span class="summary-label">Subtotal</span>
-                <span class="summary-value" id="cart-subtotal">${{ number_format($subtotal, 2) }}</span>
+                <span class="summary-value" id="cart-subtotal"> {{ settings()->currency }} {{ number_format($subtotal, 2) }}</span>
               </div>
-              {{-- <div class="summary-item shipping-item">
-                <span class="summary-label">Shipping</span>
-                <div class="shipping-options">
-                  <div class="form-check text-end">
-                    <input class="form-check-input" type="radio" name="shipping" id="standard" checked="">
-                    <label class="form-check-label" for="standard">
-                      Standard Delivery - $4.99
-                    </label>
-                  </div>
-                  <div class="form-check text-end">
-                    <input class="form-check-input" type="radio" name="shipping" id="express">
-                    <label class="form-check-label" for="express">
-                      Express Delivery - $12.99
-                    </label>
-                  </div>
-                  <div class="form-check text-end">
-                    <input class="form-check-input" type="radio" name="shipping" id="free">
-                    <label class="form-check-label" for="free">
-                      Free Shipping (Orders over $300)
-                    </label>
-                  </div>
-                </div>
-              </div> --}}
-
-              {{-- <div class="summary-item">
-                <span class="summary-label">Tax</span>
-                <span class="summary-value">$00.00</span>
-              </div> --}}
-
-              {{-- <div class="summary-item discount">
-                <span class="summary-label">Discount</span>
-                <span class="summary-value">-$0.00</span>
-              </div> --}}
+            
 
               <div class="summary-total">
                 <span class="summary-label">Total</span>
-                <span class="summary-value" id="cart-total">${{ number_format($subtotal, 2) }}</span>
+                <span class="summary-value" id="cart-total"> {{ settings()->currency }} {{ number_format($subtotal, 2) }}</span>
               </div>
 
               <div class="checkout-button">

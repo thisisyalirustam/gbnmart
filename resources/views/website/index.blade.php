@@ -623,7 +623,7 @@
             <div class="col-lg-3 col-md-6 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
                 <div class="content-card h-100">
                     <div class="card-image position-relative overflow-hidden" style="height: 200px;">
-                        <img src="{{ asset($blog->image) }}" alt="{{ $blog->title }}" class="img-fluid h-100 w-100 object-fit-cover">
+                        <img src="{{ asset($blog->images) }}" alt="{{ $blog->title }}" class="img-fluid h-100 w-100 object-fit-cover">
                         <div class="category-badge position-absolute top-0 end-0 m-2 bg-primary text-white px-2 py-1 rounded">
                             {{ optional($blog->product_cat)->name ?? 'Uncategorized' }}
                         </div>

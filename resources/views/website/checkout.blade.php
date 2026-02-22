@@ -397,7 +397,7 @@
                                                 <div class="order-item-price">
                                                     <span class="quantity">{{ $item->quantity }} ×</span>
                                                     <span
-                                                        class="price">${{ number_format($item->price * $item->quantity, 2) }}</span>
+                                                        class="price"> {{ settings()->currency }} {{ number_format($item->price * $item->quantity, 2) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -410,25 +410,25 @@
                                 <div class="order-totals">
                                     <div class="order-subtotal d-flex justify-content-between">
                                         <span>Subtotal</span>
-                                        <span>${{ number_format($subtotal, 2) }}</span>
+                                        <span> {{ settings()->currency }} {{ number_format($subtotal, 2) }}</span>
                                     </div>
                                     <div class="order-shipping d-flex justify-content-between">
                                         <span>Shipping</span>
-                                        <span id="shipping-charge">$0.00</span>
+                                        <span id="shipping-charge"> {{ settings()->currency }} 0.00</span>
                                         <input type="hidden"  name="shipping_charge" id="shipping-charge-input"
                                         value="0">
                                     </div>
                                     <div class="order-tax d-flex justify-content-between">
                                         <span>Tax</span>
-                                        <span>$0.00</span>
+                                        <span>  {{ settings()->currency }} 0.00</span>
                                     </div>
                                     <div class="order-tax d-flex justify-content-between">
                                         <span>discount</span>
-                                        <span id="discount">$0.00</span>
+                                        <span id="discount"> {{ settings()->currency }} 0.00</span>
                                     </div>
                                     <div class="order-total d-flex justify-content-between">
                                         <span>Total</span>
-                                        <span id="grand_total">${{ number_format($subtotal, 2) }}</span>
+                                        <span id="grand_total"> {{ settings()->currency }} {{ number_format($subtotal, 2) }}</span>
                                     </div>
                                 </div>
 
@@ -618,9 +618,9 @@
                     success: function(response) {
                         if (response.status == true) {
                             $("#shipping-charge-input").val(response.shippingCharge);
-                            $("#shipping-charge").text('$' + response.shippingCharge.toFixed(
+                            $("#shipping-charge").text(' {{ settings()->currency }}' + response.shippingCharge.toFixed(
                                 2)); // Format as a currency value
-                            $("#grand_total").text('$' + response.grand_total.toFixed(
+                            $("#grand_total").text(' {{ settings()->currency }}' + response.grand_total.toFixed(
                                 2)); // Format as a currency value
                         }
                     }
@@ -732,11 +732,11 @@ $(document).ready(function() {
                         // Format as a currency value
                         $("#coupon-input").val(response.discount);
                         $("#coupon_code").val(response.coupon);
-                        $("#subtotal").text('$' + response.subtotal.toFixed(
+                        $("#subtotal").text(' {{ settings()->currency }} ' + response.subtotal.toFixed(
                             2)); // Format as a currency value
-                        $("#discount").text('$' + response.discount.toFixed(
+                        $("#discount").text(' {{ settings()->currency }} ' + response.discount.toFixed(
                             2)); // Format as a currency value
-                        $("#grand_total").text('$' + response.grand_total.toFixed(2));
+                        $("#grand_total").text(' {{ settings()->currency }} ' + response.grand_total.toFixed(2));
                         $("#coupon-message").text("Your coupon is Correct You Have Dissount Now");
                     }
                     if (response.status == false) {

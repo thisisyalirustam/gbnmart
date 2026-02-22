@@ -187,7 +187,7 @@
             <div class="container">
                 <article class="article">
                     <figure class="featured-image mb-4">
-                        <img src="{{ asset($blog->image) }}" alt="{{ $blog->title }}" class="img-fluid rounded-lg w-100">
+                        <img src="{{ asset($blog->images) }}" alt="{{ $blog->title }}" class="img-fluid rounded-lg w-100">
                     </figure>
                     <h2 class="title">{{ $blog->title }}</h2>
                      <div class="author-section">

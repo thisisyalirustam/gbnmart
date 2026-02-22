@@ -133,7 +133,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="blog-card">
                         <div class="position-relative blog-img-container">
-                            <img src="{{ asset($blog->image) }}" alt="{{ $blog->title }}" class="blog-img">
+                            <img src="{{ asset($blog->images) }}" alt="{{ $blog->title }}" class="blog-img">
                             <a href="{{ route('shoppage', $blog->product_cat->slug) }}" class="blog-category">
                                 {{ $blog->product_cat->name }}
                             </a>
@@ -201,7 +201,7 @@
                 <div class="col-md-6 col-lg-4">
                     <article class="recent-post-card">
                         <div class="recent-post-img-container">
-                            <img src="{{ asset($blog->image) }}" alt="{{ $blog->title }}" class="recent-post-img">
+                            <img src="{{ asset($blog->images) }}" alt="{{ $blog->title }}" class="recent-post-img">
                             <div class="post-content">
                                 <a href="{{ route('shoppage', $blog->product_cat->slug) }}" class="post-category">
                                     {{ $blog->product_cat->name }}

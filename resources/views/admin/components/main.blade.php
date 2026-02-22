@@ -13,8 +13,8 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.dataTables.css">
     <!-- Favicons -->
-    <link href="{{ asset('admin/assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('admin/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('admin/assets/img/brandlogo.png') }}" rel="icon">
+    <link href="{{ asset('admin/assets/img/brandlogo.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">

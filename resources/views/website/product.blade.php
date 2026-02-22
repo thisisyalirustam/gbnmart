@@ -132,10 +132,10 @@
                             <div class="product-price-container">
                                 <div class="price-wrapper">
                                     @if ($product->discounted_price)
-                                        <span class="current-price">${{ $product->discounted_price }}</span>
-                                        <span class="original-price">${{ $product->price }}</span>
+                                        <span class="current-price"> {{ settings()->currency }} {{ $product->discounted_price }}</span>
+                                        <span class="original-price"> {{ settings()->currency }} {{ $product->price }}</span>
                                     @else
-                                        <span class="current-price">${{ $product->price }}</span>
+                                        <span class="current-price"> {{ settings()->currency }} {{ $product->price }}</span>
                                     @endif
                                 </div>
                                 @if ($product->discounted_price)

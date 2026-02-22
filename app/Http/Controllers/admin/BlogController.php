@@ -18,47 +18,14 @@ class BlogController extends Controller implements HasMiddleware
         public static function middleware(): array
     {
         return [
-            new Middleware('permission:blog.managment', only: ['index']),
-            new Middleware('permission:blog.managment', only: ['create']),
-            new Middleware('permission:blog.managment', only: ['store']),
-            new Middleware('permission:blog.managment', only: ['show']),
-            new Middleware('permission:blog.managment', only: ['update']),
-            new Middleware('permission:blog.managment', only: ['destroy']),
+            new Middleware('permission:blog.view', only: ['index']),
+            new Middleware('permission:blog.create', only: ['create']),
+            new Middleware('permission:blog.create', only: ['store']),
+            new Middleware('permission:blog.view', only: ['show']),
+            new Middleware('permission:blog.update', only: ['update']),
+            new Middleware('permission:blog.delete', only: ['destroy']),
         ];
     }
-//   public function index() {
-//         $blogs = Blog::all();
-//         return view('admin.pages.blogs.index', compact('blogs'));
-//     }
-
-//     public function create() {
-//         return view('admin.pages.blogs.create');
-//     }
-
-//     public function store(Request $request) {
-//         $blog = new Blog;
-//         $blog->title = $request->title;
-//         $blog->author = $request->author;
-//         $blog->category = $request->category;
-//         $blog->status = $request->status;
-//         $blog->content = $request->content;
-
-//         if ($request->hasFile('featuredImage')) {
-//             $filename = $request->file('featuredImage')->store('blogs', 'public');
-//             $blog->featured_image = $filename;
-//         }
-
-//         $blog->save();
-//         return redirect()->route('admin.blog')->with('success', 'Blog created successfully.');
-//     }
-
-//     public function show($id) {
-//         $blog = Blog::findOrFail($id);
-//         return view('admin.pages.blogs.show', compact('blog'));
-//     }
-
-   
-
  public function index(){
         $blogs=Blog::with('user')->get();
         return view('admin.pages.blogs.index',compact('blogs'));
@@ -77,7 +44,7 @@ class BlogController extends Controller implements HasMiddleware
         'author' => 'nullable|string|max:255',
         'category' => 'required|exists:product_cats,id',
         'status' => 'required|in:draft,published',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
     ]);
 
     $user = Auth::user();
@@ -99,7 +66,7 @@ class BlogController extends Controller implements HasMiddleware
     $blog->product_cat_id = $request->category;
     $blog->is_published = $request->status === 'published';
     $blog->published_at = $request->status === 'published' ? now() : null;
-    $blog->image = $imagePath;
+    $blog->images = $imagePath;
     $blog->save();
 
     return redirect()->route('admin.blog')->with('success', 'Blog created successfully!');
